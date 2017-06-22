@@ -1,0 +1,6 @@
+[package]
+name = "mlp"
+version = "0.1.0"
+authors = ["Mikhail Kravets <22kravets22@mail.ru>"]
+
+[dependencies]
