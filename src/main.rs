@@ -41,11 +41,11 @@ impl NeuralLayer{
         return nl;
     }
 
-    fn fit(X: Vec<f64>, d: Vec<f64>){
+    fn fit(&self, X: Vec<f64>, d: Vec<f64>){
 
     }
 
-    fn calc(X: Vec<f64>){
+    fn calc(&self, X: Vec<f64>){
 
     }
 }
