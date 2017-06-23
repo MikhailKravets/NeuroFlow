@@ -40,6 +40,14 @@ impl NeuralLayer{
         }
         return nl;
     }
+
+    fn fit(X: Vec<f64>, d: Vec<f64>){
+
+    }
+
+    fn calc(X: Vec<f64>){
+
+    }
 }
 
 impl NeuralNet{
