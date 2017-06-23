@@ -24,14 +24,32 @@ struct NeuralNet{
 }
 
 impl NeuralLayer{
+    fn new(amount: i32) -> NeuralLayer{
+        let mut nl = NeuralLayer{y: vec![], delta: vec![], w: Vec::new()};
+        for _ in 0..amount {
+            nl.y.push(0.0);
+            nl.delta.push(0.0);
 
+            let mut v: Vec<f64> = vec![];
+            for i in 0..amount + 1{
+                v = Vec::new();
+                v.push(0.01*i as f64);
+            }
+
+            nl.w.push(v);
+        }
+        return nl;
+    }
 }
 
 impl NeuralNet{
-    fn new(&self, architecture: Vec<int32>, l_rate: f32, moment: f32) -> NeuralNet {
-        for v in architecture{
-            // create layers with v neurons
+    fn new(architecture: Vec<i32>, l_rate: f32, moment: f32) -> NeuralNet {
+        let mut nn = NeuralNet{learn_rate: l_rate, moment: moment, layers: Vec::new()};
+        for v in architecture.iter() {
+            nn.layers.push(NeuralLayer::new(*v))
         }
+
+        return nn;
     }
 }
 
@@ -39,7 +57,14 @@ impl NeuralNet{
 fn main() {
     println!("Application starts!");
 
-    /* The final code here */
+    let nn = NeuralNet::new(vec![2, 2, 1], 0.1, 0.1);
+
+    for v in nn.layers{
+        for val in v.y{
+            println!("val: {}", val)
+        }
+        println!("----------")
+    }
 
     println!("Application stops!");
 }
