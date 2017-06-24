@@ -72,7 +72,7 @@ impl NeuralNet{
                     }
                 }
                 else {
-                    for i in 0..self::layers[j].v.len(){
+                    for i in 0..self.layers[j].v.len(){
                         sum = 0.0;
                         for k in 00..self.layers[j - 1].y.len(){
                             sum += self.layers[j].w[i][k] * self.layers[j - 1].y[k];
@@ -92,13 +92,31 @@ impl NeuralNet{
                     }
                 }
                 else {
-
+                    let mut sum;
+                    for i in 0..self.layers[j + 1].delta.len(){
+                        sum = 0.0;
+                        for k in 0..self.layers[j + 1].delta.len(){
+                            sum += self.layers[j + 1].delta[i] * self.layers[j + 1].w[k][i + 1];
+                        }
+                        self.layers[j + 1].delta[i] = der_act(self.layers[j + 1].v[i]) * sum;
+                    }
                 }
             }
         }
 
         fn update(){
-
+            for j in 0..self.layers.len(){
+                for i in 0..self.layers[j].w.len(){
+                    for k in 0..self.layers[j].w[0].len(){
+                        if j == 0 {
+                            self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*X[k];
+                        }
+                        else {
+                            self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*self.layers[j].y[k];
+                        }
+                    }
+                }
+            }
         }
 
         forward();
