@@ -58,11 +58,11 @@ impl NeuralNet{
         // TODO: prepend 1 to X here
 
         fn forward(){
-            for j in 0..self::layers.len(){
+            for j in 0..self.layers.len(){
                 let mut sum;
 
                 if j == 0{
-                    for i in 0..self::layers[j].v.len(){
+                    for i in 0..self.layers[j].v.len(){
                         sum = 0.0;
                         for k in 00..X.len(){
                             sum += self.layers[j].w[i][k] * X[k];
@@ -85,7 +85,16 @@ impl NeuralNet{
         }
 
         fn backward(){
+            for j in self.layers.len() - 1..0 {
+                if j == self.layers.len() - 1{
+                    for i in 0..self.layers[j].y.len(){
+                        self.layers[j].y[i] = (self.layers[j].y[i] - d[i])*der_act(self.layers[j].v[i]);
+                    }
+                }
+                else {
 
+                }
+            }
         }
 
         fn update(){
