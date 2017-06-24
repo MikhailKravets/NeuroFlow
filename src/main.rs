@@ -20,8 +20,8 @@ struct NeuralLayer{
 
 struct NeuralNet{
     layers: Vec<NeuralLayer>,
-    learn_rate: f32,
-    moment: f32
+    learn_rate: f64,
+    moment: f64
 }
 
 impl NeuralLayer{
@@ -45,7 +45,7 @@ impl NeuralLayer{
 }
 
 impl NeuralNet{
-    fn new(architecture: Vec<i32>, l_rate: f32, moment: f32) -> NeuralNet {
+    fn new(architecture: Vec<i32>, l_rate: f64, moment: f64) -> NeuralNet {
         let mut nn = NeuralNet{learn_rate: l_rate, moment: moment, layers: Vec::new()};
         for v in architecture.iter() {
             nn.layers.push(NeuralLayer::new(*v))
@@ -54,23 +54,22 @@ impl NeuralNet{
         return nn;
     }
 
-    fn fit(&self, X: Vec<f64>, d: Vec<f64>){
+    fn fit(&mut self, X: Vec<f64>, d: Vec<f64>){
+        let mut sum: f64;
+
         // TODO: prepend 1 to X here
 
-        fn forward(){
-            for j in 0..self.layers.len(){
-                let mut sum;
-
-                if j == 0{
-                    for i in 0..self.layers[j].v.len(){
-                        sum = 0.0;
-                        for k in 00..X.len(){
-                            sum += self.layers[j].w[i][k] * X[k];
-                        }
-                        self.layers[j].v[i] = sum;
-                        self.layers[j].y[i] = act(self.layers[j].v[i]);
+        for j in 0..self.layers.len(){
+            if j == 0{
+                for i in 0..self.layers[j].v.len(){
+                    sum = 0.0;
+                    for k in 00..X.len(){
+                        sum += self.layers[j].w[i][k] * X[k];
                     }
+                    self.layers[j].v[i] = sum;
+                    self.layers[j].y[i] = act(self.layers[j].v[i]);
                 }
+            }
                 else {
                     for i in 0..self.layers[j].v.len(){
                         sum = 0.0;
@@ -81,18 +80,15 @@ impl NeuralNet{
                         self.layers[j].y[i] = act(self.layers[j].v[i]);
                     }
                 }
-            }
         }
 
-        fn backward(){
-            for j in self.layers.len() - 1..0 {
-                if j == self.layers.len() - 1{
-                    for i in 0..self.layers[j].y.len(){
-                        self.layers[j].y[i] = (self.layers[j].y[i] - d[i])*der_act(self.layers[j].v[i]);
-                    }
+        for j in self.layers.len() - 1..0 {
+            if j == self.layers.len() - 1{
+                for i in 0..self.layers[j].y.len(){
+                    self.layers[j].y[i] = (self.layers[j].y[i] - d[i])*der_act(self.layers[j].v[i]);
                 }
+            }
                 else {
-                    let mut sum;
                     for i in 0..self.layers[j + 1].delta.len(){
                         sum = 0.0;
                         for k in 0..self.layers[j + 1].delta.len(){
@@ -101,27 +97,20 @@ impl NeuralNet{
                         self.layers[j + 1].delta[i] = der_act(self.layers[j + 1].v[i]) * sum;
                     }
                 }
-            }
         }
 
-        fn update(){
-            for j in 0..self.layers.len(){
-                for i in 0..self.layers[j].w.len(){
-                    for k in 0..self.layers[j].w[0].len(){
-                        if j == 0 {
-                            self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*X[k];
-                        }
+        for j in 0..self.layers.len(){
+            for i in 0..self.layers[j].w.len(){
+                for k in 0..self.layers[j].w[0].len(){
+                    if j == 0 {
+                        self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*X[k];
+                    }
                         else {
                             self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*self.layers[j].y[k];
                         }
-                    }
                 }
             }
         }
-
-        forward();
-        backward();
-        update();
     }
 
     fn calc(&self, X: Vec<f64>){
