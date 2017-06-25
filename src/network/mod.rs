@@ -52,10 +52,11 @@ impl NeuralNet{
         return nn;
     }
 
-    pub fn fit(&mut self, X: Vec<f64>, d: Vec<f64>){
+    pub fn fit(&mut self, X: &[f64], d: Vec<f64>){
         let mut sum: f64;
 
-        // TODO: prepend 1 to X here
+        let mut x = X.to_vec();
+        x.insert(0, 1f64);
 
         for j in 0..self.layers.len(){
             if j == 0{
@@ -111,7 +112,7 @@ impl NeuralNet{
         }
     }
 
-    pub fn calc(&self, X: Vec<f64>){
+    pub fn calc(&self, X: &[f64]){
 
     }
 }
