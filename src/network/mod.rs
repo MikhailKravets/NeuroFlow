@@ -43,7 +43,7 @@ impl NeuralLayer{
 
             v = Vec::new();
             for i in 0..amount + 1{
-                v.push(0.01*i as f64 + 0.01);
+                v.push(0.05*i as f64 + 0.01);
             }
 
             nl.w.push(v);
@@ -74,8 +74,8 @@ impl NeuralNet{
             if j == 0{
                 for i in 0..self.layers[j].v.len(){
                     sum = 0.0;
-                    for k in 00..X.len(){
-                        sum += self.layers[j].w[i][k] * X[k];
+                    for k in 00..x.len(){
+                        sum += self.layers[j].w[i][k] * x[k];
                     }
                     self.layers[j].v[i] = sum;
                     self.layers[j].y[i] = act(self.layers[j].v[i]);
@@ -93,32 +93,39 @@ impl NeuralNet{
                 }
         }
 
-        for j in self.layers.len() - 1..0 {
+        for j in (0..self.layers.len()).rev() {
             if j == self.layers.len() - 1{
                 for i in 0..self.layers[j].y.len(){
-                    self.layers[j].y[i] = (self.layers[j].y[i] - res[i])*der_act(self.layers[j].v[i]);
+                    self.layers[j].delta[i] = (self.layers[j].y[i] - res[i])*der_act(self.layers[j].v[i]);
                 }
             }
-                else {
-                    for i in 0..self.layers[j + 1].delta.len(){
-                        sum = 0.0;
-                        for k in 0..self.layers[j + 1].delta.len(){
-                            sum += self.layers[j + 1].delta[i] * self.layers[j + 1].w[k][i + 1];
-                        }
-                        self.layers[j + 1].delta[i] = der_act(self.layers[j + 1].v[i]) * sum;
+            else {
+                for i in 0..self.layers[j + 1].delta.len(){
+                    sum = 0.0;
+                    for k in 0..self.layers[j + 1].delta.len(){
+                        sum += self.layers[j + 1].delta[i] * self.layers[j + 1].w[k][i + 1];
                     }
+                    // TODO: the problem somewhere here
+                    println!("{}, {}, {}", j, i, sum);
+                    self.layers[j].delta[i] = der_act(self.layers[j + 1].v[i]) * sum;
                 }
+            }
         }
 
         for j in 0..self.layers.len(){
             for i in 0..self.layers[j].w.len(){
                 for k in 0..self.layers[j].w[i].len(){
                     if j == 0 {
-                        self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*X[k];
+                        self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*x[k];
                     }
-                        else {
-                            self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*self.layers[j].y[k];
+                    else {
+                        if k == 0{
+                            self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i];
                         }
+                        else {
+                            self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*self.layers[j].y[k - 1];
+                        }
+                    }
                 }
             }
         }

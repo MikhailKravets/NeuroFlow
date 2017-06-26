@@ -7,9 +7,23 @@ fn main() {
 
     let mut nn = NeuralNet::new(vec![2, 2, 1], 0.1, 0.1);
 
-    nn.print(network::Type::Weights);
+    let sc = &[
+        (&[0f64, 0f64], &[0f64]),
+        (&[1f64, 0f64], &[1f64]),
+        (&[0f64, 1f64], &[1f64]),
+        (&[1f64, 1f64], &[0f64]),
+    ];
+    let mut k = 0;
 
-    nn.fit(&[0f64, 1f64], &[1f64]);
+    for _ in 0..100{
+        if k == 4{
+            k = 0;
+        }
+        nn.fit(sc[k].0, sc[k].1);
+        k += 1;
+    }
+
+    nn.print(network::Type::Deltas);
 
     println!("Application stops!");
 }
