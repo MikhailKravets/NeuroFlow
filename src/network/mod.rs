@@ -40,9 +40,10 @@ impl NeuralLayer{
             nl.v.push(0.0);
 
             let mut v: Vec<f64> = vec![];
+
+            v = Vec::new();
             for i in 0..amount + 1{
-                v = Vec::new();
-                v.push(0.01*i as f64);
+                v.push(0.01*i as f64 + 0.01);
             }
 
             nl.w.push(v);
@@ -125,12 +126,52 @@ impl NeuralNet{
 
     }
 
-    pub fn print(e: Type){
+    pub fn print(&self, e: Type){
         match e {
-            Type::InducedField => {},
-            Type::Y => {},
-            Type::Deltas => {},
-            Type::Weights => {},
+            Type::InducedField => {
+                println!("**Induced field**");
+                for v in self.layers.iter(){
+                    for val in v.v.iter(){
+                        print!("{} ", val);
+                    }
+                    println!();
+                }
+                println!("----------");
+            },
+            Type::Y => {
+                println!("**Activated field**");
+                for v in self.layers.iter(){
+                    for val in v.y.iter(){
+                        print!("{} ", val);
+                    }
+                    println!();
+                }
+                println!("----------");
+            },
+            Type::Deltas => {
+                println!("**Deltas**");
+                for v in self.layers.iter(){
+                    for val in v.delta.iter(){
+                        print!("{} ", val);
+                    }
+                    println!();
+                }
+                println!("----------");
+            },
+            Type::Weights => {
+                println!("**Induced field**");
+                for v in self.layers.iter(){
+                    for val in v.w.iter(){
+                        print!("[");
+                        for cell in val.iter(){
+                            print!("{} ", cell);
+                        }
+                        print!("]");
+                    }
+                    println!();
+                }
+                println!("----------");
+            },
         }
     }
 }
