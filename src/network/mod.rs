@@ -103,10 +103,8 @@ impl NeuralNet{
                 for i in 0..self.layers[j + 1].delta.len(){
                     sum = 0.0;
                     for k in 0..self.layers[j + 1].delta.len(){
-                        sum += self.layers[j + 1].delta[i] * self.layers[j + 1].w[k][i + 1];
+                        sum += self.layers[j + 1].delta[k] * self.layers[j + 1].w[k][i + 1];
                     }
-                    // TODO: the problem somewhere here
-                    println!("{}, {}, {}", j, i, sum);
                     self.layers[j].delta[i] = der_act(self.layers[j + 1].v[i]) * sum;
                 }
             }
