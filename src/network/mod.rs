@@ -1,4 +1,3 @@
-#![allow(dead_code)]
 
 
 fn act(x: f64) -> f64{
@@ -7,6 +6,14 @@ fn act(x: f64) -> f64{
 
 fn der_act(x: f64) -> f64{
     1.0 - x.tanh().powi(2)
+}
+
+
+pub enum Type{
+    InducedField,
+    Y,
+    Deltas,
+    Weights
 }
 
 
@@ -118,7 +125,12 @@ impl NeuralNet{
 
     }
 
-    pub fn print(){
-
+    pub fn print(e: Type){
+        match e {
+            Type::InducedField => {},
+            Type::Y => {},
+            Type::Deltas => {},
+            Type::Weights => {},
+        }
     }
 }
