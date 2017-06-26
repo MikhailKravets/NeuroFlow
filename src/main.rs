@@ -2,10 +2,12 @@ mod network;
 
 use network::NeuralNet;
 
+extern crate time;
+
 fn main() {
     println!("Application starts!");
 
-    let mut nn = NeuralNet::new(vec![2, 2, 1], 0.1, 0.1);
+    let mut nn = NeuralNet::new(vec![2, 1], 0.1, 0.1);
 
     let sc = &[
         (&[0f64, 0f64], &[0f64]),
@@ -15,7 +17,8 @@ fn main() {
     ];
     let mut k = 0;
 
-    for _ in 0..100{
+    let prev = time::now();
+    for _ in 0..100000{
         if k == 4{
             k = 0;
         }
@@ -23,7 +26,8 @@ fn main() {
         k += 1;
     }
 
-    nn.print(network::Type::Deltas);
+    nn.print(network::Type::Weights);
 
+    println!("Spend time: {}", (time::now() - prev));
     println!("Application stops!");
 }

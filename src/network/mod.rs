@@ -166,7 +166,7 @@ impl NeuralNet{
                 println!("----------");
             },
             Type::Weights => {
-                println!("**Induced field**");
+                println!("**Weights field**");
                 for v in self.layers.iter(){
                     for val in v.w.iter(){
                         print!("[");
