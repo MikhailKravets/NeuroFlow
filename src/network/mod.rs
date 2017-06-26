@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 
 fn act(x: f64) -> f64{
     x.tanh()
@@ -113,6 +115,10 @@ impl NeuralNet{
     }
 
     pub fn calc(&self, X: &[f64]){
+
+    }
+
+    pub fn print(){
 
     }
 }
