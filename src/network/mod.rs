@@ -62,10 +62,12 @@ impl NeuralNet{
         return nn;
     }
 
-    pub fn fit(&mut self, X: &[f64], d: Vec<f64>){
+    pub fn fit(&mut self, X: &[f64], d: &[f64]){
         let mut sum: f64;
 
         let mut x = X.to_vec();
+        let res = d.to_vec();
+
         x.insert(0, 1f64);
 
         for j in 0..self.layers.len(){
@@ -94,7 +96,7 @@ impl NeuralNet{
         for j in self.layers.len() - 1..0 {
             if j == self.layers.len() - 1{
                 for i in 0..self.layers[j].y.len(){
-                    self.layers[j].y[i] = (self.layers[j].y[i] - d[i])*der_act(self.layers[j].v[i]);
+                    self.layers[j].y[i] = (self.layers[j].y[i] - res[i])*der_act(self.layers[j].v[i]);
                 }
             }
                 else {
@@ -110,7 +112,7 @@ impl NeuralNet{
 
         for j in 0..self.layers.len(){
             for i in 0..self.layers[j].w.len(){
-                for k in 0..self.layers[j].w[0].len(){
+                for k in 0..self.layers[j].w[i].len(){
                     if j == 0 {
                         self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*X[k];
                     }
