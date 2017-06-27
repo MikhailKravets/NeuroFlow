@@ -17,6 +17,9 @@ fn main() {
     ];
     let mut k = 0;
 
+    nn.print(network::Type::InducedField);
+    nn.print(network::Type::Y);
+    nn.print(network::Type::Deltas);
     nn.print(network::Type::Weights);
 
     let prev = time::now_utc();

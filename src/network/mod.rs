@@ -11,6 +11,7 @@ fn der_act(x: f64) -> f64{
 }
 
 
+#[allow(dead_code)]
 pub enum Type{
     InducedField,
     Y,
@@ -36,16 +37,17 @@ pub struct NeuralNet{
 impl NeuralLayer{
     fn new(amount: i32, input: i32) -> NeuralLayer{
         let mut nl = NeuralLayer{v: vec![], y: vec![], delta: vec![], w: Vec::new()};
+        let mut v: Vec<f64>;
         for _ in 0..amount {
             nl.y.push(0.0);
             nl.delta.push(0.0);
             nl.v.push(0.0);
 
-            let mut v: Vec<f64> = vec![];
+            v = vec![];
 
             v = Vec::new();
             for i in 0..input + 1{
-                v.push(rand::random::<f64>());
+                v.push(2f64*rand::random::<f64>() - 1f64);
             }
 
             nl.w.push(v);
@@ -70,6 +72,7 @@ impl NeuralNet{
         return nn;
     }
 
+    #[allow(non_snake_case)]
     pub fn fit(&mut self, X: &[f64], d: &[f64]){
         let mut sum: f64;
         let mut x = X.to_vec();
@@ -139,6 +142,7 @@ impl NeuralNet{
         }
     }
 
+    #[allow(non_snake_case)]
     pub fn calc(&mut self, X: &[f64]) -> &[f64]{
         let mut sum: f64;
         let mut x = X.to_vec();
