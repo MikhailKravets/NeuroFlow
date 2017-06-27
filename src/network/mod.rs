@@ -81,7 +81,7 @@ impl NeuralNet{
             if j == 0{
                 for i in 0..self.layers[j].v.len(){
                     sum = 0.0;
-                    for k in 00..x.len(){
+                    for k in 0..x.len(){
                         sum += self.layers[j].w[i][k] * x[k];
                     }
                     self.layers[j].v[i] = sum;
@@ -90,9 +90,9 @@ impl NeuralNet{
             }
                 else {
                     for i in 0..self.layers[j].v.len(){
-                        sum = 0.0;
-                        for k in 00..self.layers[j - 1].y.len(){
-                            sum += self.layers[j].w[i][k] * self.layers[j - 1].y[k];
+                        sum = self.layers[j].w[i][0];
+                        for k in 0..self.layers[j - 1].y.len(){
+                            sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                         }
                         self.layers[j].v[i] = sum;
                         self.layers[j].y[i] = act(self.layers[j].v[i]);
@@ -147,7 +147,7 @@ impl NeuralNet{
             if j == 0{
                 for i in 0..self.layers[j].v.len(){
                     sum = 0.0;
-                    for k in 00..x.len(){
+                    for k in 0..x.len(){
                         sum += self.layers[j].w[i][k] * x[k];
                     }
                     self.layers[j].v[i] = sum;
@@ -156,9 +156,9 @@ impl NeuralNet{
             }
             else {
                 for i in 0..self.layers[j].v.len(){
-                    sum = 0.0;
-                    for k in 00..self.layers[j - 1].y.len(){
-                        sum += self.layers[j].w[i][k] * self.layers[j - 1].y[k];
+                    sum = self.layers[j].w[i][0];
+                    for k in 0..self.layers[j - 1].y.len(){
+                        sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
                     self.layers[j].v[i] = sum;
                     self.layers[j].y[i] = act(self.layers[j].v[i]);
