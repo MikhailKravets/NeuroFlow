@@ -3,6 +3,10 @@ mod network;
 use network::NeuralNet;
 
 extern crate time;
+extern crate rand;
+
+use rand::distributions::IndependentSample;
+use rand::distributions::range::Range;
 
 fn main() {
     println!("Application starts!");
@@ -15,7 +19,8 @@ fn main() {
         (&[0f64, 1f64], &[1f64]),
         (&[1f64, 1f64], &[0f64]),
     ];
-    let mut k = 0;
+    let mut k;
+    let rnd_range = Range::new(0, sc.len());
 
     nn.print(network::Type::InducedField);
     nn.print(network::Type::Y);
@@ -23,15 +28,13 @@ fn main() {
     nn.print(network::Type::Weights);
 
     let prev = time::now_utc();
-    for _ in 0..100{
-        if k == 4{
-            k = 0;
-        }
+    for _ in 0..10_000{
+        k = rnd_range.ind_sample(&mut rand::thread_rng());
         nn.fit(sc[k].0, sc[k].1);
-        k += 1;
     }
 
     nn.print(network::Type::Deltas);
+    nn.print(network::Type::Y);
     nn.print(network::Type::Weights);
 
     println!("Res 1: [{}, {}], [{}] -> [{}]", sc[0].0[0], sc[0].0[1], sc[0].1[0], nn.calc(sc[0].0)[0]);

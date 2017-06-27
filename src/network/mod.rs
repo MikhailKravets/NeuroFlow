@@ -90,29 +90,27 @@ impl NeuralNet{
                     self.layers[j].v[i] = sum;
                     self.layers[j].y[i] = act(self.layers[j].v[i]);
                 }
-            }
-                else {
-                    for i in 0..self.layers[j].v.len(){
-                        sum = self.layers[j].w[i][0];
-                        for k in 0..self.layers[j - 1].y.len(){
-                            sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
-                        }
-                        self.layers[j].v[i] = sum;
-                        self.layers[j].y[i] = act(self.layers[j].v[i]);
+            } else {
+                for i in 0..self.layers[j].v.len(){
+                    sum = self.layers[j].w[i][0];
+                    for k in 0..self.layers[j - 1].y.len(){
+                        sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
+                    self.layers[j].v[i] = sum;
+                    self.layers[j].y[i] = act(self.layers[j].v[i]);
                 }
+            }
         }
 
         // TODO: the process doesn't coencide
-        println!("{}", (self.layers[1].y[0] - res[0]));
+//        println!("{}", (res[0] - self.layers[1].y[0]));
 
-        for j in (0..self.layers.len()).rev() {
+        for j in (0..self.layers.len()).rev(){
             if j == self.layers.len() - 1{
                 for i in 0..self.layers[j].y.len(){
-                    self.layers[j].delta[i] = (self.layers[j].y[i] - res[i])*der_act(self.layers[j].v[i]);
+                    self.layers[j].delta[i] = (res[i] - self.layers[j].y[i])*der_act(self.layers[j].v[i]);
                 }
-            }
-                else {
+            } else {
                     for i in 0..self.layers[j].delta.len(){
                         sum = 0.0;
                         for k in 0..self.layers[j + 1].delta.len(){
@@ -132,8 +130,7 @@ impl NeuralNet{
                     else {
                         if k == 0{
                             self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i];
-                        }
-                            else {
+                        } else {
                                 self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*self.layers[j - 1].y[k - 1];
                             }
                     }
@@ -157,8 +154,7 @@ impl NeuralNet{
                     self.layers[j].v[i] = sum;
                     self.layers[j].y[i] = act(self.layers[j].v[i]);
                 }
-            }
-            else {
+            } else {
                 for i in 0..self.layers[j].v.len(){
                     sum = self.layers[j].w[i][0];
                     for k in 0..self.layers[j - 1].y.len(){
