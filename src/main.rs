@@ -17,8 +17,8 @@ fn main() {
     ];
     let mut k = 0;
 
-    let prev = time::now();
-    for _ in 0..100000{
+    let prev = time::now_utc();
+    for _ in 0..1000{
         if k == 4{
             k = 0;
         }
@@ -26,8 +26,9 @@ fn main() {
         k += 1;
     }
 
+    nn.print(network::Type::Deltas);
     nn.print(network::Type::Weights);
 
-    println!("Spend time: {}", (time::now() - prev));
+    println!("Spend time: {}", (time::now_utc() - prev));
     println!("Application stops!");
 }

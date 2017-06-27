@@ -32,7 +32,7 @@ pub struct NeuralNet{
 }
 
 impl NeuralLayer{
-    fn new(amount: i32) -> NeuralLayer{
+    fn new(amount: i32, input: i32) -> NeuralLayer{
         let mut nl = NeuralLayer{v: vec![], y: vec![], delta: vec![], w: Vec::new()};
         for _ in 0..amount {
             nl.y.push(0.0);
@@ -42,8 +42,8 @@ impl NeuralLayer{
             let mut v: Vec<f64> = vec![];
 
             v = Vec::new();
-            for i in 0..amount + 1{
-                v.push(0.05*i as f64 + 0.01);
+            for i in 0..input + 1{
+                v.push(0.1*i as f64 + 0.01);
             }
 
             nl.w.push(v);
@@ -55,8 +55,14 @@ impl NeuralLayer{
 impl NeuralNet{
     pub fn new(architecture: Vec<i32>, l_rate: f64, moment: f64) -> NeuralNet {
         let mut nn = NeuralNet{learn_rate: l_rate, moment: moment, layers: Vec::new()};
-        for v in architecture.iter() {
-            nn.layers.push(NeuralLayer::new(*v))
+
+        for i in 0..architecture.len() {
+            if i == 0{
+                nn.layers.push(NeuralLayer::new(architecture[i], architecture[i]))
+            }
+            else {
+                nn.layers.push(NeuralLayer::new(architecture[i], architecture[i - 1]))
+            }
         }
 
         return nn;
@@ -93,21 +99,24 @@ impl NeuralNet{
                 }
         }
 
+        // TODO: the process doesn't coencide
+        println!("{}", (self.layers[1].y[0] - res[0]));
+
         for j in (0..self.layers.len()).rev() {
             if j == self.layers.len() - 1{
                 for i in 0..self.layers[j].y.len(){
                     self.layers[j].delta[i] = (self.layers[j].y[i] - res[i])*der_act(self.layers[j].v[i]);
                 }
             }
-            else {
-                for i in 0..self.layers[j + 1].delta.len(){
-                    sum = 0.0;
-                    for k in 0..self.layers[j + 1].delta.len(){
-                        sum += self.layers[j + 1].delta[k] * self.layers[j + 1].w[k][i + 1];
+                else {
+                    for i in 0..self.layers[j].delta.len(){
+                        sum = 0.0;
+                        for k in 0..self.layers[j + 1].delta.len(){
+                            sum += self.layers[j + 1].delta[k] * self.layers[j + 1].w[k][i + 1];
+                        }
+                        self.layers[j].delta[i] = der_act(self.layers[j].v[i]) * sum;
                     }
-                    self.layers[j].delta[i] = der_act(self.layers[j + 1].v[i]) * sum;
                 }
-            }
         }
 
         for j in 0..self.layers.len(){
@@ -120,9 +129,9 @@ impl NeuralNet{
                         if k == 0{
                             self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i];
                         }
-                        else {
-                            self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*self.layers[j].y[k - 1];
-                        }
+                            else {
+                                self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*self.layers[j - 1].y[k - 1];
+                            }
                     }
                 }
             }
