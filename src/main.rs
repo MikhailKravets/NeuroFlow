@@ -20,7 +20,7 @@ fn main() {
     nn.print(network::Type::Weights);
 
     let prev = time::now_utc();
-    for _ in 0..100000{
+    for _ in 0..100{
         if k == 4{
             k = 0;
         }
@@ -31,6 +31,11 @@ fn main() {
     nn.print(network::Type::Deltas);
     nn.print(network::Type::Weights);
 
-    println!("Spend time: {}", (time::now_utc() - prev));
+    println!("Res 1: [{}, {}], [{}] -> [{}]", sc[0].0[0], sc[0].0[1], sc[0].1[0], nn.calc(sc[0].0)[0]);
+    println!("Res 2: [{}, {}], [{}] -> [{}]", sc[1].0[0], sc[1].0[1], sc[1].1[0], nn.calc(sc[1].0)[0]);
+    println!("Res 3: [{}, {}], [{}] -> [{}]", sc[2].0[0], sc[2].0[1], sc[2].1[0], nn.calc(sc[2].0)[0]);
+    println!("Res 4: [{}, {}], [{}] -> [{}]", sc[3].0[0], sc[3].0[1], sc[3].1[0], nn.calc(sc[3].0)[0]);
+
+    println!("\nSpend time: {}", (time::now_utc() - prev));
     println!("Application stops!");
 }

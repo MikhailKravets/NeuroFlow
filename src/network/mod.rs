@@ -72,7 +72,6 @@ impl NeuralNet{
 
     pub fn fit(&mut self, X: &[f64], d: &[f64]){
         let mut sum: f64;
-
         let mut x = X.to_vec();
         let res = d.to_vec();
 
@@ -102,7 +101,7 @@ impl NeuralNet{
         }
 
         // TODO: the process doesn't coencide
-//        println!("{}", (self.layers[1].y[0] - res[0]));
+        println!("{}", (self.layers[1].y[0] - res[0]));
 
         for j in (0..self.layers.len()).rev() {
             if j == self.layers.len() - 1{
@@ -140,8 +139,34 @@ impl NeuralNet{
         }
     }
 
-    pub fn calc(&self, X: &[f64]){
+    pub fn calc(&mut self, X: &[f64]) -> &[f64]{
+        let mut sum: f64;
+        let mut x = X.to_vec();
 
+        for j in 0..self.layers.len(){
+            if j == 0{
+                for i in 0..self.layers[j].v.len(){
+                    sum = 0.0;
+                    for k in 00..x.len(){
+                        sum += self.layers[j].w[i][k] * x[k];
+                    }
+                    self.layers[j].v[i] = sum;
+                    self.layers[j].y[i] = act(self.layers[j].v[i]);
+                }
+            }
+            else {
+                for i in 0..self.layers[j].v.len(){
+                    sum = 0.0;
+                    for k in 00..self.layers[j - 1].y.len(){
+                        sum += self.layers[j].w[i][k] * self.layers[j - 1].y[k];
+                    }
+                    self.layers[j].v[i] = sum;
+                    self.layers[j].y[i] = act(self.layers[j].v[i]);
+                }
+            }
+        }
+
+        &self.layers[self.layers.len() - 1].y
     }
 
     pub fn print(&self, e: Type){
