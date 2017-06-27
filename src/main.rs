@@ -17,8 +17,10 @@ fn main() {
     ];
     let mut k = 0;
 
+    nn.print(network::Type::Weights);
+
     let prev = time::now_utc();
-    for _ in 0..1000{
+    for _ in 0..100000{
         if k == 4{
             k = 0;
         }

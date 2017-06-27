@@ -1,3 +1,5 @@
+extern crate rand;
+
 
 
 fn act(x: f64) -> f64{
@@ -43,7 +45,7 @@ impl NeuralLayer{
 
             v = Vec::new();
             for i in 0..input + 1{
-                v.push(0.1*i as f64 + 0.01);
+                v.push(rand::random::<f64>());
             }
 
             nl.w.push(v);
@@ -100,7 +102,7 @@ impl NeuralNet{
         }
 
         // TODO: the process doesn't coencide
-        println!("{}", (self.layers[1].y[0] - res[0]));
+//        println!("{}", (self.layers[1].y[0] - res[0]));
 
         for j in (0..self.layers.len()).rev() {
             if j == self.layers.len() - 1{
