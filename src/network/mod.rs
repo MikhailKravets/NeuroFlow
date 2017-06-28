@@ -141,6 +141,8 @@ impl NeuralNet{
 
     #[allow(non_snake_case)]
     pub fn calc(&mut self, X: &[f64]) -> &[f64]{
+        // Yeeeeeaaah!!! The problem namely in that stupid method... sometimes i'm going to fix it
+
         let mut sum: f64;
         let mut x = X.to_vec();
 

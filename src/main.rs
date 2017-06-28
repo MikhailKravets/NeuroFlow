@@ -28,7 +28,7 @@ fn main() {
     nn.print(network::Type::Weights);
 
     let prev = time::now_utc();
-    for _ in 0..10_000{
+    for _ in 0..20_000{
         k = rnd_range.ind_sample(&mut rand::thread_rng());
         nn.fit(sc[k].0, sc[k].1);
     }
