@@ -43,10 +43,8 @@ impl NeuralLayer{
             nl.delta.push(0.0);
             nl.v.push(0.0);
 
-            v = vec![];
-
             v = Vec::new();
-            for i in 0..input + 1{
+            for _ in 0..input + 1{
                 v.push(2f64*rand::random::<f64>() - 1f64);
             }
 
@@ -102,9 +100,6 @@ impl NeuralNet{
             }
         }
 
-        // TODO: the process doesn't coencide
-//        println!("{}", (res[0] - self.layers[1].y[0]));
-
         for j in (0..self.layers.len()).rev(){
             if j == self.layers.len() - 1{
                 for i in 0..self.layers[j].y.len(){
@@ -141,10 +136,10 @@ impl NeuralNet{
 
     #[allow(non_snake_case)]
     pub fn calc(&mut self, X: &[f64]) -> &[f64]{
-        // Yeeeeeaaah!!! The problem namely in that stupid method... sometimes i'm going to fix it
-
         let mut sum: f64;
         let mut x = X.to_vec();
+
+        x.insert(0, 1f64);
 
         for j in 0..self.layers.len(){
             if j == 0{
