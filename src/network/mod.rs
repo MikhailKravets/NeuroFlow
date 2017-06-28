@@ -12,31 +12,31 @@ fn der_act(x: f64) -> f64{
 
 
 #[allow(dead_code)]
-pub enum Type{
-    InducedField,
+pub enum Field {
+    Induced,
     Y,
     Deltas,
     Weights
 }
 
 
-pub struct NeuralLayer{
-    pub v: Vec<f64>,
-    pub y: Vec<f64>,
-    pub delta: Vec<f64>,
-    pub w: Vec<Vec<f64>>,
+struct Layer {
+    v: Vec<f64>,
+    y: Vec<f64>,
+    delta: Vec<f64>,
+    w: Vec<Vec<f64>>,
 }
 
 
-pub struct NeuralNet{
-    pub layers: Vec<NeuralLayer>,
+pub struct MLP {
+    layers: Vec<Layer>,
     pub learn_rate: f64,
     pub moment: f64
 }
 
-impl NeuralLayer{
-    fn new(amount: i32, input: i32) -> NeuralLayer{
-        let mut nl = NeuralLayer{v: vec![], y: vec![], delta: vec![], w: Vec::new()};
+impl Layer {
+    fn new(amount: i32, input: i32) -> Layer {
+        let mut nl = Layer {v: vec![], y: vec![], delta: vec![], w: Vec::new()};
         let mut v: Vec<f64>;
         for _ in 0..amount {
             nl.y.push(0.0);
@@ -54,16 +54,16 @@ impl NeuralLayer{
     }
 }
 
-impl NeuralNet{
-    pub fn new(architecture: Vec<i32>, l_rate: f64, moment: f64) -> NeuralNet {
-        let mut nn = NeuralNet{learn_rate: l_rate, moment: moment, layers: Vec::new()};
+impl MLP {
+    pub fn new(architecture: Vec<i32>, l_rate: f64, moment: f64) -> MLP {
+        let mut nn = MLP {learn_rate: l_rate, moment: moment, layers: Vec::new()};
 
         for i in 0..architecture.len() {
             if i == 0{
-                nn.layers.push(NeuralLayer::new(architecture[i], architecture[i]))
+                nn.layers.push(Layer::new(architecture[i], architecture[i]))
             }
             else {
-                nn.layers.push(NeuralLayer::new(architecture[i], architecture[i - 1]))
+                nn.layers.push(Layer::new(architecture[i], architecture[i - 1]))
             }
         }
 
@@ -166,9 +166,9 @@ impl NeuralNet{
         &self.layers[self.layers.len() - 1].y
     }
 
-    pub fn print(&self, e: Type){
+    pub fn print(&self, e: Field){
         match e {
-            Type::InducedField => {
+            Field::Induced => {
                 println!("**Induced field**");
                 for v in self.layers.iter(){
                     for val in v.v.iter(){
@@ -178,7 +178,7 @@ impl NeuralNet{
                 }
                 println!("----------");
             },
-            Type::Y => {
+            Field::Y => {
                 println!("**Activated field**");
                 for v in self.layers.iter(){
                     for val in v.y.iter(){
@@ -188,7 +188,7 @@ impl NeuralNet{
                 }
                 println!("----------");
             },
-            Type::Deltas => {
+            Field::Deltas => {
                 println!("**Deltas**");
                 for v in self.layers.iter(){
                     for val in v.delta.iter(){
@@ -198,7 +198,7 @@ impl NeuralNet{
                 }
                 println!("----------");
             },
-            Type::Weights => {
+            Field::Weights => {
                 println!("**Weights field**");
                 for v in self.layers.iter(){
                     for val in v.w.iter(){
