@@ -1,12 +1,11 @@
 extern crate rand;
 
 
-
-fn act(x: f64) -> f64{
+fn tanh(x: f64) -> f64{
     x.tanh()
 }
 
-fn der_act(x: f64) -> f64{
+fn der_tanh(x: f64) -> f64{
     1.0 - x.tanh().powi(2)
 }
 
@@ -62,9 +61,9 @@ impl NeuralNet{
             if i == 0{
                 nn.layers.push(NeuralLayer::new(architecture[i], architecture[i]))
             }
-            else {
-                nn.layers.push(NeuralLayer::new(architecture[i], architecture[i - 1]))
-            }
+                else {
+                    nn.layers.push(NeuralLayer::new(architecture[i], architecture[i - 1]))
+                }
         }
 
         return nn;
@@ -86,7 +85,7 @@ impl NeuralNet{
                         sum += self.layers[j].w[i][k] * x[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = act(self.layers[j].v[i]);
+                    self.layers[j].y[i] = tanh(self.layers[j].v[i]);
                 }
             } else {
                 for i in 0..self.layers[j].v.len(){
@@ -95,7 +94,7 @@ impl NeuralNet{
                         sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = act(self.layers[j].v[i]);
+                    self.layers[j].y[i] = tanh(self.layers[j].v[i]);
                 }
             }
         }
@@ -103,17 +102,17 @@ impl NeuralNet{
         for j in (0..self.layers.len()).rev(){
             if j == self.layers.len() - 1{
                 for i in 0..self.layers[j].y.len(){
-                    self.layers[j].delta[i] = (res[i] - self.layers[j].y[i])*der_act(self.layers[j].v[i]);
+                    self.layers[j].delta[i] = (res[i] - self.layers[j].y[i])* der_tanh(self.layers[j].v[i]);
                 }
             } else {
-                    for i in 0..self.layers[j].delta.len(){
-                        sum = 0.0;
-                        for k in 0..self.layers[j + 1].delta.len(){
-                            sum += self.layers[j + 1].delta[k] * self.layers[j + 1].w[k][i + 1];
-                        }
-                        self.layers[j].delta[i] = der_act(self.layers[j].v[i]) * sum;
+                for i in 0..self.layers[j].delta.len(){
+                    sum = 0.0;
+                    for k in 0..self.layers[j + 1].delta.len(){
+                        sum += self.layers[j + 1].delta[k] * self.layers[j + 1].w[k][i + 1];
                     }
+                    self.layers[j].delta[i] = der_tanh(self.layers[j].v[i]) * sum;
                 }
+            }
         }
 
         for j in 0..self.layers.len(){
@@ -122,13 +121,13 @@ impl NeuralNet{
                     if j == 0 {
                         self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*x[k];
                     }
-                    else {
-                        if k == 0{
-                            self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i];
-                        } else {
+                        else {
+                            if k == 0{
+                                self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i];
+                            } else {
                                 self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*self.layers[j - 1].y[k - 1];
                             }
-                    }
+                        }
                 }
             }
         }
@@ -149,7 +148,7 @@ impl NeuralNet{
                         sum += self.layers[j].w[i][k] * x[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = act(self.layers[j].v[i]);
+                    self.layers[j].y[i] = tanh(self.layers[j].v[i]);
                 }
             } else {
                 for i in 0..self.layers[j].v.len(){
@@ -158,7 +157,7 @@ impl NeuralNet{
                         sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = act(self.layers[j].v[i]);
+                    self.layers[j].y[i] = tanh(self.layers[j].v[i]);
                 }
             }
         }
