@@ -7,9 +7,11 @@ use rand::distributions::IndependentSample;
 use rand::distributions::range::Range;
 
 use nn_rust::activations::tanh;
+use nn_rust::estimations;
 
 
 #[test]
+#[ignore]
 fn xor(){
     println!("Application starts!");
 
@@ -43,4 +45,10 @@ fn xor(){
     println!("\nSpend time: {}", (time::now_utc() - prev));
     println!("Application stops!");
     assert!(true);
+}
+
+#[test]
+fn widrows(){
+    let w = estimations::widrows(&[2, 1], 0.1);
+    assert_eq!(w, 90f64);
 }
