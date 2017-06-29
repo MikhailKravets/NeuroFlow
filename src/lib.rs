@@ -54,8 +54,8 @@ impl NeuralLayer{
 }
 
 impl NeuralNet{
-    pub fn new(architecture: Vec<i32>, l_rate: f64, moment: f64) -> NeuralNet {
-        let mut nn = NeuralNet{learn_rate: l_rate, moment: moment, layers: Vec::new()};
+    pub fn new(architecture: Vec<i32>,) -> NeuralNet {
+        let mut nn = NeuralNet{learn_rate: 0.1, moment: 0.1, layers: Vec::new()};
 
         for i in 0..architecture.len() {
             if i == 0{
