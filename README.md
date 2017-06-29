@@ -17,4 +17,4 @@ A little documentation that tells how to use that lib
 All the tests lays in the tests directory (give me a boat!)
 
 ## License
-Mehh
+MIT License
