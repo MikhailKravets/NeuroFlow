@@ -179,6 +179,11 @@ impl MLP {
         self.der_act = *derivative;
     }
 
+    pub fn set_params(&mut self, learning_rate: f64, moment: f64){
+        self.learn_rate = learning_rate;
+        self.moment = moment;
+    }
+
     pub fn print(&self, e: Field){
         match e {
             Field::Induced => {
