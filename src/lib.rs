@@ -13,7 +13,7 @@ pub enum Field {
 }
 
 
-pub struct Layer {
+struct Layer {
     v: Vec<f64>,
     y: Vec<f64>,
     delta: Vec<f64>,
@@ -84,7 +84,7 @@ impl MLP {
                         sum += self.layers[j].w[i][k] * x[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = self.act(self.layers[j].v[i]);
+                    self.layers[j].y[i] = (self.act)(self.layers[j].v[i]);
                 }
             } else {
                 for i in 0..self.layers[j].v.len(){
@@ -93,7 +93,7 @@ impl MLP {
                         sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = self.act(self.layers[j].v[i]);
+                    self.layers[j].y[i] = (self.act)(self.layers[j].v[i]);
                 }
             }
         }
@@ -101,7 +101,7 @@ impl MLP {
         for j in (0..self.layers.len()).rev(){
             if j == self.layers.len() - 1{
                 for i in 0..self.layers[j].y.len(){
-                    self.layers[j].delta[i] = (res[i] - self.layers[j].y[i])* self.der_act(self.layers[j].v[i]);
+                    self.layers[j].delta[i] = (res[i] - self.layers[j].y[i])* (self.der_act)(self.layers[j].v[i]);
                 }
             } else {
                 for i in 0..self.layers[j].delta.len(){
@@ -109,7 +109,7 @@ impl MLP {
                     for k in 0..self.layers[j + 1].delta.len(){
                         sum += self.layers[j + 1].delta[k] * self.layers[j + 1].w[k][i + 1];
                     }
-                    self.layers[j].delta[i] = self.der_act(self.layers[j].v[i]) * sum;
+                    self.layers[j].delta[i] = (self.der_act)(self.layers[j].v[i]) * sum;
                 }
             }
         }
@@ -147,7 +147,7 @@ impl MLP {
                         sum += self.layers[j].w[i][k] * x[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = self.act(self.layers[j].v[i]);
+                    self.layers[j].y[i] = (self.act)(self.layers[j].v[i]);
                 }
             } else {
                 for i in 0..self.layers[j].v.len(){
@@ -156,7 +156,7 @@ impl MLP {
                         sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = self.der_act(self.layers[j].v[i]);
+                    self.layers[j].y[i] = (self.act)(self.layers[j].v[i]);
                 }
             }
         }
@@ -166,7 +166,7 @@ impl MLP {
 
     pub fn print(&self, e: Field){
         match e {
-            Field::InducedField => {
+            Field::Induced => {
                 println!("**Induced field**");
                 for v in self.layers.iter(){
                     for val in v.v.iter(){
