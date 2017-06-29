@@ -1,5 +1,5 @@
-mod activations;
-mod estimations;
+pub mod activations;
+pub mod estimations;
 
 extern crate rand;
 
@@ -175,8 +175,8 @@ impl MLP {
         }
     }
     pub fn set_activation(&mut self, func: &fn(f64)->f64, derivative: &fn(f64)->f64){
-        self.act = func;
-        self.der_act = derivative;
+        self.act = *func;
+        self.der_act = *derivative;
     }
 
     pub fn print(&self, e: Field){

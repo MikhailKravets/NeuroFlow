@@ -6,6 +6,8 @@ use nn_rust::MLP;
 use rand::distributions::IndependentSample;
 use rand::distributions::range::Range;
 
+use nn_rust::activations::tanh;
+
 
 #[test]
 fn xor(){
