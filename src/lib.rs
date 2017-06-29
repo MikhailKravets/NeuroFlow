@@ -12,6 +12,12 @@ pub enum Field {
     Weights
 }
 
+#[allow(dead_code)]
+pub enum Activation{
+    Sigmoid,
+    Tanh
+}
+
 
 struct Layer {
     v: Vec<f64>,
@@ -154,6 +160,23 @@ impl MLP {
         self.forward(&x, &Vec::new());
 
         &self.layers[self.layers.len() - 1].y
+    }
+
+    pub fn activation(&mut self, func: Activation){
+        match func{
+            Activation::Sigmoid => {
+                self.act = activations::sigm;
+                self.der_act = activations::der_sigm;
+            }
+            Activation::Tanh => {
+                self.act = activations::tanh;
+                self.der_act = activations::der_tanh;
+            }
+        }
+    }
+    pub fn set_activation(&mut self, func: &fn(f64)->f64, derivative: &fn(f64)->f64){
+        self.act = func;
+        self.der_act = derivative;
     }
 
     pub fn print(&self, e: Field){
