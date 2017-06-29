@@ -30,7 +30,7 @@ struct Layer {
 pub struct MLP {
     layers: Vec<Layer>,
     learn_rate: f64,
-    moment: f64,
+    momentum: f64,
 
     act: fn(f64) -> f64,
     der_act: fn(f64) -> f64
@@ -58,7 +58,7 @@ impl Layer {
 
 impl MLP {
     pub fn new(architecture: Vec<i32>,) -> MLP {
-        let mut nn = MLP {learn_rate: 0.1, moment: 0.1,
+        let mut nn = MLP {learn_rate: 0.1, momentum: 0.1,
             layers: Vec::new(),
             act: activations::tanh, der_act: activations::der_tanh};
 
@@ -179,9 +179,9 @@ impl MLP {
         self.der_act = *derivative;
     }
 
-    pub fn set_params(&mut self, learning_rate: f64, moment: f64){
+    pub fn set_params(&mut self, learning_rate: f64, momentum: f64){
         self.learn_rate = learning_rate;
-        self.moment = moment;
+        self.momentum = momentum;
     }
 
     pub fn print(&self, e: Field){
