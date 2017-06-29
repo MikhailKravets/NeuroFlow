@@ -68,13 +68,8 @@ impl MLP {
         return nn;
     }
 
-    #[allow(non_snake_case)]
-    pub fn fit(&mut self, X: &[f64], d: &[f64]){
+    fn forward(&mut self, x: &Vec<f64>, d: &Vec<f64>){
         let mut sum: f64;
-        let mut x = X.to_vec();
-        let res = d.to_vec();
-
-        x.insert(0, 1f64);
 
         for j in 0..self.layers.len(){
             if j == 0{
@@ -97,11 +92,15 @@ impl MLP {
                 }
             }
         }
+    }
+
+    fn backward(&mut self, x: &Vec<f64>, d: &Vec<f64>){
+        let mut sum: f64;
 
         for j in (0..self.layers.len()).rev(){
             if j == self.layers.len() - 1{
                 for i in 0..self.layers[j].y.len(){
-                    self.layers[j].delta[i] = (res[i] - self.layers[j].y[i])* (self.der_act)(self.layers[j].v[i]);
+                    self.layers[j].delta[i] = (d[i] - self.layers[j].y[i])* (self.der_act)(self.layers[j].v[i]);
                 }
             } else {
                 for i in 0..self.layers[j].delta.len(){
@@ -113,7 +112,9 @@ impl MLP {
                 }
             }
         }
+    }
 
+    fn update(&mut self, x: &Vec<f64>, d: &Vec<f64>){
         for j in 0..self.layers.len(){
             for i in 0..self.layers[j].w.len(){
                 for k in 0..self.layers[j].w[i].len(){
@@ -133,33 +134,24 @@ impl MLP {
     }
 
     #[allow(non_snake_case)]
+    pub fn fit(&mut self, X: &[f64], d: &[f64]){
+        let mut x = X.to_vec();
+        let res = d.to_vec();
+
+        x.insert(0, 1f64);
+
+        self.forward(&x, &res);
+        self.backward(&x, &res);
+        self.update(&x, &res);
+    }
+
+    #[allow(non_snake_case)]
     pub fn calc(&mut self, X: &[f64]) -> &[f64]{
-        let mut sum: f64;
         let mut x = X.to_vec();
 
         x.insert(0, 1f64);
 
-        for j in 0..self.layers.len(){
-            if j == 0{
-                for i in 0..self.layers[j].v.len(){
-                    sum = 0.0;
-                    for k in 0..x.len(){
-                        sum += self.layers[j].w[i][k] * x[k];
-                    }
-                    self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = (self.act)(self.layers[j].v[i]);
-                }
-            } else {
-                for i in 0..self.layers[j].v.len(){
-                    sum = self.layers[j].w[i][0];
-                    for k in 0..self.layers[j - 1].y.len(){
-                        sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
-                    }
-                    self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = (self.act)(self.layers[j].v[i]);
-                }
-            }
-        }
+        self.forward(&x, &Vec::new());
 
         &self.layers[self.layers.len() - 1].y
     }
