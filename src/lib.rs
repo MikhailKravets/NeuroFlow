@@ -1,41 +1,38 @@
+mod activations;
+mod estimations;
+
 extern crate rand;
 
 
-fn tanh(x: f64) -> f64{
-    x.tanh()
-}
-
-fn der_tanh(x: f64) -> f64{
-    1.0 - x.tanh().powi(2)
-}
-
-
 #[allow(dead_code)]
-pub enum Type{
-    InducedField,
+pub enum Field {
+    Induced,
     Y,
     Deltas,
     Weights
 }
 
 
-pub struct NeuralLayer{
-    pub v: Vec<f64>,
-    pub y: Vec<f64>,
-    pub delta: Vec<f64>,
-    pub w: Vec<Vec<f64>>,
+pub struct Layer {
+    v: Vec<f64>,
+    y: Vec<f64>,
+    delta: Vec<f64>,
+    w: Vec<Vec<f64>>,
 }
 
 
-pub struct NeuralNet{
-    pub layers: Vec<NeuralLayer>,
-    pub learn_rate: f64,
-    pub moment: f64
+pub struct MLP {
+    layers: Vec<Layer>,
+    learn_rate: f64,
+    moment: f64,
+
+    act: fn(f64) -> f64,
+    der_act: fn(f64) -> f64
 }
 
-impl NeuralLayer{
-    fn new(amount: i32, input: i32) -> NeuralLayer{
-        let mut nl = NeuralLayer{v: vec![], y: vec![], delta: vec![], w: Vec::new()};
+impl Layer {
+    fn new(amount: i32, input: i32) -> Layer {
+        let mut nl = Layer {v: vec![], y: vec![], delta: vec![], w: Vec::new()};
         let mut v: Vec<f64>;
         for _ in 0..amount {
             nl.y.push(0.0);
@@ -53,16 +50,18 @@ impl NeuralLayer{
     }
 }
 
-impl NeuralNet{
-    pub fn new(architecture: Vec<i32>,) -> NeuralNet {
-        let mut nn = NeuralNet{learn_rate: 0.1, moment: 0.1, layers: Vec::new()};
+impl MLP {
+    pub fn new(architecture: Vec<i32>,) -> MLP {
+        let mut nn = MLP {learn_rate: 0.1, moment: 0.1,
+            layers: Vec::new(),
+            act: activations::tanh, der_act: activations::der_tanh};
 
         for i in 0..architecture.len() {
             if i == 0{
-                nn.layers.push(NeuralLayer::new(architecture[i], architecture[i]))
+                nn.layers.push(Layer::new(architecture[i], architecture[i]))
             }
                 else {
-                    nn.layers.push(NeuralLayer::new(architecture[i], architecture[i - 1]))
+                    nn.layers.push(Layer::new(architecture[i], architecture[i - 1]))
                 }
         }
 
@@ -85,7 +84,7 @@ impl NeuralNet{
                         sum += self.layers[j].w[i][k] * x[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = tanh(self.layers[j].v[i]);
+                    self.layers[j].y[i] = self.act(self.layers[j].v[i]);
                 }
             } else {
                 for i in 0..self.layers[j].v.len(){
@@ -94,7 +93,7 @@ impl NeuralNet{
                         sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = tanh(self.layers[j].v[i]);
+                    self.layers[j].y[i] = self.act(self.layers[j].v[i]);
                 }
             }
         }
@@ -102,7 +101,7 @@ impl NeuralNet{
         for j in (0..self.layers.len()).rev(){
             if j == self.layers.len() - 1{
                 for i in 0..self.layers[j].y.len(){
-                    self.layers[j].delta[i] = (res[i] - self.layers[j].y[i])* der_tanh(self.layers[j].v[i]);
+                    self.layers[j].delta[i] = (res[i] - self.layers[j].y[i])* self.der_act(self.layers[j].v[i]);
                 }
             } else {
                 for i in 0..self.layers[j].delta.len(){
@@ -110,7 +109,7 @@ impl NeuralNet{
                     for k in 0..self.layers[j + 1].delta.len(){
                         sum += self.layers[j + 1].delta[k] * self.layers[j + 1].w[k][i + 1];
                     }
-                    self.layers[j].delta[i] = der_tanh(self.layers[j].v[i]) * sum;
+                    self.layers[j].delta[i] = self.der_act(self.layers[j].v[i]) * sum;
                 }
             }
         }
@@ -148,7 +147,7 @@ impl NeuralNet{
                         sum += self.layers[j].w[i][k] * x[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = tanh(self.layers[j].v[i]);
+                    self.layers[j].y[i] = self.act(self.layers[j].v[i]);
                 }
             } else {
                 for i in 0..self.layers[j].v.len(){
@@ -157,7 +156,7 @@ impl NeuralNet{
                         sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = tanh(self.layers[j].v[i]);
+                    self.layers[j].y[i] = self.der_act(self.layers[j].v[i]);
                 }
             }
         }
@@ -165,9 +164,9 @@ impl NeuralNet{
         &self.layers[self.layers.len() - 1].y
     }
 
-    pub fn print(&self, e: Type){
+    pub fn print(&self, e: Field){
         match e {
-            Type::InducedField => {
+            Field::InducedField => {
                 println!("**Induced field**");
                 for v in self.layers.iter(){
                     for val in v.v.iter(){
@@ -177,7 +176,7 @@ impl NeuralNet{
                 }
                 println!("----------");
             },
-            Type::Y => {
+            Field::Y => {
                 println!("**Activated field**");
                 for v in self.layers.iter(){
                     for val in v.y.iter(){
@@ -187,7 +186,7 @@ impl NeuralNet{
                 }
                 println!("----------");
             },
-            Type::Deltas => {
+            Field::Deltas => {
                 println!("**Deltas**");
                 for v in self.layers.iter(){
                     for val in v.delta.iter(){
@@ -197,7 +196,7 @@ impl NeuralNet{
                 }
                 println!("----------");
             },
-            Type::Weights => {
+            Field::Weights => {
                 println!("**Weights field**");
                 for v in self.layers.iter(){
                     for val in v.w.iter(){
