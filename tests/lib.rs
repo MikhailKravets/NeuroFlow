@@ -52,6 +52,11 @@ fn classes(){
     let mut sample;
     let mut k = 0;
 
+    // I guess the problem is that I use for training always new value
+    // and that is why the network can't catch this combinatorical law
+    // by which it should divide sets
+    // But on 50% of my mind I am sure that I am wrong
+
     let c1 = Normal::new(0.1f64, 0.05);
     let c2 = Normal::new(0.25f64, 0.07);
     let c3 = Normal::new(0.5f64, 0.3);
