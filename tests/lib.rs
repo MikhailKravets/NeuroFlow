@@ -50,32 +50,37 @@ fn classes(){
     let allowed_error = 0.08; // Max allowed error is 8%
     let mut nn = MLP::new(&[2, 3, 3]);
     let mut sample;
-    let mut k = 0;
-
-    // I guess the problem is that I use for training always new value
-    // and that is why the network can't catch this combinatorical law
-    // by which it should divide sets
-    // But on 50% of my mind I am sure that I am wrong
+    let mut training_set: Vec<(Vec<f64>, Vec<f64>)> = Vec::new();
+    let training_amount = (10f64 * estimators::widrows(&[3, 3], 0.8)) as i32;
 
     let c1 = Normal::new(0.1f64, 0.05);
     let c2 = Normal::new(0.25f64, 0.07);
     let c3 = Normal::new(0.5f64, 0.3);
 
-    let rnd_range = Range::new(0, 10);
-    let prev = time::now_utc();
+    let mut k = 0;
+    for i in 0..training_amount{
+        if k == 0{
+            training_set.push((vec![c1.ind_sample(&mut rand::thread_rng()), c1.ind_sample(&mut rand::thread_rng())], vec![1f64, 0f64, 0f64]));
+        }
+        else if k == 1 {
+            training_set.push((vec![c2.ind_sample(&mut rand::thread_rng()), c2.ind_sample(&mut rand::thread_rng())], vec![0f64, 1f64, 0f64]));
+        }
+        else if k == 2 {
+            training_set.push((vec![c3.ind_sample(&mut rand::thread_rng()), c3.ind_sample(&mut rand::thread_rng())], vec![0f64, 0f64, 1f64]));
+        }
+        else {
+            k = 0;
+        }
+    }
 
+    let rnd_range = Range::new(0, training_set.len());
+
+    let prev = time::now_utc();
     nn.activation(nn_rust::Activator::Sigmoid);
 
     for _ in 0..20_000{
-        nn.fit(&[c1.ind_sample(&mut rand::thread_rng()), c1.ind_sample(&mut rand::thread_rng())], &[0.98f64, 0f64, 0f64]);
-    }
-
-    for _ in 0..20_000{
-        nn.fit(&[c2.ind_sample(&mut rand::thread_rng()), c2.ind_sample(&mut rand::thread_rng())], &[0f64, 0.98f64, 0f64]);
-    }
-
-    for _ in 0..20_000{
-        nn.fit(&[c3.ind_sample(&mut rand::thread_rng()), c3.ind_sample(&mut rand::thread_rng())], &[0f64, 0f64, 0.98f64]);
+        k = rnd_range.ind_sample(&mut rand::thread_rng());
+        nn.fit(&training_set[k].0, &training_set[k].1);
     }
 
     {
@@ -90,13 +95,6 @@ fn classes(){
         sample = [c2.ind_sample(&mut rand::thread_rng()), c2.ind_sample(&mut rand::thread_rng())];
         res = nn.calc(&sample);
         println!("Res for: [{:?}], [0, 1, 0] -> [{}, {}, {}]", sample, res[0], res[1], res[2]);
-    }
-
-    {
-        let res;
-        sample = [c3.ind_sample(&mut rand::thread_rng()), c3.ind_sample(&mut rand::thread_rng())];
-        res = nn.calc(&sample);
-        println!("Res for: [{:?}], [0, 0, 1] -> [{}, {}, {}]", sample, res[0], res[1], res[2]);
     }
 
     //  (res - v.1[0]).abs() > allowed_error
