@@ -1,3 +1,6 @@
+
+
+
 /// # Widrow's rule of thumb
 /// This is an empirical rule that shows the size of training sample
 /// in order to get good generalization.
@@ -13,4 +16,13 @@ pub fn widrows(architecture: &[i32], allowed_error: f64) -> f64 {
     }
 
     (s as f64) / allowed_error
+}
+
+/// # Optimal Brain Surgery (OBS)
+/// OBS is procedure that helps get rid of redundant free network
+/// parameters (e.g. weights).
+/// After applying of OBS you need to train your network again.
+#[allow(non_snake_case)]
+pub fn OBS(nn: &super::MLP) {
+
 }
