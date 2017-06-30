@@ -6,8 +6,8 @@ use nn_rust::MLP;
 use rand::distributions::IndependentSample;
 use rand::distributions::range::Range;
 
-use nn_rust::activations::tanh;
-use nn_rust::estimations;
+use nn_rust::activators::tanh;
+use nn_rust::estimators;
 
 
 #[test]
@@ -49,6 +49,6 @@ fn xor(){
 
 #[test]
 fn widrows(){
-    let w = estimations::widrows(&[2, 1], 0.1);
+    let w = estimators::widrows(&[2, 1], 0.1);
     assert_eq!(w, 90f64);
 }

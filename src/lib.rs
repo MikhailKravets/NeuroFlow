@@ -1,5 +1,5 @@
-pub mod activations;
-pub mod estimations;
+pub mod activators;
+pub mod estimators;
 
 extern crate rand;
 
@@ -13,7 +13,7 @@ pub enum Field {
 }
 
 #[allow(dead_code)]
-pub enum Activation{
+pub enum Activator {
     Sigmoid,
     Tanh
 }
@@ -60,7 +60,7 @@ impl MLP {
     pub fn new(architecture: Vec<i32>,) -> MLP {
         let mut nn = MLP {learn_rate: 0.1, momentum: 0.1,
             layers: Vec::new(),
-            act: activations::tanh, der_act: activations::der_tanh};
+            act: activators::tanh, der_act: activators::der_tanh};
 
         for i in 0..architecture.len() {
             if i == 0{
@@ -162,15 +162,15 @@ impl MLP {
         &self.layers[self.layers.len() - 1].y
     }
 
-    pub fn activation(&mut self, func: Activation){
+    pub fn activation(&mut self, func: Activator){
         match func{
-            Activation::Sigmoid => {
-                self.act = activations::sigm;
-                self.der_act = activations::der_sigm;
+            Activator::Sigmoid => {
+                self.act = activators::sigm;
+                self.der_act = activators::der_sigm;
             }
-            Activation::Tanh => {
-                self.act = activations::tanh;
-                self.der_act = activations::der_tanh;
+            Activator::Tanh => {
+                self.act = activators::tanh;
+                self.der_act = activators::der_tanh;
             }
         }
     }
