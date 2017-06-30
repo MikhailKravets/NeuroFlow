@@ -57,18 +57,13 @@ impl Layer {
 }
 
 impl MLP {
-    pub fn new(architecture: Vec<i32>,) -> MLP {
+    pub fn new(architecture: &[i32],) -> MLP {
         let mut nn = MLP {learn_rate: 0.1, momentum: 0.1,
             layers: Vec::new(),
             act: activators::tanh, der_act: activators::der_tanh};
 
-        for i in 0..architecture.len() {
-            if i == 0{
-                nn.layers.push(Layer::new(architecture[i], architecture[i]))
-            }
-                else {
-                    nn.layers.push(Layer::new(architecture[i], architecture[i - 1]))
-                }
+        for i in 1..architecture.len() {
+            nn.layers.push(Layer::new(architecture[i], architecture[i - 1]))
         }
 
         return nn;
@@ -158,7 +153,6 @@ impl MLP {
         x.insert(0, 1f64);
 
         self.forward(&x, &Vec::new());
-
         &self.layers[self.layers.len() - 1].y
     }
 
