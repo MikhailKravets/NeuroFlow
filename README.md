@@ -1,5 +1,5 @@
 # NN-Rust
-Neural Networks Rust library. For now, the library contains Multilayer Perceptron that is trained by Backpropagation algorythm.
+Neural Networks Rust library. For now, the library contains Multilayer Perceptron that is trained by Backpropagation algorithm.
 
 ## Code Example
 XOR task with nn-rust library
