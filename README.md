@@ -41,7 +41,7 @@ XOR task with nn-rust library
 ```
 
 ## Motivation
-You may ask me, why are you doing it there are already a lot of much better solution (even for Rust)? Actually, it is done in order to fill my educational need. But I'll be glad if you find it useful.
+You may ask me, why are you doing it if there are already a lot of much better solutions (even for Rust)? Actually, it is done in order to fill my educational need. But I'll be glad if you find something useful here.
 
 ## Installation
 Insert into cargo.toml [dependencies] block next line
