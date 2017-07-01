@@ -82,7 +82,18 @@ impl MLP {
                     self.layers[j].v[i] = sum;
                     self.layers[j].y[i] = (self.act)(self.layers[j].v[i]);
                 }
-            } else {
+            }
+            else if j == self.layers.len() - 1{
+                for i in 0..self.layers[j].v.len(){
+                    sum = self.layers[j].w[i][0];
+                    for k in 0..self.layers[j - 1].y.len(){
+                        sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
+                    }
+                    self.layers[j].v[i] = sum;
+                    self.layers[j].y[i] = self.layers[j].v[i];
+                }
+            }
+            else {
                 for i in 0..self.layers[j].v.len(){
                     sum = self.layers[j].w[i][0];
                     for k in 0..self.layers[j - 1].y.len(){

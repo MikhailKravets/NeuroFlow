@@ -12,7 +12,6 @@ use nn_rust::estimators;
 
 
 #[test]
-#[ignore]
 fn xor(){
     let allowed_error = 0.08; // Max allowed error is 8%
     let mut nn = MLP::new(&[2, 2, 1]);
@@ -46,7 +45,6 @@ fn xor(){
 }
 
 #[test]
-#[ignore]
 fn classes(){
     let allowed_error = 0.08; // Max allowed error is 8%
     let mut nn = MLP::new(&[2, 3, 4, 3]);
