@@ -34,17 +34,20 @@ Simple classification task
         Simultaneously generate value from each class and add it to the training set
     */
     let mut k = 0;
-    for i in 0..training_amount{
+    for _ in 0..training_amount{
         if k == 0{
-            training_set.push((vec![c1.ind_sample(&mut rand::thread_rng()), c1.ind_sample(&mut rand::thread_rng())], vec![1f64, 0f64, 0f64]));
+            training_set.push((vec![c1.ind_sample(&mut rand::thread_rng()), c1.ind_sample(&mut rand::thread_rng())],
+                               vec![1f64, 0f64, 0f64]));
             k += 1;
         }
         else if k == 1 {
-            training_set.push((vec![c2.ind_sample(&mut rand::thread_rng()), c2.ind_sample(&mut rand::thread_rng())], vec![0f64, 1f64, 0f64]));
+            training_set.push((vec![c2.ind_sample(&mut rand::thread_rng()), c2.ind_sample(&mut rand::thread_rng())],
+                               vec![0f64, 1f64, 0f64]));
             k += 1;
         }
         else if k == 2 {
-            training_set.push((vec![c3.ind_sample(&mut rand::thread_rng()), c3.ind_sample(&mut rand::thread_rng())], vec![0f64, 0f64, 1f64]));
+            training_set.push((vec![c3.ind_sample(&mut rand::thread_rng()), c3.ind_sample(&mut rand::thread_rng())],
+                               vec![0f64, 0f64, 1f64]));
             k += 1;
         }
         else {
@@ -87,9 +90,9 @@ Simple classification task
 ```
 Expected result
 ```
-Res for: [[1.2154260379961084, 0.5240532938133206]], [1, 0, 0] -> [0.9043892795089641, 0.044860317736932304, 0.01336331265053569]
-Res for: [[3.1533061574154067, 1.2676336140495372]], [0, 1, 0] -> [0.16666039429457316, 0.8046737684912082, 0.020950389723868302]
-Res for: [[2.9893548907003327, 3.336032369101008]], [0, 0, 1] -> [0.02594222276553783, -0.049839163422333486, 0.9953174852324813]
+for: [[1.1630001104941605, 1.1159243765400833]], [1, 0, 0] -> [0.9004036298791347, 0.21423674017110195, -0.010395171772725179]
+for: [[2.910223592320417, 2.223002513509626]], [0, 1, 0] -> [0.2995672796100093, 0.6364006240915903, 0.1628364994838787]
+for: [[3.858661199225414, 3.492064661955157]], [0, 0, 1] -> [0.07877276613964404, -0.06444202949012201, 0.9761674435051991]
 ```
 
 ## Motivation
