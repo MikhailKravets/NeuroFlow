@@ -96,7 +96,7 @@ for: [[3.858661199225414, 3.492064661955157]], [0, 0, 1] -> [0.07877276613964404
 ```
 
 ## Motivation
-You may ask me, why are you doing it if there are already a lot of much better solutions (even for Rust)? Actually, it is done in order to fill my educational need. But I'll be glad if you find something useful here.
+The library is done for educational purposes. But I'll be glad if you find something useful here.
 
 ## Installation
 Insert into cargo.toml [dependencies] block next line
