@@ -50,24 +50,27 @@ fn classes(){
     let mut nn = MLP::new(&[2, 3, 4, 3]);
     let mut sample;
     let mut training_set: Vec<(Vec<f64>, Vec<f64>)> = Vec::new();
-    let training_amount = (10f64 * estimators::widrows(&[3, 4, 3], 0.8)) as i32;
+    let training_amount = (20f64 * estimators::widrows(&[3, 4, 3], 0.8)) as i32;
 
-    let c1 = Normal::new(0.1f64, 0.05);
-    let c2 = Normal::new(0.2f64, 0.07);
-    let c3 = Normal::new(0.5f64, 0.2);
+    let c1 = Normal::new(1f64, 0.5);
+    let c2 = Normal::new(2f64, 1.0);
+    let c3 = Normal::new(3f64, 0.35);
 
     let mut k = 0;
-    for i in 0..training_amount{
+    for _ in 0..training_amount{
         if k == 0{
-            training_set.push((vec![c1.ind_sample(&mut rand::thread_rng()), c1.ind_sample(&mut rand::thread_rng())], vec![1f64, 0f64, 0f64]));
+            training_set.push((vec![c1.ind_sample(&mut rand::thread_rng()), c1.ind_sample(&mut rand::thread_rng())],
+                               vec![1f64, 0f64, 0f64]));
             k += 1;
         }
         else if k == 1 {
-            training_set.push((vec![c2.ind_sample(&mut rand::thread_rng()), c2.ind_sample(&mut rand::thread_rng())], vec![0f64, 1f64, 0f64]));
+            training_set.push((vec![c2.ind_sample(&mut rand::thread_rng()), c2.ind_sample(&mut rand::thread_rng())],
+                               vec![0f64, 1f64, 0f64]));
             k += 1;
         }
         else if k == 2 {
-            training_set.push((vec![c3.ind_sample(&mut rand::thread_rng()), c3.ind_sample(&mut rand::thread_rng())], vec![0f64, 0f64, 1f64]));
+            training_set.push((vec![c3.ind_sample(&mut rand::thread_rng()), c3.ind_sample(&mut rand::thread_rng())],
+                               vec![0f64, 0f64, 1f64]));
             k += 1;
         }
         else {
@@ -100,25 +103,23 @@ fn classes(){
     {
         sample = [c1.ind_sample(&mut rand::thread_rng()), c1.ind_sample(&mut rand::thread_rng())];
         let res = nn.calc(&sample);
-        println!("Res for: [{:?}], [1, 0, 0] -> {:?}", sample, res);
+        println!("for: [{:?}], [1, 0, 0] -> {:?}", sample, res);
         assert!(check(&res, 0));
     }
 
     {
         sample = [c2.ind_sample(&mut rand::thread_rng()), c2.ind_sample(&mut rand::thread_rng())];
         let res = nn.calc(&sample);
-        println!("Res for: [{:?}], [1, 0, 0] -> {:?}", sample, res);
+        println!("for: [{:?}], [0, 1, 0] -> {:?}", sample, res);
         assert!(check(res, 1));
     }
 
     {
         sample = [c3.ind_sample(&mut rand::thread_rng()), c3.ind_sample(&mut rand::thread_rng())];
         let res = nn.calc(&sample);
-        println!("Res for: [{:?}], [1, 0, 0] -> {:?}", sample, res);
+        println!("for: [{:?}], [0, 0, 1] -> {:?}", sample, res);
         assert!(check(res, 2));
     }
-
-    //  (res - v.1[0]).abs() > allowed_error
 
     println!("\nSpend time: {}", (time::now_utc() - prev));
     assert!(true);
