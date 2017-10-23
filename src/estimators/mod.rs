@@ -23,6 +23,6 @@ pub fn widrows(architecture: &[i32], allowed_error: f64) -> f64 {
 /// parameters (e.g. weights).
 /// After applying of OBS you need to train your network again.
 #[allow(non_snake_case)]
-pub fn OBS(nn: &super::MLP) {
+pub fn OBS(nn: &super::FeedForward) {
 
 }

@@ -27,7 +27,7 @@ struct Layer {
 }
 
 
-pub struct MLP {
+pub struct FeedForward {
     layers: Vec<Layer>,
     learn_rate: f64,
     momentum: f64,
@@ -56,9 +56,9 @@ impl Layer {
     }
 }
 
-impl MLP {
-    pub fn new(architecture: &[i32],) -> MLP {
-        let mut nn = MLP {learn_rate: 0.1, momentum: 0.1,
+impl FeedForward {
+    pub fn new(architecture: &[i32],) -> FeedForward {
+        let mut nn = FeedForward {learn_rate: 0.1, momentum: 0.1,
             layers: Vec::new(),
             act: activators::tanh, der_act: activators::der_tanh};
 

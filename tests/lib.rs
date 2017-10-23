@@ -2,7 +2,7 @@ extern crate nn_rust;
 extern crate time;
 extern crate rand;
 
-use nn_rust::MLP;
+use nn_rust::FeedForward;
 use rand::distributions::IndependentSample;
 use rand::distributions::range::Range;
 use rand::distributions::normal::Normal;
@@ -15,7 +15,7 @@ use nn_rust::estimators;
 #[ignore]
 fn xor(){
     let allowed_error = 0.08; // Max allowed error is 8%
-    let mut nn = MLP::new(&[2, 2, 1]);
+    let mut nn = FeedForward::new(&[2, 2, 1]);
     let sc = &[
         (&[0f64, 0f64], &[0f64]),
         (&[1f64, 0f64], &[1f64]),
@@ -49,7 +49,7 @@ fn xor(){
 #[ignore]
 fn classes(){
     let allowed_error = 0.08; // Max allowed error is 8%
-    let mut nn = MLP::new(&[2, 3, 4, 3]);
+    let mut nn = FeedForward::new(&[2, 3, 4, 3]);
     let mut sample;
     let mut training_set: Vec<(Vec<f64>, Vec<f64>)> = Vec::new();
     let training_amount = (10f64 * estimators::widrows(&[3, 4, 3], 0.8)) as i32;
