@@ -1,6 +1,8 @@
 pub mod activators;
 pub mod estimators;
 
+use std::fmt;
+
 extern crate rand;
 
 
@@ -188,53 +190,49 @@ impl FeedForward {
         self.learn_rate = learning_rate;
         self.momentum = momentum;
     }
+}
 
-    pub fn print(&self, e: Field){
-        match e {
-            Field::Induced => {
-                println!("**Induced field**");
-                for v in self.layers.iter(){
-                    for val in v.v.iter(){
-                        print!("{} ", val);
-                    }
-                    println!();
-                }
-                println!("----------");
-            },
-            Field::Y => {
-                println!("**Activated field**");
-                for v in self.layers.iter(){
-                    for val in v.y.iter(){
-                        print!("{} ", val);
-                    }
-                    println!();
-                }
-                println!("----------");
-            },
-            Field::Deltas => {
-                println!("**Deltas**");
-                for v in self.layers.iter(){
-                    for val in v.delta.iter(){
-                        print!("{} ", val);
-                    }
-                    println!();
-                }
-                println!("----------");
-            },
-            Field::Weights => {
-                println!("**Weights field**");
-                for v in self.layers.iter(){
-                    for val in v.w.iter(){
-                        print!("[");
-                        for cell in val.iter(){
-                            print!("{} ", cell);
-                        }
-                        print!("]");
-                    }
-                    println!();
-                }
-                println!("----------");
-            },
+impl fmt::Display for FeedForward {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result{
+        let mut buf: String = format!("**Induced field**");
+
+        for v in self.layers.iter(){
+            for val in v.v.iter(){
+                buf += &format!("{:.3} ", val);
+            }
+            buf += "\n";
         }
+        buf += "\n";
+
+        buf += "**Activated field**";
+        for v in self.layers.iter(){
+            for val in v.y.iter(){
+                buf += &format!("{:.3} ", val);
+            }
+            buf += "\n";
+        }
+        buf += "\n";
+
+        buf += "**Deltas**";
+        for v in self.layers.iter(){
+            for val in v.delta.iter(){
+                buf += &format!("{:.3} ", val);
+            }
+            buf += "\n";
+        }
+        buf += "\n";
+
+        buf += "**Weights**";
+        for v in self.layers.iter() {
+            for val in v.w.iter() {
+                buf += "[";
+                for cell in val.iter() {
+                    buf += &format!("{:.3} ", cell);
+                }
+                buf += "]";
+            }
+        }
+
+        buf.fmt(f)
     }
 }
