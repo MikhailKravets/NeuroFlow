@@ -7,6 +7,7 @@ use rand::distributions::IndependentSample;
 use rand::distributions::range::Range;
 use rand::distributions::normal::Normal;
 
+use nn_rust::activators;
 use nn_rust::activators::tanh;
 use nn_rust::estimators;
 
@@ -33,16 +34,17 @@ fn xor(){
     let mut res;
     for v in sc{
         res = nn.calc(v.0)[0];
-        println!("Res for: [{}, {}], [{}] -> [{}]", v.0[0], v.0[1], v.1[0], res);
+        println!("Res for: [{:.3}, {:.3}], [{:.3}] -> [{:.3}]", v.0[0], v.0[1], v.1[0], res);
 
         if (res - v.1[0]).abs() > allowed_error{
             assert!(false);
         }
     }
 
-    println!("\nSpend time: {}", (time::now_utc() - prev));
+    println!("\nSpend time: {:.5}", (time::now_utc() - prev));
     assert!(true);
 }
+
 
 #[test]
 fn classes(){
@@ -81,7 +83,7 @@ fn classes(){
     let rnd_range = Range::new(0, training_set.len());
 
     let prev = time::now_utc();
-    nn.activation(nn_rust::Activator::Tanh);
+    nn.activation(nn_rust::activators::Type::Tanh);
 
     for _ in 0..50_000{
         k = rnd_range.ind_sample(&mut rand::thread_rng());

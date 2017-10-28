@@ -14,12 +14,6 @@ pub enum Field {
     Weights
 }
 
-#[allow(dead_code)]
-pub enum Activator {
-    Sigmoid,
-    Tanh
-}
-
 
 struct Layer {
     v: Vec<f64>,
@@ -169,26 +163,28 @@ impl FeedForward {
         &self.layers[self.layers.len() - 1].y
     }
 
-    pub fn activation(&mut self, func: Activator){
+    pub fn activation(&mut self, func: activators::Type) -> &mut FeedForward{
         match func{
-            Activator::Sigmoid => {
+            activators::Type::Sigmoid => {
                 self.act = activators::sigm;
                 self.der_act = activators::der_sigm;
             }
-            Activator::Tanh => {
+            activators::Type::Tanh => {
                 self.act = activators::tanh;
                 self.der_act = activators::der_tanh;
             }
         }
-    }
-    pub fn set_activation(&mut self, func: &fn(f64)->f64, derivative: &fn(f64)->f64){
-        self.act = *func;
-        self.der_act = *derivative;
+        self
     }
 
-    pub fn set_params(&mut self, learning_rate: f64, momentum: f64){
+    pub fn learning_rate(&mut self, learning_rate: f64) -> &mut FeedForward {
         self.learn_rate = learning_rate;
+        self
+    }
+
+    pub fn momentum(&mut self, momentum: f64) -> &mut FeedForward {
         self.momentum = momentum;
+        self
     }
 }
 
