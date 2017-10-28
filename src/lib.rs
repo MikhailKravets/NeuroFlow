@@ -217,7 +217,7 @@ impl FeedForward {
 
 impl fmt::Display for FeedForward {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result{
-        let mut buf: String = format!("**Induced field**");
+        let mut buf: String = format!("**Induced field**\n");
 
         for v in self.layers.iter(){
             for val in v.v.iter(){
@@ -227,7 +227,7 @@ impl fmt::Display for FeedForward {
         }
         buf += "\n";
 
-        buf += "**Activated field**";
+        buf += "**Activated field**\n";
         for v in self.layers.iter(){
             for val in v.y.iter(){
                 buf += &format!("{:.3} ", val);
@@ -236,7 +236,7 @@ impl fmt::Display for FeedForward {
         }
         buf += "\n";
 
-        buf += "**Deltas**";
+        buf += "**Deltas**\n";
         for v in self.layers.iter(){
             for val in v.delta.iter(){
                 buf += &format!("{:.3} ", val);
@@ -245,7 +245,7 @@ impl fmt::Display for FeedForward {
         }
         buf += "\n";
 
-        buf += "**Weights**";
+        buf += "**Weights**\n";
         for v in self.layers.iter() {
             for val in v.w.iter() {
                 buf += "[";
@@ -254,6 +254,7 @@ impl fmt::Display for FeedForward {
                 }
                 buf += "]";
             }
+            buf += "\n";
         }
 
         buf.fmt(f)
