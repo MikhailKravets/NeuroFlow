@@ -50,10 +50,29 @@ impl Layer {
         }
         return nl;
     }
+    fn bind(&mut self, index: usize){
+        self.v.insert(index, 0.0);
+        self.y.insert(index, 0.0);
+        self.delta.insert(index, 0.0);
+
+        let mut v: Vec<f64> = Vec::new();
+        let len = self.w[index].len();
+
+        for _ in 0..len{
+            v.push(2f64*rand::random::<f64>() - 1f64);
+        }
+        self.w.insert(index, v);
+    }
+    fn unbind(&mut self, index: usize){
+        self.v.remove(index);
+        self.y.remove(index);
+        self.delta.remove(index);
+        self.w.remove(index);
+    }
 }
 
 impl FeedForward {
-    pub fn new(architecture: &[i32],) -> FeedForward {
+    pub fn new(architecture: &[i32]) -> FeedForward {
         let mut nn = FeedForward {learn_rate: 0.1, momentum: 0.1,
             layers: Vec::new(),
             act: activators::tanh, der_act: activators::der_tanh};
@@ -141,13 +160,12 @@ impl FeedForward {
         }
     }
 
-    // TODO: finish methods for binding and unbinding links
-    pub fn bind(&mut self, layer: i32, neuron: i32){
-
+    pub fn bind(&mut self, layer: usize, neuron: usize){
+        self.layers[layer].bind(neuron);
     }
 
-    pub fn unbind(&mut self, layer: i32, neuron: i32){
-
+    pub fn unbind(&mut self, layer: usize, neuron: usize){
+        self.layers[layer].unbind(neuron);
     }
 
     #[allow(non_snake_case)]
