@@ -1,5 +1,10 @@
 # NN-Rust
-Neural Networks Rust library. For now, the library contains Multilayer Perceptron that is trained by Backpropagation algorithm.
+Neural Networks Rust library. For now, feed forward neural network struct is implemented. It is trained by Back propagation algorithm.
+
+### Current goals
+- Serialize of FeedForward struct and write into file
+- Implement Optimal Brain Surgery algorithm
+- Work with data in files (``csv``, ``xlsx``, etc)
 
 ## Code Example
 Simple classification task
@@ -90,25 +95,19 @@ Simple classification task
 ```
 Expected result
 ```
-for: [[1.1630001104941605, 1.1159243765400833]], [1, 0, 0] -> [0.9004036298791347, 0.21423674017110195, -0.010395171772725179]
-for: [[2.910223592320417, 2.223002513509626]], [0, 1, 0] -> [0.2995672796100093, 0.6364006240915903, 0.1628364994838787]
-for: [[3.858661199225414, 3.492064661955157]], [0, 0, 1] -> [0.07877276613964404, -0.06444202949012201, 0.9761674435051991]
+for: [[1.16, 1.11]], [1, 0, 0] -> [0.90, 0.21, -0.01]
+for: [[2.91, 2.22]], [0, 1, 0] -> [0.29, 0.63, 0.16]
+for: [[3.85, 3.49]], [0, 0, 1] -> [0.078, -0.06, 0.97]
 ```
 
 ## Motivation
-The library is done for educational purposes. But I'll be glad if you find something useful here.
+The library is done for educational purposes.
 
 ## Installation
 Insert into cargo.toml [dependencies] block next line
 ```
 nn_rust = { git = "https://github.com/MikhailKravets/NN-Rust.git" }
 ```
-
-## API Reference
-Comming soon.
-
-## Tests
-All the tests lays in the tests directory (give me a boat!)
 
 ## License
 MIT License
