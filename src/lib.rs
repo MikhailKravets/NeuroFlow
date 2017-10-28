@@ -141,6 +141,15 @@ impl FeedForward {
         }
     }
 
+    // TODO: finish methods for binding and unbinding links
+    pub fn bind(&mut self, layer: i32, neuron: i32){
+
+    }
+
+    pub fn unbind(&mut self, layer: i32, neuron: i32){
+
+    }
+
     #[allow(non_snake_case)]
     pub fn fit(&mut self, X: &[f64], d: &[f64]){
         let mut x = X.to_vec();
