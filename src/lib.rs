@@ -76,7 +76,7 @@ impl FeedForward {
                         sum += self.layers[j].w[i][k] * x[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = (self.act)(self.layers[j].v[i]);
+                    self.layers[j].y[i] = (self.act)(sum);
                 }
             }
             else if j == self.layers.len() - 1{
@@ -86,7 +86,7 @@ impl FeedForward {
                         sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = self.layers[j].v[i];
+                    self.layers[j].y[i] = sum;
                 }
             }
             else {
@@ -96,7 +96,7 @@ impl FeedForward {
                         sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = (self.act)(self.layers[j].v[i]);
+                    self.layers[j].y[i] = (self.act)(sum);
                 }
             }
         }
