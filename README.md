@@ -1,8 +1,8 @@
 # NN-Rust
-Neural Networks Rust library. For now, feed forward neural network struct is implemented. It is trained by Back propagation algorithm.
+Neural Networks Rust library. For now, feed forward neural network is implemented.
 
 ### Current goals
-- Serialize of FeedForward struct and write into file
+- Serialize of Neural Network and write it into file
 - Implement Optimal Brain Surgery algorithm
 - Work with data in files (``csv``, ``xlsx``, etc)
 
