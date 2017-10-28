@@ -1,4 +1,4 @@
-# NN-Rust
+# Neural Network Rust
 Neural Networks Rust library. For now, feed forward neural network is implemented.
 
 ### Current goals
