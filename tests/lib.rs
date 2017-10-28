@@ -47,6 +47,21 @@ fn xor(){
 
 
 #[test]
+fn binding(){
+    let allowed_error = 0.08; // Max allowed error is 8%
+    let mut nn = FeedForward::new(&[6, 4, 4, 2, 1]);
+
+    println!("{}", nn);
+
+    nn.unbind(1, 0);
+    println!("{}", nn);
+
+    nn.bind(1, 0);
+    println!("{}", nn);
+}
+
+
+#[test]
 fn classes(){
     let allowed_error = 0.08; // Max allowed error is 8%
     let mut nn = FeedForward::new(&[2, 3, 4, 3]);

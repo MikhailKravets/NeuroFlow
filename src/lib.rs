@@ -161,11 +161,11 @@ impl FeedForward {
     }
 
     pub fn bind(&mut self, layer: usize, neuron: usize){
-        self.layers[layer].bind(neuron);
+        self.layers[layer - 1].bind(neuron);
     }
 
     pub fn unbind(&mut self, layer: usize, neuron: usize){
-        self.layers[layer].unbind(neuron);
+        self.layers[layer - 1].unbind(neuron);
     }
 
     #[allow(non_snake_case)]
