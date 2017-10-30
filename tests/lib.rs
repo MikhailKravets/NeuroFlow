@@ -34,7 +34,8 @@ fn xor(){
     let mut res;
     for v in sc{
         res = nn.calc(v.0)[0];
-        println!("Res for: [{:.3}, {:.3}], [{:.3}] -> [{:.3}]", v.0[0], v.0[1], v.1[0], res);
+        println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]",
+                 v.0[0], v.0[1], v.1[0], res);
 
         if (res - v.1[0]).abs() > allowed_error{
             assert!(false);
