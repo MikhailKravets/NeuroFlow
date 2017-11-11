@@ -3,11 +3,13 @@
 /// TODO: write functions that write existing NN to file.
 
 
-struct DataSet{
-
+struct DataSet<'a>{
+    x: Vec<Vec<f64>>,
+    y: Vec<Vec<f64>>
 }
 
 
-trait NNData {
-
+trait Extractable {
+    fn rand_element<'a>() -> (&'a Vec<f64>, &'a Vec<f64>);
+    fn get<'a>(i: i32) -> (&'a Vec<f64>, &'a Vec<f64>);
 }
