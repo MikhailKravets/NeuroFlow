@@ -3,7 +3,7 @@ extern crate time;
 extern crate rand;
 
 use nn_rust::FeedForward;
-use nn_rust::data::DataSet;
+use nn_rust::data::{DataSet, Extractable};
 
 use rand::distributions::IndependentSample;
 use rand::distributions::range::Range;
@@ -52,7 +52,7 @@ fn xor(){
 
 #[test]
 fn xor_through_data_set_and_train(){
-    let allowed_error = 0.08; // Max allowed error is 8%
+    const allowed_error: f64 = 0.08; // Max allowed error is 8%
     let mut nn = FeedForward::new(&[2, 2, 1]);
     let mut data = DataSet::new();
 
@@ -66,9 +66,16 @@ fn xor_through_data_set_and_train(){
         .momentum(0.15)
         .train(&data, 20_000);
 
-    let res = nn.calc(&[0f64, 0f64]);
-    println!("for [0, 0], [0] -> [{:.3}]", res[0]);
-    assert_eq!(0f64, (res[0] * 100.0).round() / 100.0);
+    let mut res;
+    let mut d;
+    for i in 0..data.len(){
+        res = nn.calc(data.get(i).0)[0];
+        d = data.get(i);
+        println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]", d.0[0], d.0[1], d.1[0], res);
+        if (res - data.get(i).1[0]).abs() > allowed_error{
+            assert!(false);
+        }
+    }
 }
 
 

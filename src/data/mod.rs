@@ -3,13 +3,13 @@
 
 extern crate rand;
 
-use std::marker::PhantomData;
 use rand::distributions::range::Range;
 use rand::distributions::IndependentSample;
 
 pub trait Extractable {
     fn rand(&self) -> (&Vec<f64>, &Vec<f64>);
     fn get(&self, i: usize) -> (&Vec<f64>, &Vec<f64>);
+    fn len(&self) -> usize;
 }
 
 pub struct DataSet{
@@ -42,5 +42,8 @@ impl Extractable for DataSet{
     }
     fn get(&self, i: usize) -> (&Vec<f64>, &Vec<f64>){
         (&self.x[i], &self.y[i])
+    }
+    fn len(&self) -> usize {
+        self.y.len()
     }
 }
