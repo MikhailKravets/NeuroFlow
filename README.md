@@ -15,28 +15,24 @@ XOR problem
         1 neuron in output layer
     */
     let mut nn = FeedForward::new(&[2, 2, 1]);
-    
-    // Define training set
-    let sc = &[
-        (&[0f64, 0f64], &[0f64]),
-        (&[1f64, 0f64], &[1f64]),
-        (&[0f64, 1f64], &[1f64]),
-        (&[1f64, 1f64], &[0f64]),
-    ];
-    let mut k;
-    let rnd_range = Range::new(0, sc.len());
-    
-    // Train the network feeding it examples from training set randomly
-    for _ in 0..20_000{
-        k = rnd_range.ind_sample(&mut rand::thread_rng());
-        nn.fit(sc[k].0, sc[k].1);
-    }
+    let mut data = DataSet::new();
+
+    data.push(&[0f64, 0f64], &[0f64]);
+    data.push(&[1f64, 0f64], &[1f64]);
+    data.push(&[0f64, 1f64], &[1f64]);
+    data.push(&[1f64, 1f64], &[0f64]);
+
+    nn.activation(activators::Type::Tanh)
+        .learning_rate(0.1)
+        .momentum(0.15)
+        .train(&data, 20_000);
 
     let mut res;
-    for v in sc{
-        res = nn.calc(v.0)[0];
-        println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]",
-        v.0[0], v.0[1], v.1[0], res);
+    let mut d;
+    for i in 0..data.len(){
+        res = nn.calc(data.get(i).0)[0];
+        d = data.get(i);
+        println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]", d.0[0], d.0[1], d.1[0], res);
     }
 ```
 Expected result
