@@ -1,7 +1,8 @@
 # Neural Network Rust
-Neural Networks Rust library. For now, feed forward neural network is implemented.
 
 ![Build status](https://travis-ci.org/MikhailKravets/Neural-Network-Rust.svg?branch=master)
+
+Neural Networks Rust library. For now, feed forward neural network is implemented.
 
 ### Current goals
 - Serialize of Neural Network and write it into file
