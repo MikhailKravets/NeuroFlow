@@ -3,6 +3,8 @@ extern crate time;
 extern crate rand;
 
 use nn_rust::FeedForward;
+use nn_rust::data::DataSet;
+
 use rand::distributions::IndependentSample;
 use rand::distributions::range::Range;
 use rand::distributions::normal::Normal;
@@ -46,6 +48,27 @@ fn xor(){
 
     println!("\nSpend time: {:.5}", (time::now_utc() - prev));
     assert!(true);
+}
+
+#[test]
+fn xor_through_data_set_and_train(){
+    let allowed_error = 0.08; // Max allowed error is 8%
+    let mut nn = FeedForward::new(&[2, 2, 1]);
+    let mut data = DataSet::new();
+
+    data.push(&[0f64, 0f64], &[0f64]);
+    data.push(&[1f64, 0f64], &[1f64]);
+    data.push(&[0f64, 1f64], &[1f64]);
+    data.push(&[1f64, 1f64], &[0f64]);
+
+    nn.activation(activators::Type::Tanh)
+        .learning_rate(0.1)
+        .momentum(0.15)
+        .train(&data, 20_000);
+
+    let res = nn.calc(&[0f64, 0f64]);
+    println!("for [0, 0], [0] -> [{:.3}]", res[0]);
+    assert_eq!(0f64, (res[0] * 100.0).round() / 100.0);
 }
 
 

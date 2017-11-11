@@ -1,9 +1,11 @@
 pub mod activators;
 pub mod estimators;
-
-use std::fmt;
+pub mod data;
 
 extern crate rand;
+
+use std::fmt;
+use data::Extractable;
 
 
 #[allow(dead_code)]
@@ -166,6 +168,13 @@ impl FeedForward {
 
     pub fn unbind(&mut self, layer: usize, neuron: usize){
         self.layers[layer - 1].unbind(neuron);
+    }
+
+    pub fn train<T>(&mut self, data: &T, iterations: i64) where T: Extractable{
+        for _ in 0..iterations{
+            let (x, y) = data.rand();
+            self.fit(&x, &y);
+        }
     }
 
     #[allow(non_snake_case)]
