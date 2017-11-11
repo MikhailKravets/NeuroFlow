@@ -30,7 +30,7 @@ fn xor(){
     let rnd_range = Range::new(0, sc.len());
     let prev = time::now_utc();
 
-    for _ in 0..20_000{
+    for _ in 0..30_000{
         k = rnd_range.ind_sample(&mut rand::thread_rng());
         nn.fit(sc[k].0, sc[k].1);
     }
@@ -64,7 +64,7 @@ fn xor_through_data_set_and_train(){
     nn.activation(activators::Type::Tanh)
         .learning_rate(0.1)
         .momentum(0.15)
-        .train(&data, 20_000);
+        .train(&data, 30_000);
 
     let mut res;
     let mut d;
