@@ -18,7 +18,7 @@ use neuroflow::estimators;
 
 #[test]
 fn xor(){
-    let allowed_error = 0.08; // Max allowed error is 8%
+    let allowed_error = 0.1; // Max allowed error is 10%
     let mut nn = FeedForward::new(&[2, 2, 1]);
     let sc = &[
         (&[0f64, 0f64], &[0f64]),
@@ -52,7 +52,7 @@ fn xor(){
 
 #[test]
 fn xor_through_data_set_and_train(){
-    const allowed_error: f64 = 0.08; // Max allowed error is 8%
+    const allowed_error: f64 = 0.1; // Max allowed error is 10%
     let mut nn = FeedForward::new(&[2, 2, 1]);
     let mut data = DataSet::new();
 
