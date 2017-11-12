@@ -1,10 +1,16 @@
 pub mod activators;
 pub mod estimators;
 pub mod data;
+pub mod io;
 
 extern crate rand;
 
+#[macro_use]
+extern crate serde_derive;
+
 use std::fmt;
+use std::default::Default;
+
 use data::Extractable;
 
 
@@ -16,7 +22,7 @@ pub enum Field {
     Weights
 }
 
-
+#[derive(Serialize, Deserialize)]
 struct Layer {
     v: Vec<f64>,
     y: Vec<f64>,
@@ -30,13 +36,15 @@ struct ActivationContainer{
     der: fn(f64) -> f64
 }
 
-
+#[derive(Serialize, Deserialize)]
 pub struct FeedForward {
     layers: Vec<Layer>,
     learn_rate: f64,
     momentum: f64,
 
     act_type: activators::Type,
+
+    #[serde(skip_deserializing, skip_serializing)]
     act: ActivationContainer
 }
 
@@ -230,6 +238,12 @@ impl FeedForward {
     pub fn momentum(&mut self, momentum: f64) -> &mut FeedForward {
         self.momentum = momentum;
         self
+    }
+}
+
+impl Default for ActivationContainer{
+    fn default() -> ActivationContainer {
+        ActivationContainer{func: activators::tanh, der: activators::der_tanh}
     }
 }
 

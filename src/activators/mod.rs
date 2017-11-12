@@ -1,4 +1,5 @@
 #[allow(dead_code)]
+#[derive(Serialize, Deserialize)]
 pub enum Type {
     Sigmoid,
     Tanh
