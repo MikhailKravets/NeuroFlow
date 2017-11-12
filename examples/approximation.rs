@@ -18,41 +18,29 @@ use neuroflow::estimators;
 
 
 fn main(){
-    let allowed_error = 0.08; // Max allowed error is 8%
     let mut nn = FeedForward::new(&[1, 8, 6, 1]);
-    nn.activation(Tanh).learning_rate(0.05);
+    let mut data: DataSet = DataSet::new();
+    let mut i = -3.0;
 
-    let mut k;
-    let mut sc = Vec::new();
-
-    let mut i: f64 = -3.0;
     while i <= 3.0 {
-        sc.push((i, i.sin()));
+        data.push(&[i], &[i.sin()]);
         i += 0.1;
     }
 
-    let rnd_range = Range::new(0, sc.len());
     let prev = time::now_utc();
 
-    for _ in 0..30_000 {
-        k = rnd_range.ind_sample(&mut rand::thread_rng());
-        nn.fit(&[sc[k].0], &[sc[k].1]);
-    }
+    nn.activation(Tanh)
+        .learning_rate(0.05)
+        .train(&data, 30_000);
 
     let mut res;
 
-    i = -0.0;
-    while i <= 2.0{
+    i = 0.0;
+    while i <= 0.3{
         res = nn.calc(&[i])[0];
-        println!("for [{:.3}], [{:.3}] -> [{:.3}]",
-                 i, i.sin(), res);
-
-        //        if (res - i.sin()).abs() > allowed_error{
-        //            assert!(false);
-        //        }
-
+        println!("for [{:.3}], [{:.3}] -> [{:.3}]", i, i.sin(), res);
         i += 0.05;
     }
 
-    println!("\nSpend time: {:.5}", (time::now_utc() - prev));
+    println!("\nSpend time: {:.3}", (time::now_utc() - prev).num_milliseconds() as f64 / 1000.0);
 }
