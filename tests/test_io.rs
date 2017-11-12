@@ -78,7 +78,7 @@ fn loading_of_neural_net(){
         println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]",
                  v.0[0], v.0[1], v.1[0], res);
 
-        if (res - v.1[0]).abs() > ALLOWED_ERROR{
+        if (res - res1).abs() != 0.0{
             assert!(false);
         }
     }
