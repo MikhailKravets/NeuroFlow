@@ -7,13 +7,92 @@
 
 New Neural Networks Rust crate
 
-### Current goals
-- Serialize of Neural Network and write it into file
-- Implement Optimal Brain Surgery algorithm
-- Work with data in files (``csv``, ``xlsx``, etc)
+## Code Examples
 
-## Code Example
-XOR problem
+Let's try to approximate simple `sin(x)` function.
+
+```rust
+    extern crate neuroflow;
+    use neuroflow::FeedForward;
+    use neuroflow::data::DataSet;
+
+    /*
+        Define neural network with 1 neuron in input layers 
+        (we have only 1 argument in sin(x), so it should be 1 neuron in the input layer).
+        Network contains 2 hidden layers (that have 8 and 6 neurons respectively).
+        And, such as sin(x) returns single value, it is reasonable to have 1 neuron in the output layer.
+    */
+    let mut nn = FeedForward::new(&[1, 8, 6, 1]);
+    
+    /*
+        Define DataSet.
+        
+        DataSet is the Type that significantly simplifies work with neural network.
+        Majority of its functionality is still under development :(
+    */
+    let mut data: DataSet = DataSet::new();
+    let mut i = -3.0;
+    
+    // Push the data to DataSet (method push accepts two slices: input data and expected output)
+    while i <= 3.0 {
+        data.push(&[i], &[i.sin()]);
+        i += 0.1;
+    }
+    
+    // Here, we set necessary parameters and train neural network by our DataSet with 30 000 iterations
+    nn.activation(Tanh)
+        .learning_rate(0.05)
+        .train(&data, 30_000);
+
+    let mut res;
+    
+    // Let's check the result
+    i = 0.0;
+    while i <= 0.3{
+        res = nn.calc(&[i])[0];
+        println!("for [{:.3}], [{:.3}] -> [{:.3}]", i, i.sin(), res);
+        i += 0.05;
+    }
+```
+
+Expected output
+```
+for [0.000], [0.000] -> [0.003]
+for [0.050], [0.050] -> [0.048]
+for [0.100], [0.100] -> [0.098]
+for [0.150], [0.149] -> [0.149]
+for [0.200], [0.199] -> [0.199]
+for [0.250], [0.247] -> [0.248]
+for [0.300], [0.296] -> [0.297]
+```
+
+But we don't want to lose our trained network so easily. So, there is functionality to save and restore
+neural networks from files.
+
+```rust
+
+    /*
+        In order to save neural network into file call function save from neuroflow::io module.
+        
+        First argument is link on the saving neural network;
+        Second argument is path to the file. 
+    */
+    neuroflow::io::save(&nn, "test.flow");
+    
+    /*
+        After we have saved the neural network to the file we can restore it by calling
+        of load function from neuroflow::io module.
+        
+        We must specify the type of new_nn variable.
+        The only argument of load function is the path to file containing
+        the neural network
+    */
+    let mut new_nn: FeedForward = load("test.nn");
+```
+
+----------------------
+
+classic XOR problem
 ```rust
     /*
         Define neural network with 2 neurons in input layers,
@@ -41,7 +120,7 @@ XOR problem
         println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]", d.0[0], d.0[1], d.1[0], res);
     }
 ```
-Expected result
+Expected output
 ```
 for [0.000, 0.000], [0.000] -> [0.000]
 for [1.000, 0.000], [1.000] -> [1.000]
@@ -49,13 +128,23 @@ for [0.000, 1.000], [1.000] -> [1.000]
 for [1.000, 1.000], [0.000] -> [0.000]
 ```
 
+## Current goals
+- Implement Optimal Brain Surgery algorithm
+- Work with data in files (``csv``, ``xlsx``, etc)
+
 ## Motivation
-The library is done for educational purposes.
+Previously the library was created only for educational purposes. Saying about present time
+there is, also, sport interest :)
 
 ## Installation
 Insert into cargo.toml [dependencies] block next line
 ```
 neuroflow = { git = "https://github.com/MikhailKravets/neuroflow.git" }
+```
+
+Then in your code
+```rust
+    extern crate neuroflow;
 ```
 
 ## License
