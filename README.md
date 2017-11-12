@@ -4,6 +4,7 @@
 
 ![Build status](https://travis-ci.org/MikhailKravets/NeuroFlow.svg?branch=master)
 [![codecov](https://codecov.io/gh/MikhailKravets/NeuroFlow/branch/master/graph/badge.svg)](https://codecov.io/gh/MikhailKravets/NeuroFlow)
+[![crates](https://img.shields.io/crates/v/neuroflow.svg)](https://crates.io/crates/neuroflow)
 
 New Neural Networks Rust crate
 
@@ -132,9 +133,10 @@ for [1.000, 1.000], [0.000] -> [0.000]
 Previously the library was created only for educational purposes. Saying about now there is, also, sport interest :)
 
 ## Installation
-Insert into cargo.toml [dependencies] block next line
+Insert into your project's cargo.toml block next line
 ```
-neuroflow = { git = "https://github.com/MikhailKravets/neuroflow.git" }
+[dependencies]
+neuroflow = "0.1.0"
 ```
 
 Then in your code
