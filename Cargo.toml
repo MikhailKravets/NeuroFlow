@@ -10,7 +10,7 @@ categories = ["algorithms", "science"]
 license = "MIT"
 
 authors = ["Mikhail Kravets <michkravets@gmail.com>"]
-exclude = ["examples/*", "tests/*", "logo.png"]
+exclude = ["examples/*", "tests/*"]
 
 [badges]
 travis-ci = { repository = "MikhailKravets/NeuroFlow", branch = "master" }
