@@ -6,6 +6,12 @@ extern crate rand;
 use rand::distributions::range::Range;
 use rand::distributions::IndependentSample;
 
+/// The function's prototype that loads data from csv
+///  and place it in the DataSet structure
+fn from_csv(file_path: &str) -> DataSet {
+
+}
+
 pub trait Extractable {
     fn rand(&self) -> (&Vec<f64>, &Vec<f64>);
     fn get(&self, i: usize) -> (&Vec<f64>, &Vec<f64>);
