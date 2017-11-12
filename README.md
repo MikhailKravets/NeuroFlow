@@ -129,8 +129,7 @@ for [1.000, 1.000], [0.000] -> [0.000]
 - Work with data in files (``csv``, ``xlsx``, etc)
 
 ## Motivation
-Previously the library was created only for educational purposes. Saying about present time
-there is, also, sport interest :)
+Previously the library was created only for educational purposes. Saying about now there is, also, sport interest :)
 
 ## Installation
 Insert into cargo.toml [dependencies] block next line
