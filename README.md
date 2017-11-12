@@ -3,7 +3,7 @@
 </div>
 
 ![Build status](https://travis-ci.org/MikhailKravets/NeuroFlow.svg?branch=master)
-[![codecov](https://codecov.io/gh/MikhailKravets/Neural-Network-Rust/branch/master/graph/badge.svg)](https://codecov.io/gh/MikhailKravets/Neural-Network-Rust)
+[![codecov](https://codecov.io/gh/MikhailKravets/NeuroFlow/branch/master/graph/badge.svg)](https://codecov.io/gh/MikhailKravets/NeuroFlow)
 
 New Neural Networks Rust crate
 
