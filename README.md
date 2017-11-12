@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/MikhailKravets/DataFlow/master/logo.png"><br><br>
 </div>
 
-![Build status](https://travis-ci.org/MikhailKravets/Neural-Network-Rust.svg?branch=master)
+![Build status](https://travis-ci.org/MikhailKravets/NeuroFlow.svg?branch=master)
 [![codecov](https://codecov.io/gh/MikhailKravets/Neural-Network-Rust/branch/master/graph/badge.svg)](https://codecov.io/gh/MikhailKravets/Neural-Network-Rust)
 
 New Neural Networks Rust crate
