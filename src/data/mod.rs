@@ -9,7 +9,7 @@ use rand::distributions::IndependentSample;
 /// The function's prototype that loads data from csv
 ///  and place it in the DataSet structure
 fn from_csv(file_path: &str) -> DataSet {
-
+    DataSet::new()
 }
 
 pub trait Extractable {

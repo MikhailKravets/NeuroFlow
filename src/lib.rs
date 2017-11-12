@@ -25,13 +25,19 @@ struct Layer {
 }
 
 
+struct ActivationContainer{
+    func: fn(f64) -> f64,
+    der: fn(f64) -> f64
+}
+
+
 pub struct FeedForward {
     layers: Vec<Layer>,
     learn_rate: f64,
     momentum: f64,
 
-    act: fn(f64) -> f64,
-    der_act: fn(f64) -> f64
+    act_type: activators::Type,
+    act: ActivationContainer
 }
 
 impl Layer {
@@ -79,7 +85,8 @@ impl FeedForward {
     pub fn new(architecture: &[i32]) -> FeedForward {
         let mut nn = FeedForward {learn_rate: 0.1, momentum: 0.1,
             layers: Vec::new(),
-            act: activators::tanh, der_act: activators::der_tanh};
+            act: ActivationContainer{func: activators::tanh, der: activators::der_tanh},
+            act_type: activators::Type::Tanh};
 
         for i in 1..architecture.len() {
             nn.layers.push(Layer::new(architecture[i], architecture[i - 1]))
@@ -99,7 +106,7 @@ impl FeedForward {
                         sum += self.layers[j].w[i][k] * x[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = (self.act)(sum);
+                    self.layers[j].y[i] = (self.act.func)(sum);
                 }
             }
             else if j == self.layers.len() - 1{
@@ -119,7 +126,7 @@ impl FeedForward {
                         sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = (self.act)(sum);
+                    self.layers[j].y[i] = (self.act.func)(sum);
                 }
             }
         }
@@ -131,7 +138,7 @@ impl FeedForward {
         for j in (0..self.layers.len()).rev(){
             if j == self.layers.len() - 1{
                 for i in 0..self.layers[j].y.len(){
-                    self.layers[j].delta[i] = (d[i] - self.layers[j].y[i])* (self.der_act)(self.layers[j].v[i]);
+                    self.layers[j].delta[i] = (d[i] - self.layers[j].y[i])* (self.act.der)(self.layers[j].v[i]);
                 }
             } else {
                 for i in 0..self.layers[j].delta.len(){
@@ -139,7 +146,7 @@ impl FeedForward {
                     for k in 0..self.layers[j + 1].delta.len(){
                         sum += self.layers[j + 1].delta[k] * self.layers[j + 1].w[k][i + 1];
                     }
-                    self.layers[j].delta[i] = (self.der_act)(self.layers[j].v[i]) * sum;
+                    self.layers[j].delta[i] = (self.act.der)(self.layers[j].v[i]) * sum;
                 }
             }
         }
@@ -204,12 +211,12 @@ impl FeedForward {
     pub fn activation(&mut self, func: activators::Type) -> &mut FeedForward{
         match func{
             activators::Type::Sigmoid => {
-                self.act = activators::sigm;
-                self.der_act = activators::der_sigm;
+                self.act.func = activators::sigm;
+                self.act.der = activators::der_sigm;
             }
             activators::Type::Tanh => {
-                self.act = activators::tanh;
-                self.der_act = activators::der_tanh;
+                self.act.func = activators::tanh;
+                self.act.der = activators::der_tanh;
             }
         }
         self

@@ -10,15 +10,12 @@ use rand::distributions::range::Range;
 use rand::distributions::normal::Normal;
 
 use neuroflow::activators;
-use neuroflow::activators::tanh;
-use neuroflow::activators::Type::Tanh;
-use neuroflow::activators::Type::Sigmoid;
 use neuroflow::estimators;
 
 
 #[test]
 fn xor(){
-    let allowed_error = 0.1; // Max allowed error is 10%
+    let ALLOWED_ERROR = 0.1; // Max allowed error is 10%
     let mut nn = FeedForward::new(&[2, 2, 1]);
     let sc = &[
         (&[0f64, 0f64], &[0f64]),
@@ -30,6 +27,7 @@ fn xor(){
     let rnd_range = Range::new(0, sc.len());
     let prev = time::now_utc();
 
+    nn.momentum(0.05);
     for _ in 0..30_000{
         k = rnd_range.ind_sample(&mut rand::thread_rng());
         nn.fit(sc[k].0, sc[k].1);
@@ -41,7 +39,7 @@ fn xor(){
         println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]",
                  v.0[0], v.0[1], v.1[0], res);
 
-        if (res - v.1[0]).abs() > allowed_error{
+        if (res - v.1[0]).abs() > ALLOWED_ERROR{
             assert!(false);
         }
     }
@@ -52,7 +50,7 @@ fn xor(){
 
 #[test]
 fn xor_through_data_set_and_train(){
-    const allowed_error: f64 = 0.1; // Max allowed error is 10%
+    const ALLOWED_ERROR: f64 = 0.1; // Max allowed error is 10%
     let mut nn = FeedForward::new(&[2, 2, 1]);
     let mut data = DataSet::new();
 
@@ -62,7 +60,7 @@ fn xor_through_data_set_and_train(){
     data.push(&[1f64, 1f64], &[0f64]);
 
     nn.activation(activators::Type::Tanh)
-        .learning_rate(0.1)
+        .learning_rate(0.05)
         .momentum(0.15)
         .train(&data, 30_000);
 
@@ -72,7 +70,7 @@ fn xor_through_data_set_and_train(){
         res = nn.calc(data.get(i).0)[0];
         d = data.get(i);
         println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]", d.0[0], d.0[1], d.1[0], res);
-        if (res - data.get(i).1[0]).abs() > allowed_error{
+        if (res - data.get(i).1[0]).abs() > ALLOWED_ERROR {
             assert!(false);
         }
     }
