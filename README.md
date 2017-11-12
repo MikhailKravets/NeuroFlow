@@ -55,7 +55,7 @@ The library is done for educational purposes.
 ## Installation
 Insert into cargo.toml [dependencies] block next line
 ```
-dataflow = { git = "https://github.com/MikhailKravets/dataflow.git" }
+neuroflow = { git = "https://github.com/MikhailKravets/neuroflow.git" }
 ```
 
 ## License
