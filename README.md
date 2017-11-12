@@ -1,4 +1,4 @@
-# Neural Network Rust
+# DataFlow
 
 ![Build status](https://travis-ci.org/MikhailKravets/Neural-Network-Rust.svg?branch=master)
 [![codecov](https://codecov.io/gh/MikhailKravets/Neural-Network-Rust/branch/master/graph/badge.svg)](https://codecov.io/gh/MikhailKravets/Neural-Network-Rust)
