@@ -3,51 +3,20 @@ extern crate time;
 extern crate rand;
 
 use nn_rust::FeedForward;
+use nn_rust::data::{DataSet, Extractable};
+
 use rand::distributions::IndependentSample;
 use rand::distributions::range::Range;
 use rand::distributions::normal::Normal;
 
 use nn_rust::activators;
 use nn_rust::activators::tanh;
+use nn_rust::activators::Type::Tanh;
+use nn_rust::activators::Type::Sigmoid;
 use nn_rust::estimators;
 
 
-#[test]
-fn xor(){
-    let allowed_error = 0.08; // Max allowed error is 8%
-    let mut nn = FeedForward::new(&[2, 2, 1]);
-    let sc = &[
-        (&[0f64, 0f64], &[0f64]),
-        (&[1f64, 0f64], &[1f64]),
-        (&[0f64, 1f64], &[1f64]),
-        (&[1f64, 1f64], &[0f64]),
-    ];
-    let mut k;
-    let rnd_range = Range::new(0, sc.len());
-    let prev = time::now_utc();
-
-    for _ in 0..20_000{
-        k = rnd_range.ind_sample(&mut rand::thread_rng());
-        nn.fit(sc[k].0, sc[k].1);
-    }
-
-    let mut res;
-    for v in sc{
-        res = nn.calc(v.0)[0];
-        println!("Res for: [{:.3}, {:.3}], [{:.3}] -> [{:.3}]", v.0[0], v.0[1], v.1[0], res);
-
-        if (res - v.1[0]).abs() > allowed_error{
-            assert!(false);
-        }
-    }
-
-    println!("\nSpend time: {:.5}", (time::now_utc() - prev));
-    assert!(true);
-}
-
-
-#[test]
-fn classes(){
+fn main(){
     let allowed_error = 0.08; // Max allowed error is 8%
     let mut nn = FeedForward::new(&[2, 3, 4, 3]);
     let mut sample;
@@ -65,19 +34,19 @@ fn classes(){
                                vec![1f64, 0f64, 0f64]));
             k += 1;
         }
-        else if k == 1 {
-            training_set.push((vec![c2.ind_sample(&mut rand::thread_rng()), c2.ind_sample(&mut rand::thread_rng())],
-                               vec![0f64, 1f64, 0f64]));
-            k += 1;
-        }
-        else if k == 2 {
-            training_set.push((vec![c3.ind_sample(&mut rand::thread_rng()), c3.ind_sample(&mut rand::thread_rng())],
-                               vec![0f64, 0f64, 1f64]));
-            k += 1;
-        }
-        else {
-            k = 0;
-        }
+            else if k == 1 {
+                training_set.push((vec![c2.ind_sample(&mut rand::thread_rng()), c2.ind_sample(&mut rand::thread_rng())],
+                                   vec![0f64, 1f64, 0f64]));
+                k += 1;
+            }
+                else if k == 2 {
+                    training_set.push((vec![c3.ind_sample(&mut rand::thread_rng()), c3.ind_sample(&mut rand::thread_rng())],
+                                       vec![0f64, 0f64, 1f64]));
+                    k += 1;
+                }
+                    else {
+                        k = 0;
+                    }
     }
 
     let rnd_range = Range::new(0, training_set.len());
@@ -125,11 +94,4 @@ fn classes(){
 
     println!("\nSpend time: {}", (time::now_utc() - prev));
     assert!(true);
-}
-
-#[test]
-#[ignore]
-fn widrows(){
-    let w = estimators::widrows(&[2, 1], 0.1);
-    assert_eq!(w, 90f64);
 }

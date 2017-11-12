@@ -1,9 +1,11 @@
 pub mod activators;
 pub mod estimators;
-
-use std::fmt;
+pub mod data;
 
 extern crate rand;
+
+use std::fmt;
+use data::Extractable;
 
 
 #[allow(dead_code)]
@@ -50,10 +52,29 @@ impl Layer {
         }
         return nl;
     }
+    fn bind(&mut self, index: usize){
+        self.v.insert(index, 0.0);
+        self.y.insert(index, 0.0);
+        self.delta.insert(index, 0.0);
+
+        let mut v: Vec<f64> = Vec::new();
+        let len = self.w[index].len();
+
+        for _ in 0..len{
+            v.push(2f64*rand::random::<f64>() - 1f64);
+        }
+        self.w.insert(index, v);
+    }
+    fn unbind(&mut self, index: usize){
+        self.v.remove(index);
+        self.y.remove(index);
+        self.delta.remove(index);
+        self.w.remove(index);
+    }
 }
 
 impl FeedForward {
-    pub fn new(architecture: &[i32],) -> FeedForward {
+    pub fn new(architecture: &[i32]) -> FeedForward {
         let mut nn = FeedForward {learn_rate: 0.1, momentum: 0.1,
             layers: Vec::new(),
             act: activators::tanh, der_act: activators::der_tanh};
@@ -76,7 +97,7 @@ impl FeedForward {
                         sum += self.layers[j].w[i][k] * x[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = (self.act)(self.layers[j].v[i]);
+                    self.layers[j].y[i] = (self.act)(sum);
                 }
             }
             else if j == self.layers.len() - 1{
@@ -86,7 +107,7 @@ impl FeedForward {
                         sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = self.layers[j].v[i];
+                    self.layers[j].y[i] = sum;
                 }
             }
             else {
@@ -96,7 +117,7 @@ impl FeedForward {
                         sum += self.layers[j].w[i][k + 1] * self.layers[j - 1].y[k];
                     }
                     self.layers[j].v[i] = sum;
-                    self.layers[j].y[i] = (self.act)(self.layers[j].v[i]);
+                    self.layers[j].y[i] = (self.act)(sum);
                 }
             }
         }
@@ -138,6 +159,21 @@ impl FeedForward {
                         }
                 }
             }
+        }
+    }
+
+    pub fn bind(&mut self, layer: usize, neuron: usize){
+        self.layers[layer - 1].bind(neuron);
+    }
+
+    pub fn unbind(&mut self, layer: usize, neuron: usize){
+        self.layers[layer - 1].unbind(neuron);
+    }
+
+    pub fn train<T>(&mut self, data: &T, iterations: i64) where T: Extractable{
+        for _ in 0..iterations{
+            let (x, y) = data.rand();
+            self.fit(&x, &y);
         }
     }
 
@@ -190,7 +226,7 @@ impl FeedForward {
 
 impl fmt::Display for FeedForward {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result{
-        let mut buf: String = format!("**Induced field**");
+        let mut buf: String = format!("**Induced field**\n");
 
         for v in self.layers.iter(){
             for val in v.v.iter(){
@@ -200,7 +236,7 @@ impl fmt::Display for FeedForward {
         }
         buf += "\n";
 
-        buf += "**Activated field**";
+        buf += "**Activated field**\n";
         for v in self.layers.iter(){
             for val in v.y.iter(){
                 buf += &format!("{:.3} ", val);
@@ -209,7 +245,7 @@ impl fmt::Display for FeedForward {
         }
         buf += "\n";
 
-        buf += "**Deltas**";
+        buf += "**Deltas**\n";
         for v in self.layers.iter(){
             for val in v.delta.iter(){
                 buf += &format!("{:.3} ", val);
@@ -218,7 +254,7 @@ impl fmt::Display for FeedForward {
         }
         buf += "\n";
 
-        buf += "**Weights**";
+        buf += "**Weights**\n";
         for v in self.layers.iter() {
             for val in v.w.iter() {
                 buf += "[";
@@ -227,6 +263,7 @@ impl fmt::Display for FeedForward {
                 }
                 buf += "]";
             }
+            buf += "\n";
         }
 
         buf.fmt(f)
