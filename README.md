@@ -60,3 +60,7 @@ dataflow = { git = "https://github.com/MikhailKravets/dataflow.git" }
 
 ## License
 MIT License
+
+### Attribution
+The origami bird from logo is made by ![Freepik](https://www.freepik.com/)
+
