@@ -1,19 +1,19 @@
-extern crate nn_rust;
+extern crate dataflow;
 extern crate time;
 extern crate rand;
 
-use nn_rust::FeedForward;
-use nn_rust::data::{DataSet, Extractable};
+use dataflow::FeedForward;
+use dataflow::data::{DataSet, Extractable};
 
 use rand::distributions::IndependentSample;
 use rand::distributions::range::Range;
 use rand::distributions::normal::Normal;
 
-use nn_rust::activators;
-use nn_rust::activators::tanh;
-use nn_rust::activators::Type::Tanh;
-use nn_rust::activators::Type::Sigmoid;
-use nn_rust::estimators;
+use dataflow::activators;
+use dataflow::activators::tanh;
+use dataflow::activators::Type::Tanh;
+use dataflow::activators::Type::Sigmoid;
+use dataflow::estimators;
 
 
 #[test]

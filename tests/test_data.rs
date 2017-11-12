@@ -1,7 +1,7 @@
-extern crate nn_rust;
+extern crate dataflow;
 
-use nn_rust::data::DataSet;
-use nn_rust::data::Extractable;
+use dataflow::data::DataSet;
+use dataflow::data::Extractable;
 
 
 #[test]
