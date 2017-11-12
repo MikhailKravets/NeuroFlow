@@ -12,10 +12,6 @@ New Neural Networks Rust crate
 Let's try to approximate simple `sin(x)` function.
 
 ```rust
-    extern crate neuroflow;
-    use neuroflow::FeedForward;
-    use neuroflow::data::DataSet;
-
     /*
         Define neural network with 1 neuron in input layers 
         (we have only 1 argument in sin(x), so it should be 1 neuron in the input layer).
