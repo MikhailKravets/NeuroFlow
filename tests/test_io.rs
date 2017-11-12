@@ -6,7 +6,14 @@ use std::path::Path;
 use std::fs::remove_file;
 
 use neuroflow::FeedForward;
-use neuroflow::data::{DataSet};
+use neuroflow::data::{DataSet, Extractable};
+
+use rand::distributions::IndependentSample;
+use rand::distributions::range::Range;
+use rand::distributions::normal::Normal;
+
+use neuroflow::activators;
+use neuroflow::estimators;
 
 use neuroflow::io::{save, load};
 
@@ -67,9 +74,11 @@ fn loading_of_neural_net(){
     let mut res1;
     for v in sc{
         res = nn.calc(v.0)[0];
-        res1 = new_nn.calc(v.0)[0];
+        res1 = new_nn.calc(v.0)[0]
+        println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]",
+                 v.0[0], v.0[1], v.1[0], res);
 
-        if (res - res1).abs() != 0.0{
+        if (res - v.1[0]).abs() > ALLOWED_ERROR{
             assert!(false);
         }
     }
