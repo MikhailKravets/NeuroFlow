@@ -52,6 +52,7 @@ impl Layer {
         }
         return nl;
     }
+
     fn bind(&mut self, index: usize){
         self.v.insert(index, 0.0);
         self.y.insert(index, 0.0);
@@ -65,6 +66,7 @@ impl Layer {
         }
         self.w.insert(index, v);
     }
+
     fn unbind(&mut self, index: usize){
         self.v.remove(index);
         self.y.remove(index);
