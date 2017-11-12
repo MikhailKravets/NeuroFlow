@@ -1,9 +1,11 @@
-# DataFlow
+<div align="center">
+  <img src="https://raw.githubusercontent.com/MikhailKravets/DataFlow/master/logo.png"><br><br>
+</div>
 
 ![Build status](https://travis-ci.org/MikhailKravets/Neural-Network-Rust.svg?branch=master)
 [![codecov](https://codecov.io/gh/MikhailKravets/Neural-Network-Rust/branch/master/graph/badge.svg)](https://codecov.io/gh/MikhailKravets/Neural-Network-Rust)
 
-Neural Networks Rust library. For now, feed forward neural network is implemented.
+New Neural Networks Rust crate
 
 ### Current goals
 - Serialize of Neural Network and write it into file
