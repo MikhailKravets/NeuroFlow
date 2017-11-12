@@ -74,7 +74,7 @@ fn loading_of_neural_net(){
     let mut res1;
     for v in sc{
         res = nn.calc(v.0)[0];
-        res1 = new_nn.calc(v.0)[0]
+        res1 = new_nn.calc(v.0)[0];
         println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]",
                  v.0[0], v.0[1], v.1[0], res);
 
