@@ -5,7 +5,7 @@ version = "0.1.0"
 description = "The neural network library implemented in Rust"
 repository = "https://github.com/MikhailKravets/NeuroFlow"
 readme = "README.md"
-keywords = ["networks", "feed forward", "neural", "backpropagation", "artificial intelligence"]
+keywords = ["neural", "networks", "deep", "learning", "backpropagation"]
 categories = ["algorithms", "science"]
 license = "MIT"
 
