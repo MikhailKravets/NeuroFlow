@@ -83,7 +83,7 @@ neural networks from files.
         The only argument of load function is the path to file containing
         the neural network
     */
-    let mut new_nn: FeedForward = load("test.nn");
+    let mut new_nn: FeedForward = load("test.flow");
 ```
 
 ----------------------
