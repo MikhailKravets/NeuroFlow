@@ -1,8 +1,20 @@
 [package]
 name = "neuroflow"
 version = "0.1.0"
+
+description = "The neural network library implemented in Rust"
+repository = "https://github.com/MikhailKravets/NeuroFlow"
+readme = "README.md"
+keywords = ["neural networks", "feed forward", "neural", "backpropagation", "artificial intelligence"]
+categories = ["algorithms", "science"]
+license = "MIT"
+
 authors = ["Mikhail Kravets <michkravets@gmail.com>"]
-exclude = ["examples/*"]
+exclude = ["examples/*", "tests/*"]
+
+[badges]
+travis-ci = { repository = "MikhailKravets/NeuroFlow", branch = "master" }
+codecov = { repository = "MikhailKravets/NeuroFlow", branch = "master", service = "github" }
 
 [dependencies]
 time = "0.1"
