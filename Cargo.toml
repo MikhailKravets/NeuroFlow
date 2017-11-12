@@ -1,7 +1,7 @@
 [package]
-name = "dataflow"
+name = "neuroflow"
 version = "0.1.0"
-authors = ["Mikhail Kravets <22kravets22@mail.ru>"]
+authors = ["Mikhail Kravets <michkravets@gmail.com>"]
 exclude = ["examples/*"]
 
 [dependencies]

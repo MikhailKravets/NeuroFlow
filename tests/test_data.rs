@@ -1,7 +1,7 @@
-extern crate dataflow;
+extern crate neuroflow;
 
-use dataflow::data::DataSet;
-use dataflow::data::Extractable;
+use neuroflow::data::DataSet;
+use neuroflow::data::Extractable;
 
 
 #[test]

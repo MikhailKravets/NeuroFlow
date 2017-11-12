@@ -1,19 +1,19 @@
-extern crate dataflow;
+extern crate neuroflow;
 extern crate time;
 extern crate rand;
 
-use dataflow::FeedForward;
-use dataflow::data::{DataSet, Extractable};
+use neuroflow::FeedForward;
+use neuroflow::data::{DataSet, Extractable};
 
 use rand::distributions::IndependentSample;
 use rand::distributions::range::Range;
 use rand::distributions::normal::Normal;
 
-use dataflow::activators;
-use dataflow::activators::tanh;
-use dataflow::activators::Type::Tanh;
-use dataflow::activators::Type::Sigmoid;
-use dataflow::estimators;
+use neuroflow::activators;
+use neuroflow::activators::tanh;
+use neuroflow::activators::Type::Tanh;
+use neuroflow::activators::Type::Sigmoid;
+use neuroflow::estimators;
 
 
 fn main(){
@@ -52,7 +52,7 @@ fn main(){
     let rnd_range = Range::new(0, training_set.len());
 
     let prev = time::now_utc();
-    nn.activation(dataflow::activators::Type::Tanh);
+    nn.activation(neuroflow::activators::Type::Tanh);
 
     for _ in 0..50_000{
         k = rnd_range.ind_sample(&mut rand::thread_rng());
