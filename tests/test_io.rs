@@ -6,14 +6,7 @@ use std::path::Path;
 use std::fs::remove_file;
 
 use neuroflow::FeedForward;
-use neuroflow::data::{DataSet, Extractable};
-
-use rand::distributions::IndependentSample;
-use rand::distributions::range::Range;
-use rand::distributions::normal::Normal;
-
-use neuroflow::activators;
-use neuroflow::estimators;
+use neuroflow::data::{DataSet};
 
 use neuroflow::io::{save, load};
 
