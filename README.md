@@ -13,6 +13,14 @@ New Neural Networks Rust crate
 Let's try to approximate simple `sin(x)` function.
 
 ```rust
+extern crate neuroflow;
+
+use neuroflow::FeedForward;
+use neuroflow::data::DataSet;
+use neuroflow::activators::Type::Tanh;
+
+
+fn main(){
     /*
         Define neural network with 1 neuron in input layers 
         (we have only 1 argument in sin(x), so it should be 1 neuron in the input layer).
@@ -50,6 +58,7 @@ Let's try to approximate simple `sin(x)` function.
         println!("for [{:.3}], [{:.3}] -> [{:.3}]", i, i.sin(), res);
         i += 0.05;
     }
+}
 ```
 
 Expected output
@@ -91,6 +100,14 @@ neural networks from files.
 
 classic XOR problem
 ```rust
+extern crate neuroflow;
+
+use neuroflow::FeedForward;
+use neuroflow::data::DataSet;
+use neuroflow::activators::Type::Tanh;
+
+
+fn main(){
     /*
         Define neural network with 2 neurons in input layers,
         1 hidden layer (with 2 neurons),
@@ -104,7 +121,7 @@ classic XOR problem
     data.push(&[0f64, 1f64], &[1f64]);
     data.push(&[1f64, 1f64], &[0f64]);
 
-    nn.activation(activators::Type::Tanh)
+    nn.activation(Tanh)
         .learning_rate(0.1)
         .momentum(0.15)
         .train(&data, 20_000);
@@ -116,6 +133,7 @@ classic XOR problem
         d = data.get(i);
         println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]", d.0[0], d.0[1], d.1[0], res);
     }
+}
 ```
 Expected output
 ```
