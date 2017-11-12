@@ -1,8 +1,7 @@
 /// TODO: write functions that loads csv data.
 /// TODO: write functions that write existing NN to file.
 
-extern crate rand;
-
+use rand;
 use rand::distributions::range::Range;
 use rand::distributions::IndependentSample;
 

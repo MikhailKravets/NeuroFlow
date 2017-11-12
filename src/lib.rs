@@ -4,6 +4,8 @@ pub mod data;
 pub mod io;
 
 extern crate rand;
+extern crate serde;
+extern crate bincode;
 
 #[macro_use]
 extern crate serde_derive;
