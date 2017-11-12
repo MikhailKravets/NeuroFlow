@@ -53,7 +53,7 @@ The library is done for educational purposes.
 ## Installation
 Insert into cargo.toml [dependencies] block next line
 ```
-nn_rust = { git = "https://github.com/MikhailKravets/NN-Rust.git" }
+dataflow = { git = "https://github.com/MikhailKravets/dataflow.git" }
 ```
 
 ## License
