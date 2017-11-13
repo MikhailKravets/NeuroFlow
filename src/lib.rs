@@ -165,7 +165,7 @@ impl FeedForward {
         return nn;
     }
 
-    fn forward(&mut self, x: &Vec<f64>, d: &Vec<f64>){
+    fn forward(&mut self, x: &Vec<f64>){
         let mut sum: f64;
 
         for j in 0..self.layers.len(){
@@ -202,7 +202,7 @@ impl FeedForward {
         }
     }
 
-    fn backward(&mut self, x: &Vec<f64>, d: &Vec<f64>){
+    fn backward(&mut self, d: &Vec<f64>){
         let mut sum: f64;
 
         for j in (0..self.layers.len()).rev(){
@@ -222,7 +222,7 @@ impl FeedForward {
         }
     }
 
-    fn update(&mut self, x: &Vec<f64>, d: &Vec<f64>){
+    fn update(&mut self, x: &Vec<f64>){
         for j in 0..self.layers.len(){
             for i in 0..self.layers[j].w.len(){
                 for k in 0..self.layers[j].w[i].len(){
@@ -301,9 +301,9 @@ impl FeedForward {
 
         x.insert(0, 1f64);
 
-        self.forward(&x, &res);
-        self.backward(&x, &res);
-        self.update(&x, &res);
+        self.forward(&x);
+        self.backward(&res);
+        self.update(&x);
     }
 
     /// Calculate the response by trained neural network.
@@ -321,7 +321,7 @@ impl FeedForward {
 
         x.insert(0, 1f64);
 
-        self.forward(&x, &Vec::new());
+        self.forward(&x);
         &self.layers[self.layers.len() - 1].y
     }
 

@@ -6,21 +6,15 @@ use std::path::Path;
 use std::fs::remove_file;
 
 use neuroflow::FeedForward;
-use neuroflow::data::{DataSet, Extractable};
-
-use rand::distributions::IndependentSample;
-use rand::distributions::range::Range;
-use rand::distributions::normal::Normal;
+use neuroflow::data::{DataSet};
 
 use neuroflow::activators;
-use neuroflow::estimators;
 
 use neuroflow::io::{save, load};
 
 
 #[test]
 fn saving_of_neural_net(){
-    const ALLOWED_ERROR: f64 = 0.1; // Max allowed error is 10%
     let mut nn = FeedForward::new(&[2, 2, 1]);
     let mut data = DataSet::new();
 
@@ -34,18 +28,17 @@ fn saving_of_neural_net(){
         .momentum(0.15)
         .train(&data, 5_000);
 
-    save(&nn, "test.nn");
+    save(&nn, "test.nn").unwrap();
 
     let p = Path::new("test.nn");
     assert!(p.exists());
     if p.exists(){
-        remove_file(p);
+        remove_file(p).unwrap();
     }
 }
 
 #[test]
 fn loading_of_neural_net(){
-    const ALLOWED_ERROR: f64 = 0.1; // Max allowed error is 10%
     let mut nn = FeedForward::new(&[2, 2, 1]);
     let mut data = DataSet::new();
 
@@ -59,7 +52,7 @@ fn loading_of_neural_net(){
         .momentum(0.15)
         .train(&data, 5_000);
 
-    save(&nn, "test.nn");
+    save(&nn, "test.nn").unwrap();
 
     let mut new_nn: FeedForward = load("test.nn")
         .unwrap_or(FeedForward::new(&[2, 2, 1]));
@@ -87,14 +80,14 @@ fn loading_of_neural_net(){
     let p = Path::new("test.nn");
     assert!(p.exists());
     if p.exists(){
-        remove_file(p);
+        remove_file(p).unwrap();
     }
 }
 
 #[test]
 fn load_not_existent_file(){
     match load::<FeedForward>("test.nn") {
-        Ok(n) => assert!(false),
-        Err(e) => assert!(true)
+        Ok(_) => assert!(false),
+        Err(_) => assert!(true)
     }
 }

@@ -18,7 +18,7 @@
 
 use std;
 use std::fs::File;
-use std::io::{Read, Write, BufReader};
+use std::io::{Write, BufReader};
 use serde;
 use bincode;
 use bincode::{serialize, deserialize_from, Infinite};
@@ -46,8 +46,7 @@ pub fn save<T: serde::Serialize>(obj: &T, file_path: &str) -> Result<(), IOError
     let mut file = File::create(file_path).map_err(IOError::IO)?;
     let encoded: Vec<u8> = serialize(obj, Infinite).map_err(IOError::Encoding)?;
 
-    file.write_all(&encoded);
-    file.flush();
+    file.write_all(&encoded).map_err(IOError::IO)?;
 
     Ok(())
 }
@@ -64,8 +63,7 @@ pub fn save<T: serde::Serialize>(obj: &T, file_path: &str) -> Result<(), IOError
 ///     .unwrap_or(FeedForward::new(&[2, 2, 1]));
 /// ```
 pub fn load<'b, T>(file_path: &'b str) -> Result<T, IOError> where for<'de> T: serde::Deserialize<'de>{
-    let mut content: Vec<u8> = Vec::new();
-    let mut file = File::open(file_path).map_err(IOError::IO)?;
+    let file = File::open(file_path).map_err(IOError::IO)?;
     let mut buf = BufReader::new(file);
 
     let mut nn: T = deserialize_from(&mut buf, Infinite).map_err(IOError::Encoding)?;
