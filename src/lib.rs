@@ -15,15 +15,18 @@ use std::default::Default;
 
 use data::Extractable;
 
-
+/// The struct that points different fields of network.
+/// It is used only for Display trait. Should be deleted in future versions
 #[allow(dead_code)]
-pub enum Field {
+enum Field {
     Induced,
     Y,
     Deltas,
     Weights
 }
 
+/// Struct `Layer` represents single layer of network.
+/// It is private and should not be used directly.
 #[derive(Serialize, Deserialize)]
 struct Layer {
     v: Vec<f64>,
@@ -32,12 +35,54 @@ struct Layer {
     w: Vec<Vec<f64>>,
 }
 
-
+/// This struct is a container for chosen activation function and its derivative.
+/// It is useful when in network's serialization in order to skip function
+/// in serialization
 struct ActivationContainer{
     func: fn(f64) -> f64,
     der: fn(f64) -> f64
 }
 
+/// Feed Forward (multilayer perceptron) neural network that is trained
+/// by back propagation algorithm.
+/// You can use it for approximation and classification tasks as well.
+///
+/// # Examples
+///
+/// In order to create `FeedForward` instance call its constructor `new`.
+///
+/// The constructor accepts slice as an argument. This slice determines
+/// the architecture of network.
+/// First element in slice is amount of neurons in input layer
+/// and the last one is amount of neurons in output layer.
+/// Denote, that vector of input data must have the equal length as input
+/// layer of FeedForward neural network (the same is for expected output vector).
+/// ```
+/// let mut nn = FeedForward::new(&[1, 3, 2]);
+/// ```
+///
+/// Then you can train your network simultaneously via `fit` method:
+/// ```
+/// nn.fit(&[1.2], &[0.2, 0.8]);
+/// ```
+/// Or to use `train` method with `neuroflow::data::DataSet` struct:
+/// ```
+/// let mut data = DataSet::new();
+/// nn.train(data, 30_000); // 30_000 is iterations count
+/// ```
+///
+/// It is possible to set parameters of network:
+/// ```
+/// nn.learning_rate(0.1)
+///   .momentum(0.05)
+///   .activation(neuroflow::activators::Type::Tanh);
+/// ```
+///
+/// Call method `calc` in order to calculate value by your(already trained) network:
+/// ```
+/// let d: Vec<f64> = nn.calc(&[1.02]).to_vec();
+/// ```
+///
 #[derive(Serialize, Deserialize)]
 pub struct FeedForward {
     layers: Vec<Layer>,
@@ -92,6 +137,21 @@ impl Layer {
 }
 
 impl FeedForward {
+    /// The constructor of `FeedForward` struct
+    ///
+    /// * `architecture: &[i32]` - the architecture of network where each
+    /// element in slice represents amount of neurons in this layer.
+    /// First element in slice is amount of neurons in input layer
+    /// and the last one is amount of neurons in output layer.
+    /// Denote, that vector of input data must have the equal length as input
+    /// layer of FeedForward neural network (the same is for expected output vector).
+    ///
+    /// * `return` - `FeedForward` struct
+    /// # Example
+    /// ```
+    /// let mut nn = FeedForward::new(&[1, 3, 2]);
+    /// ```
+    ///
     pub fn new(architecture: &[i32]) -> FeedForward {
         let mut nn = FeedForward {learn_rate: 0.1, momentum: 0.1,
             layers: Vec::new(),
@@ -181,14 +241,43 @@ impl FeedForward {
         }
     }
 
+    /// Bind a new neuron to layer. It initializes neuron with
+    /// random weights.
+    ///
+    /// * `layer: usize` - index of layer. NOTE, layer indexing starts from 1!
+    /// * `neuron: usize` - index of neuron. NOTE, neurons indexing in layer starts from 0!
+    ///
+    /// # Example
+    /// ```
+    /// nn.bind(2, 0);
+    /// ```
     pub fn bind(&mut self, layer: usize, neuron: usize){
         self.layers[layer - 1].bind(neuron);
     }
 
+    /// Unbind neuron from layer.
+    ///
+    /// * `layer: usize` - index of layer. NOTE, layer indexing starts from 1!
+    /// * `neuron: usize` - index of neuron. NOTE, neurons indexing in layer starts from 0!
+    ///
+    /// # Example
+    /// ```
+    /// nn.unbind(2, 0);
+    /// ```
     pub fn unbind(&mut self, layer: usize, neuron: usize){
         self.layers[layer - 1].unbind(neuron);
     }
 
+    /// Train neural network by bulked data.
+    ///
+    /// * `data: &T` - the link on data that implements `neuroflow::data::Extractable` trait;
+    /// * `iterations: i64` - iterations count.
+    ///
+    /// # Example
+    /// ```
+    /// let mut d = neuroflow::data::DataSet::new();
+    /// nn.train(d, 30_000);
+    /// ```
     pub fn train<T>(&mut self, data: &T, iterations: i64) where T: Extractable{
         for _ in 0..iterations{
             let (x, y) = data.rand();
@@ -196,6 +285,15 @@ impl FeedForward {
         }
     }
 
+    /// Train neural network simultaneously step by step
+    ///
+    /// * `X: &[f64]` - slice of input data;
+    /// * `d: &[f64]` - expected output.
+    ///
+    /// # Example
+    /// ```
+    /// nn.fit(&[3], &[3, 5]);
+    /// ```
     #[allow(non_snake_case)]
     pub fn fit(&mut self, X: &[f64], d: &[f64]){
         let mut x = X.to_vec();
@@ -208,6 +306,15 @@ impl FeedForward {
         self.update(&x, &res);
     }
 
+    /// Calculate the response by trained neural network.
+    ///
+    /// * `X: &[f64]` - slice of input data;
+    /// * `return -> &[f64]` - slice of calculated data.
+    ///
+    /// # Example
+    /// ```
+    /// let v: Vec<f64> = nn.calc(&[1.02]).to_vec();
+    /// ```
     #[allow(non_snake_case)]
     pub fn calc(&mut self, X: &[f64]) -> &[f64]{
         let mut x = X.to_vec();
@@ -218,6 +325,11 @@ impl FeedForward {
         &self.layers[self.layers.len() - 1].y
     }
 
+    /// Choose activation function.
+    ///
+    /// * `func: neuroflow::activators::Type` - enum element that indicates which
+    /// function to use;
+    /// * `return -> &mut FeedForward` - link on the current struct.
     pub fn activation(&mut self, func: activators::Type) -> &mut FeedForward{
         match func{
             activators::Type::Sigmoid => {
@@ -232,11 +344,29 @@ impl FeedForward {
         self
     }
 
+    /// Set the learning rate of network.
+    ///
+    /// * `learning_rate: f64` - learning rate;
+    /// * `return -> &mut FeedForward` - link on the current struct.
+    ///
+    /// # Example
+    /// ```
+    /// nn.learning_rate(0.1);
+    /// ```
     pub fn learning_rate(&mut self, learning_rate: f64) -> &mut FeedForward {
         self.learn_rate = learning_rate;
         self
     }
 
+    /// Set the momentum of network.
+    ///
+    /// * `momentum: f64` - momentum;
+    /// * `return -> &mut FeedForward` - link on the current struct.
+    ///
+    /// # Example
+    /// ```
+    /// nn.momentum(0.05);
+    /// ```
     pub fn momentum(&mut self, momentum: f64) -> &mut FeedForward {
         self.momentum = momentum;
         self
