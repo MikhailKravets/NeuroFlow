@@ -57,29 +57,29 @@ struct ActivationContainer{
 /// and the last one is amount of neurons in output layer.
 /// Denote, that vector of input data must have the equal length as input
 /// layer of FeedForward neural network (the same is for expected output vector).
-/// ```rust,no_run
+/// ```rust, no_run
 /// let mut nn = FeedForward::new(&[1, 3, 2]);
 /// ```
 ///
 /// Then you can train your network simultaneously via `fit` method:
-/// ```rust,no_run
+/// ```rust, no_run
 /// nn.fit(&[1.2], &[0.2, 0.8]);
 /// ```
 /// Or to use `train` method with `neuroflow::data::DataSet` struct:
-/// ```rust,no_run
+/// ```rust, no_run
 /// let mut data = DataSet::new();
 /// nn.train(data, 30_000); // 30_000 is iterations count
 /// ```
 ///
 /// It is possible to set parameters of network:
-/// ```rust,no_run
+/// ```rust, no_run
 /// nn.learning_rate(0.1)
 ///   .momentum(0.05)
 ///   .activation(neuroflow::activators::Type::Tanh);
 /// ```
 ///
 /// Call method `calc` in order to calculate value by your(already trained) network:
-/// ```rust,no_run
+/// ```rust, no_run
 /// let d: Vec<f64> = nn.calc(&[1.02]).to_vec();
 /// ```
 ///
@@ -148,7 +148,7 @@ impl FeedForward {
     ///
     /// * `return` - `FeedForward` struct
     /// # Example
-    /// ```rust,no_run
+    /// ```rust, no_run
     /// let mut nn = FeedForward::new(&[1, 3, 2]);
     /// ```
     ///
@@ -248,7 +248,7 @@ impl FeedForward {
     /// * `neuron: usize` - index of neuron. NOTE, neurons indexing in layer starts from 0!
     ///
     /// # Example
-    /// ```rust,no_run
+    /// ```rust, no_run
     /// nn.bind(2, 0);
     /// ```
     pub fn bind(&mut self, layer: usize, neuron: usize){
@@ -261,7 +261,7 @@ impl FeedForward {
     /// * `neuron: usize` - index of neuron. NOTE, neurons indexing in layer starts from 0!
     ///
     /// # Example
-    /// ```rust,no_run
+    /// ```rust, no_run
     /// nn.unbind(2, 0);
     /// ```
     pub fn unbind(&mut self, layer: usize, neuron: usize){
@@ -274,7 +274,7 @@ impl FeedForward {
     /// * `iterations: i64` - iterations count.
     ///
     /// # Example
-    /// ```rust,no_run
+    /// ```rust, no_run
     /// let mut d = neuroflow::data::DataSet::new();
     /// nn.train(d, 30_000);
     /// ```
@@ -291,7 +291,7 @@ impl FeedForward {
     /// * `d: &[f64]` - expected output.
     ///
     /// # Example
-    /// ```rust,no_run
+    /// ```rust, no_run
     /// nn.fit(&[3], &[3, 5]);
     /// ```
     #[allow(non_snake_case)]
@@ -312,7 +312,7 @@ impl FeedForward {
     /// * `return -> &[f64]` - slice of calculated data.
     ///
     /// # Example
-    /// ```rust,no_run
+    /// ```rust, no_run
     /// let v: Vec<f64> = nn.calc(&[1.02]).to_vec();
     /// ```
     #[allow(non_snake_case)]
@@ -350,7 +350,7 @@ impl FeedForward {
     /// * `return -> &mut FeedForward` - link on the current struct.
     ///
     /// # Example
-    /// ```rust,no_run
+    /// ```rust, no_run
     /// nn.learning_rate(0.1);
     /// ```
     pub fn learning_rate(&mut self, learning_rate: f64) -> &mut FeedForward {
@@ -364,7 +364,7 @@ impl FeedForward {
     /// * `return -> &mut FeedForward` - link on the current struct.
     ///
     /// # Example
-    /// ```rust,no_run
+    /// ```rust, no_run
     /// nn.momentum(0.05);
     /// ```
     pub fn momentum(&mut self, momentum: f64) -> &mut FeedForward {
