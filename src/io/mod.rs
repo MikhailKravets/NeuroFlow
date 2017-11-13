@@ -4,14 +4,14 @@
 //!
 //! # Example
 //! Saving of neural network:
-//! ```
+//! ```rust,no_run
 //! let mut nn = FeedForward::new(&[2, 2, 1]);
 //! /* train here your neural network */
 //! save(&nn, "test.flow");
 //! ```
 //!
 //! Restoring of neural network:
-//! ```
+//! ```rust,no_run
 //! let mut new_nn: FeedForward = load("test.nn")
 //!     .unwrap_or(FeedForward::new(&[2, 2, 1]));
 //! ```
@@ -37,7 +37,7 @@ pub enum IOError{
 /// * `return -> Result<(), IOError>` - result of operation;
 ///
 /// # Example
-/// ```
+/// ```rust,no_run
 /// let mut nn = FeedForward::new(&[2, 2, 1]);
 /// /* train here your neural network */
 /// save(&nn, "test.flow");
@@ -58,7 +58,7 @@ pub fn save<T: serde::Serialize>(obj: &T, file_path: &str) -> Result<(), IOError
 /// apparently specify the type T).
 ///
 /// # Example
-/// ```
+/// ```rust,no_run
 /// let mut new_nn: FeedForward = load("test.flow")
 ///     .unwrap_or(FeedForward::new(&[2, 2, 1]));
 /// ```
