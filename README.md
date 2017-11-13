@@ -8,7 +8,7 @@
 
 New Neural Networks Rust crate
 
-## Code Examples
+## How to use
 
 Let's try to approximate simple `sin(x)` function.
 
@@ -83,7 +83,7 @@ neural networks from files.
         First argument is link on the saving neural network;
         Second argument is path to the file. 
     */
-    neuroflow::io::save(&nn, "test.flow");
+    neuroflow::io::save(&nn, "test.flow").unwrap();
     
     /*
         After we have saved the neural network to the file we can restore it by calling
@@ -93,12 +93,12 @@ neural networks from files.
         The only argument of load function is the path to file containing
         the neural network
     */
-    let mut new_nn: FeedForward = load("test.flow");
+    let mut new_nn: FeedForward = neuroflow::io::load("test.flow").unwrap();
 ```
 
 ----------------------
 
-classic XOR problem
+Classic XOR problem
 ```rust
 extern crate neuroflow;
 
@@ -150,7 +150,7 @@ Previously the library was created only for educational purposes. Saying about n
 Insert into your project's cargo.toml block next line
 ```
 [dependencies]
-neuroflow = "0.1.0"
+neuroflow = "0.1.2"
 ```
 
 Then in your code
