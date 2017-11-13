@@ -1,6 +1,6 @@
 //! Module contains functions, structs and traits for data storage, access, and processing.
 //!
-//! # Examples
+//! # Example
 //! In order to train network by `neuroflow::FeedForward::train` method,
 //! the first argument of this method must implement Extractable trait.
 //! Example for DataSet
