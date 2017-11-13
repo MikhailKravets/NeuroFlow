@@ -23,9 +23,6 @@
 //!
 //! Also, it has `DataSet` struct for easy managing of data.
 //! For example, when you load data from file, it'll be placed into `DataSet`
-//! ```text, no_run
-//! // under development :(
-//! ```
 use rand;
 use rand::distributions::range::Range;
 use rand::distributions::IndependentSample;
