@@ -2,32 +2,39 @@
 /// The module should contain functions and traits for saving
 /// and restoring of neural networks from files, and buffers
 
+use std;
 use std::fs::File;
 use std::io::{Read, Write, BufReader};
 use serde;
+use bincode;
 use bincode::{serialize, deserialize_from, Infinite};
-use FeedForward;
 
-/// obj: it should be neural network to save.
-/// I guess it should be generic type with necessary
-/// implementation of some trait
-pub fn save<T: serde::Serialize>(obj: &T, file_path: &str){
-    let mut file = File::create(file_path).unwrap();
-    let encoded: Vec<u8> = serialize(obj, Infinite).unwrap();
+#[derive(Debug)]
+pub enum IOError{
+    IO(std::io::Error),
+    Encoding(bincode::Error)
+}
+
+
+pub fn save<T: serde::Serialize>(obj: &T, file_path: &str) -> Result<(), IOError>{
+    let mut file = File::create(file_path).map_err(IOError::IO)?;
+    let encoded: Vec<u8> = serialize(obj, Infinite).map_err(IOError::Encoding)?;
 
     file.write_all(&encoded);
     file.flush();
+
+    Ok(())
 }
 
-/// Function that load NN from file.
-/// Is it possible to return generic type!?
-pub fn load<'b, T>(file_path: &'b str) -> T where for<'de> T: serde::Deserialize<'de>{
+
+pub fn load<'b, T>(file_path: &'b str) -> Result<T, IOError> where for<'de> T: serde::Deserialize<'de>{
     let mut content: Vec<u8> = Vec::new();
-    let mut file = File::open(file_path).unwrap();
+    let mut file = File::open(file_path).map_err(IOError::IO)?;
     let mut buf = BufReader::new(file);
 
-    let mut nn: T = deserialize_from(&mut buf, Infinite).unwrap();
-    nn
+    let mut nn: T = deserialize_from(&mut buf, Infinite).map_err(IOError::Encoding)?;
+
+    Ok(nn)
 }
 
 /// Future function for saving in JSON string.
