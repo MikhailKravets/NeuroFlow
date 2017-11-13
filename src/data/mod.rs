@@ -1,10 +1,10 @@
 //! Module contains functions, structs and traits for data storage, access, and processing.
 //!
 //! In order to train network by `neuroflow::FeedForward::train` method,
-//! the first argument of this method must implement Extractable trait.
+//! you need the first argument to implement `Extractable` trait.
 //!
-//! Also, it has `DataSet` struct for easy managing of data.
-//! For example, when you load data from file, it'll be placed into `DataSet`
+//! Also, it has `DataSet` struct (which implement `Executable` trait) for easy managing of data.
+//! For example, when you load data from file, it'll be placed into `DataSet`.
 use rand;
 use rand::distributions::range::Range;
 use rand::distributions::IndependentSample;
