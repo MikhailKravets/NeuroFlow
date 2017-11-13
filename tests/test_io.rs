@@ -90,3 +90,11 @@ fn loading_of_neural_net(){
         remove_file(p);
     }
 }
+
+#[test]
+fn load_not_existent_file(){
+    match load::<FeedForward>("test.nn") {
+        Ok(n) => assert!(false),
+        Err(e) => assert!(true)
+    }
+}
