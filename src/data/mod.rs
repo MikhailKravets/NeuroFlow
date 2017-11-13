@@ -38,22 +38,22 @@ fn from_csv(file_path: &str) -> DataSet {
 /// Trait for getting specific element from set.
 ///
 /// # Example
-//! ```
-//! impl Extractable for DataSet{
-//!     fn rand(&self) -> (&Vec<f64>, &Vec<f64>){
-//!         let rnd_range = Range::new(0, self.y.len());
-//!         let k = rnd_range.ind_sample(&mut rand::thread_rng());
-//!
-//!         (&self.x[k], &self.y[k])
-//!     }
-//!     fn get(&self, i: usize) -> (&Vec<f64>, &Vec<f64>){
-//!         (&self.x[i], &self.y[i])
-//!     }
-//!     fn len(&self) -> usize {
-//!         self.y.len()
-//!     }
-//! }
-//! ```
+/// ```
+/// impl Extractable for DataSet{
+///     fn rand(&self) -> (&Vec<f64>, &Vec<f64>){
+///        let rnd_range = Range::new(0, self.y.len());
+///         let k = rnd_range.ind_sample(&mut rand::thread_rng());
+///
+///         (&self.x[k], &self.y[k])
+///     }
+///     fn get(&self, i: usize) -> (&Vec<f64>, &Vec<f64>){
+///         (&self.x[i], &self.y[i])
+///     }
+///     fn len(&self) -> usize {
+///         self.y.len()
+///     }
+/// }
+/// ```
 pub trait Extractable {
     /// Get random element from set
     ///
