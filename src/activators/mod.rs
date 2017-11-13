@@ -1,3 +1,7 @@
+//! Module contains popular neural networks activation functions
+//! and theirs derivatives
+
+/// Determine types of activation functions contained in this module.
 #[allow(dead_code)]
 #[derive(Serialize, Deserialize)]
 pub enum Type {
