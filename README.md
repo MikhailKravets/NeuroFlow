@@ -143,10 +143,6 @@ for [0.000, 1.000], [1.000] -> [1.000]
 for [1.000, 1.000], [0.000] -> [0.000]
 ```
 
-## Current goals
-- Implement Optimal Brain Surgery algorithm
-- Work with data in files (``csv``, ``xlsx``, etc)
-
 ## Motivation
 Previously the library was created only for educational purposes. Saying about now there is, also, sport interest :)
 
