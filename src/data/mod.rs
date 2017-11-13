@@ -4,7 +4,7 @@
 //! In order to train network by `neuroflow::FeedForward::train` method,
 //! the first argument of this method must implement Extractable trait.
 //! Example for DataSet
-//! ```rust, no_run
+//! ```text, no_run
 //! impl Extractable for DataSet{
 //!     fn rand(&self) -> (&Vec<f64>, &Vec<f64>){
 //!         let rnd_range = Range::new(0, self.y.len());
@@ -23,7 +23,7 @@
 //!
 //! Also, it has `DataSet` struct for easy managing of data.
 //! For example, when you load data from file, it'll be placed into `DataSet`
-//! ```rust, no_run
+//! ```text, no_run
 //! // under development :(
 //! ```
 use rand;
@@ -38,7 +38,7 @@ fn from_csv(file_path: &str) -> DataSet {
 /// Trait for getting specific element from set.
 ///
 /// # Example
-/// ```rust, no_run
+/// ```text, no_run
 /// impl Extractable for DataSet{
 ///     fn rand(&self) -> (&Vec<f64>, &Vec<f64>){
 ///        let rnd_range = Range::new(0, self.y.len());
@@ -83,7 +83,7 @@ impl DataSet {
     /// `DataSet` constructor.
     ///
     /// # Example
-    /// ```rust, no_run
+    /// ```text, no_run
     /// let mut data = DataSet::new();
     /// ```
     pub fn new() -> DataSet{
@@ -96,7 +96,7 @@ impl DataSet {
     /// * `y: &[f64]` - expected output of neural network.
     ///
     /// # Example
-    /// ```rust, no_run
+    /// ```text, no_run
     /// let mut data = DataSet::new();
     /// data.push(&[1.3], &[1.2, 2.1]);
     /// ```
@@ -110,7 +110,7 @@ impl DataSet {
     /// * `i: usize` - index of element to be deleted.
     ///
     /// # Example
-    /// ```rust, no_run
+    /// ```text, no_run
     /// data.remove(0);
     /// ```
     pub fn remove(&mut self, i: usize){
