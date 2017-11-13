@@ -1,25 +1,7 @@
 //! Module contains functions, structs and traits for data storage, access, and processing.
 //!
-//! # Example
 //! In order to train network by `neuroflow::FeedForward::train` method,
 //! the first argument of this method must implement Extractable trait.
-//! Example for DataSet
-//! ```text, no_run
-//! impl Extractable for DataSet{
-//!     fn rand(&self) -> (&Vec<f64>, &Vec<f64>){
-//!         let rnd_range = Range::new(0, self.y.len());
-//!         let k = rnd_range.ind_sample(&mut rand::thread_rng());
-//!
-//!         (&self.x[k], &self.y[k])
-//!     }
-//!     fn get(&self, i: usize) -> (&Vec<f64>, &Vec<f64>){
-//!         (&self.x[i], &self.y[i])
-//!     }
-//!     fn len(&self) -> usize {
-//!         self.y.len()
-//!     }
-//! }
-//! ```
 //!
 //! Also, it has `DataSet` struct for easy managing of data.
 //! For example, when you load data from file, it'll be placed into `DataSet`
