@@ -4,15 +4,23 @@
 //!
 //! # Example
 //! Saving of neural network:
-//! ```text, no_run
+//!
+//! ```
+//! use neuroflow::FeedForward;
+//! use neuroflow::io;
+//!
 //! let mut nn = FeedForward::new(&[2, 2, 1]);
 //! /* train here your neural network */
-//! save(&nn, "test.flow");
+//! io::save(&nn, "test.flow");
 //! ```
 //!
 //! Restoring of neural network:
-//! ```text, no_run
-//! let mut new_nn: FeedForward = load("test.nn")
+//!
+//! ```
+//! use neuroflow::FeedForward;
+//! use neuroflow::io;
+//!
+//! let mut new_nn: FeedForward = io::load("test.nn")
 //!     .unwrap_or(FeedForward::new(&[2, 2, 1]));
 //! ```
 
@@ -36,11 +44,15 @@ pub enum IOError{
 /// * `file_path: &str` - path to the file.
 /// * `return -> Result<(), IOError>` - result of operation;
 ///
-/// # Example
-/// ```text, no_run
+/// # Examples
+///
+/// ```
+/// use neuroflow::FeedForward;
+/// use neuroflow::io;
+///
 /// let mut nn = FeedForward::new(&[2, 2, 1]);
 /// /* train here your neural network */
-/// save(&nn, "test.flow");
+/// io::save(&nn, "test.flow");
 /// ```
 pub fn save<T: serde::Serialize>(obj: &T, file_path: &str) -> Result<(), IOError>{
     let mut file = File::create(file_path).map_err(IOError::IO)?;
@@ -57,9 +69,13 @@ pub fn save<T: serde::Serialize>(obj: &T, file_path: &str) -> Result<(), IOError
 /// * `return -> Result<T, IOError>` - if Ok returns loaded neural network (Note, you must
 /// apparently specify the type T).
 ///
-/// # Example
-/// ```text, no_run
-/// let mut new_nn: FeedForward = load("test.flow")
+/// # Examples
+///
+/// ```
+/// use neuroflow::FeedForward;
+/// use neuroflow::io;
+///
+/// let mut new_nn: FeedForward = io::load("test.flow")
 ///     .unwrap_or(FeedForward::new(&[2, 2, 1]));
 /// ```
 pub fn load<'b, T>(file_path: &'b str) -> Result<T, IOError> where for<'de> T: serde::Deserialize<'de>{

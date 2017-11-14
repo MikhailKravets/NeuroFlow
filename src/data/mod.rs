@@ -16,22 +16,15 @@ fn from_csv(file_path: &str) -> DataSet {
 
 /// Trait for getting specific element from set.
 ///
-/// # Example
-/// ```text, no_run
-/// impl Extractable for DataSet{
-///     fn rand(&self) -> (&Vec<f64>, &Vec<f64>){
-///        let rnd_range = Range::new(0, self.y.len());
-///         let k = rnd_range.ind_sample(&mut rand::thread_rng());
+/// # Examples
 ///
-///         (&self.x[k], &self.y[k])
-///     }
-///     fn get(&self, i: usize) -> (&Vec<f64>, &Vec<f64>){
-///         (&self.x[i], &self.y[i])
-///     }
-///     fn len(&self) -> usize {
-///         self.y.len()
-///     }
-/// }
+/// ```
+/// use neuroflow::data::Extractable;
+/// use neuroflow::data::DataSet;
+///
+/// let mut data = DataSet::new();
+/// data.push(&[3.01], &[4.0]);
+/// data.rand();
 /// ```
 pub trait Extractable {
     /// Get random element from set
@@ -61,8 +54,11 @@ pub struct DataSet{
 impl DataSet {
     /// `DataSet` constructor.
     ///
-    /// # Example
-    /// ```text, no_run
+    /// # Examples
+    ///
+    /// ```
+    /// use neuroflow::data::DataSet;
+    ///
     /// let mut data = DataSet::new();
     /// ```
     pub fn new() -> DataSet{
@@ -74,8 +70,11 @@ impl DataSet {
     /// * `x: &[f64]` - input data to neural network;
     /// * `y: &[f64]` - expected output of neural network.
     ///
-    /// # Example
-    /// ```text, no_run
+    /// # Examples
+    ///
+    /// ```
+    /// use neuroflow::data::DataSet;
+    ///
     /// let mut data = DataSet::new();
     /// data.push(&[1.3], &[1.2, 2.1]);
     /// ```
@@ -88,8 +87,13 @@ impl DataSet {
     ///
     /// * `i: usize` - index of element to be deleted.
     ///
-    /// # Example
-    /// ```text, no_run
+    /// # Examples
+    ///
+    /// ```
+    /// use neuroflow::data::DataSet;
+    ///
+    /// let mut data = DataSet::new();
+    /// data.push(&[1.3], &[1.2, 2.1]);
     /// data.remove(0);
     /// ```
     pub fn remove(&mut self, i: usize){

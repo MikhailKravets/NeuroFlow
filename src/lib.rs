@@ -57,29 +57,44 @@ struct ActivationContainer{
 /// and the last one is amount of neurons in output layer.
 /// Denote, that vector of input data must have the equal length as input
 /// layer of FeedForward neural network (the same is for expected output vector).
-/// ```text, no_run
+///
+/// ```
+/// use neuroflow::FeedForward;
+///
 /// let mut nn = FeedForward::new(&[1, 3, 2]);
 /// ```
 ///
 /// Then you can train your network simultaneously via `fit` method:
-/// ```text, no_run
+///
+/// ```text
+/// # use neuroflow::FeedForward;
+/// # let mut nn = FeedForward::new(&[1, 3, 2]);
 /// nn.fit(&[1.2], &[0.2, 0.8]);
 /// ```
+///
 /// Or to use `train` method with `neuroflow::data::DataSet` struct:
-/// ```text, no_run
+///
+/// ```text
+/// # use neuroflow::FeedForward;
+/// # let mut nn = FeedForward::new(&[1, 3, 2]);
 /// let mut data = DataSet::new();
 /// nn.train(data, 30_000); // 30_000 is iterations count
 /// ```
 ///
 /// It is possible to set parameters of network:
-/// ```text, no_run
+/// ```text
+/// # use neuroflow::FeedForward;
+/// # let mut nn = FeedForward::new(&[1, 3, 2]);
 /// nn.learning_rate(0.1)
 ///   .momentum(0.05)
 ///   .activation(neuroflow::activators::Type::Tanh);
 /// ```
 ///
 /// Call method `calc` in order to calculate value by your(already trained) network:
-/// ```text, no_run
+///
+/// ```text
+/// # use neuroflow::FeedForward;
+/// # let mut nn = FeedForward::new(&[1, 3, 2]);
 /// let d: Vec<f64> = nn.calc(&[1.02]).to_vec();
 /// ```
 ///
@@ -148,7 +163,9 @@ impl FeedForward {
     ///
     /// * `return` - `FeedForward` struct
     /// # Example
-    /// ```text, no_run
+    ///
+    /// ```
+    /// use neuroflow::FeedForward;
     /// let mut nn = FeedForward::new(&[1, 3, 2]);
     /// ```
     ///
@@ -247,8 +264,11 @@ impl FeedForward {
     /// * `layer: usize` - index of layer. NOTE, layer indexing starts from 1!
     /// * `neuron: usize` - index of neuron. NOTE, neurons indexing in layer starts from 0!
     ///
-    /// # Example
-    /// ```text, no_run
+    /// # Examples
+    ///
+    /// ```text
+    /// # use neuroflow::FeedForward;
+    /// # let mut nn = FeedForward::new(&[1, 3, 2]);
     /// nn.bind(2, 0);
     /// ```
     pub fn bind(&mut self, layer: usize, neuron: usize){
@@ -260,8 +280,11 @@ impl FeedForward {
     /// * `layer: usize` - index of layer. NOTE, layer indexing starts from 1!
     /// * `neuron: usize` - index of neuron. NOTE, neurons indexing in layer starts from 0!
     ///
-    /// # Example
-    /// ```text, no_run
+    /// # Examples
+    ///
+    /// ```text
+    /// # use neuroflow::FeedForward;
+    /// # let mut nn = FeedForward::new(&[1, 3, 2]);
     /// nn.unbind(2, 0);
     /// ```
     pub fn unbind(&mut self, layer: usize, neuron: usize){
@@ -273,8 +296,11 @@ impl FeedForward {
     /// * `data: &T` - the link on data that implements `neuroflow::data::Extractable` trait;
     /// * `iterations: i64` - iterations count.
     ///
-    /// # Example
-    /// ```text, no_run
+    /// # Examples
+    ///
+    /// ```text
+    /// # use neuroflow::FeedForward;
+    /// # let mut nn = FeedForward::new(&[1, 3, 2]);
     /// let mut d = neuroflow::data::DataSet::new();
     /// nn.train(d, 30_000);
     /// ```
@@ -290,8 +316,11 @@ impl FeedForward {
     /// * `X: &[f64]` - slice of input data;
     /// * `d: &[f64]` - expected output.
     ///
-    /// # Example
-    /// ```text, no_run
+    /// # Examples
+    ///
+    /// ```text
+    /// # use neuroflow::FeedForward;
+    /// # let mut nn = FeedForward::new(&[1, 3, 2]);
     /// nn.fit(&[3], &[3, 5]);
     /// ```
     #[allow(non_snake_case)]
@@ -311,8 +340,11 @@ impl FeedForward {
     /// * `X: &[f64]` - slice of input data;
     /// * `return -> &[f64]` - slice of calculated data.
     ///
-    /// # Example
-    /// ```text, no_run
+    /// # Examples
+    ///
+    /// ```text
+    /// # use neuroflow::FeedForward;
+    /// # let mut nn = FeedForward::new(&[1, 3, 2]);
     /// let v: Vec<f64> = nn.calc(&[1.02]).to_vec();
     /// ```
     #[allow(non_snake_case)]
@@ -349,8 +381,11 @@ impl FeedForward {
     /// * `learning_rate: f64` - learning rate;
     /// * `return -> &mut FeedForward` - link on the current struct.
     ///
-    /// # Example
-    /// ```text, no_run
+    /// # Examples
+    ///
+    /// ```text
+    /// # use neuroflow::FeedForward;
+    /// # let mut nn = FeedForward::new(&[1, 3, 2]);
     /// nn.learning_rate(0.1);
     /// ```
     pub fn learning_rate(&mut self, learning_rate: f64) -> &mut FeedForward {
@@ -364,7 +399,10 @@ impl FeedForward {
     /// * `return -> &mut FeedForward` - link on the current struct.
     ///
     /// # Example
-    /// ```text, no_run
+    ///
+    /// ```text
+    /// # use neuroflow::FeedForward;
+    /// # let mut nn = FeedForward::new(&[1, 3, 2]);
     /// nn.momentum(0.05);
     /// ```
     pub fn momentum(&mut self, momentum: f64) -> &mut FeedForward {
