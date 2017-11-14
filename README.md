@@ -6,7 +6,7 @@
 [![codecov](https://codecov.io/gh/MikhailKravets/NeuroFlow/branch/master/graph/badge.svg)](https://codecov.io/gh/MikhailKravets/NeuroFlow)
 [![crates](https://img.shields.io/crates/v/neuroflow.svg)](https://crates.io/crates/neuroflow)
 
-New Neural Networks Rust crate
+Neural Networks Rust crate that is based on speed, safety, and clear sanity.
 
 ## How to use
 
@@ -143,9 +143,6 @@ for [0.000, 1.000], [1.000] -> [1.000]
 for [1.000, 1.000], [0.000] -> [0.000]
 ```
 
-## Motivation
-Previously the library was created only for educational purposes. Saying about now there is, also, sport interest :)
-
 ## Installation
 Insert into your project's cargo.toml block next line
 ```
@@ -155,8 +152,11 @@ neuroflow = "0.1.2"
 
 Then in your code
 ```rust
-    extern crate neuroflow;
+extern crate neuroflow;
 ```
+
+## Motivation
+Previously the library was created only for educational purposes. Saying about now there is, also, sport interest :)
 
 ## License
 MIT License
