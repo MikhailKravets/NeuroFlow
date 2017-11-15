@@ -22,10 +22,8 @@ use neuroflow::activators::Type::Tanh;
 
 fn main(){
     /*
-        Define neural network with 1 neuron in input layers 
-        (we have only 1 argument in sin(x), so it should be 1 neuron in the input layer).
-        Network contains 2 hidden layers (that have 8 and 6 neurons respectively).
-        And, such as sin(x) returns single value, it is reasonable to have 1 neuron in the output layer.
+        Define neural network with 1 neuron in input layers. Network contains 4 hidden layers.
+        And, such as our function returns single value, it is reasonable to have 1 neuron in the output layer.
     */
     let mut nn = FeedForward::new(&[1, 7, 8, 8, 7, 1]);
     
@@ -44,7 +42,7 @@ fn main(){
         i += 0.05;
     }
     
-    // Here, we set necessary parameters and train neural network by our DataSet with 30 000 iterations
+    // Here, we set necessary parameters and train neural network by our DataSet with 50 000 iterations
     nn.activation(Tanh)
         .learning_rate(0.01)
         .train(&data, 50_000);
