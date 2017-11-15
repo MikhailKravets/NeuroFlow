@@ -54,8 +54,7 @@ fn loading_of_neural_net(){
 
     save(&nn, "test.nn").unwrap();
 
-    let mut new_nn: FeedForward = load("test.nn")
-        .unwrap_or(FeedForward::new(&[2, 2, 1]));
+    let mut new_nn: FeedForward = load("test.nn").unwrap();
 
     let sc = &[
         (&[0f64, 0f64], &[0f64]),
@@ -69,8 +68,8 @@ fn loading_of_neural_net(){
     for v in sc{
         res = nn.calc(v.0)[0];
         res1 = new_nn.calc(v.0)[0];
-        println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]",
-                 v.0[0], v.0[1], v.1[0], res);
+        println!("for [{:.3}, {:.3}] -> [{:.3}], [{:.3}]",
+                 v.0[0], v.0[1], res, res1);
 
         if (res - res1).abs() > 0.1{
             assert!(false);
@@ -78,9 +77,7 @@ fn loading_of_neural_net(){
     }
 
     let p = Path::new("test.nn");
-    if p.exists(){
-        remove_file(p).unwrap();
-    }
+    remove_file(p).unwrap();
 }
 
 #[test]
