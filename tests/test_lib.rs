@@ -91,7 +91,6 @@ fn binding(){
 }
 
 #[test]
-#[ignore]
 fn widrows(){
     let w = estimators::widrows(&[2, 1], 0.1);
     assert_eq!(w, 90f64);
