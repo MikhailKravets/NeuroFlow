@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/MikhailKravets/DataFlow/master/logo.png"><br><br>
 </div>
 
-![Build status](https://travis-ci.org/MikhailKravets/NeuroFlow.svg?branch=master)
+[![Build status](https://travis-ci.org/MikhailKravets/NeuroFlow.svg?branch=master)](https://travis-ci.org/MikhailKravets/NeuroFlow)
 [![codecov](https://codecov.io/gh/MikhailKravets/NeuroFlow/branch/master/graph/badge.svg)](https://codecov.io/gh/MikhailKravets/NeuroFlow)
 [![crates](https://img.shields.io/crates/v/neuroflow.svg)](https://crates.io/crates/neuroflow)
 
