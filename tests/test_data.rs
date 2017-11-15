@@ -12,3 +12,16 @@ fn test_data_set(){
     assert_eq!(x[0], ds.rand().0[0]);
     assert_eq!(x[0], ds.get(0).0[0]);
 }
+
+#[test]
+#[ignore]
+fn test_load_from_csv(){
+    let ds = DataSet::from_csv("D:\\DELETE\\отчеты\\output.csv");
+    match ds {
+       Ok(v) => println!("{:?}", v),
+        Err(e) => {
+            println!("{}", e);
+            assert!(false);
+        }
+    }
+}

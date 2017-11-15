@@ -5,12 +5,14 @@
 //!
 //! Also, it has `DataSet` struct (which implement `Executable` trait) for easy managing of data.
 //! For example, when you load data from file, it'll be placed into `DataSet`.
+use std;
+
 use rand;
 use rand::distributions::range::Range;
 use rand::distributions::IndependentSample;
-
 use csv;
 
+use ErrorKind;
 
 /// Trait for getting specific element from set.
 ///
@@ -42,8 +44,8 @@ pub trait Extractable {
     fn len(&self) -> usize;
 }
 
-/// Container for data set.
-///
+/// Container for the set of data.
+#[derive(Debug)]
 pub struct DataSet{
     x: Vec<Vec<f64>>,
     y: Vec<Vec<f64>>
@@ -63,16 +65,55 @@ impl DataSet {
         return DataSet{x: vec![], y: vec![]};
     }
 
-    fn from_csv(file_path: &str) -> Result<DataSet, ()> {
+    /// Read data from csv file and parse it to the `DataSet` instance.
+    ///
+    /// The file must have following header format:
+    ///
+    /// `x,x,y,y`
+    ///
+    /// where each value (must be parsable to float) under `x` responds to input vector
+    /// and each value under `y` response to desired output vector.
+    ///
+    /// * `file_path: &str` - path to `csv` file;
+    /// * `return -> Result<DataSet, Box<std::error::Error>>` - return new `DataSet`
+    /// instance if Ok.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use neuroflow::data::DataSet;
+    ///
+    /// let mut data = DataSet::from_csv("container.csv");
+    /// println!("{:?}", data);
+    /// ```
+    pub fn from_csv(file_path: &str) -> Result<DataSet, Box<std::error::Error>> {
         let mut file = csv::ReaderBuilder::new().from_path(file_path)?;
         let mut data_set = DataSet::new();
 
-        let header = file.headers()?;
+        let header = file.headers()?.clone();
 
         for row in file.records(){
             let records = row?;
-            // write all records into new data_set;
+            let mut x: Vec<f64> = Vec::new();
+            let mut y: Vec<f64> = Vec::new();
+
+            for i in 0..header.len(){
+                if let Some(h) = header.get(i){
+                    if h == "x"{
+                        if let Some(v) = records.get(i){
+                            x.push(v.parse()?);
+                        }
+                    } else if h == "y" {
+                        if let Some(v) = records.get(i){
+                            y.push(v.parse()?);
+                        }
+                    }
+                }
+            }
+            data_set.push(&x, &y);
         }
+
+        Ok(data_set)
     }
 
     /// Append data to the end of the set.
