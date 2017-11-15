@@ -16,6 +16,14 @@ use std::default::Default;
 
 use data::Extractable;
 
+/// Custom ErrorKind enum for handling multiple error types
+#[derive(Debug)]
+pub enum ErrorKind {
+    IO(std::io::Error),
+    Encoding(bincode::Error),
+    StdError(Box<std::error::Error>)
+}
+
 /// The struct that points different fields of network.
 /// It is used only for Display trait. Should be deleted in future versions
 #[allow(dead_code)]

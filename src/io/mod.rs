@@ -31,12 +31,7 @@ use serde;
 use bincode;
 use bincode::{serialize, deserialize_from, Infinite};
 
-/// Custom ErrorKind enum for handling multiple error types
-#[derive(Debug)]
-pub enum ErrorKind {
-    IO(std::io::Error),
-    Encoding(bincode::Error)
-}
+use ErrorKind;
 
 /// Saves given neural network to file specified by `file_path`.
 ///
