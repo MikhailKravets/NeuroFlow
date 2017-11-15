@@ -9,10 +9,8 @@ use rand;
 use rand::distributions::range::Range;
 use rand::distributions::IndependentSample;
 
+use csv;
 
-fn from_csv(file_path: &str) -> DataSet {
-    unimplemented!();
-}
 
 /// Trait for getting specific element from set.
 ///
@@ -63,6 +61,18 @@ impl DataSet {
     /// ```
     pub fn new() -> DataSet{
         return DataSet{x: vec![], y: vec![]};
+    }
+
+    fn from_csv(file_path: &str) -> Result<DataSet, ()> {
+        let mut file = csv::ReaderBuilder::new().from_path(file_path)?;
+        let mut data_set = DataSet::new();
+
+        let header = file.headers()?;
+
+        for row in file.records(){
+            let records = row?;
+            // write all records into new data_set;
+        }
     }
 
     /// Append data to the end of the set.
