@@ -10,7 +10,7 @@ Neural Networks Rust crate that is based on speed, safety, and clear sanity.
 
 ## How to use
 
-Let's try to approximate simple `sin(x)` function.
+Let's try to approximate very simple `0.5*sin(e^x) - cos(e^(-x))` function.
 
 ```rust
 extern crate neuroflow;
@@ -27,7 +27,7 @@ fn main(){
         Network contains 2 hidden layers (that have 8 and 6 neurons respectively).
         And, such as sin(x) returns single value, it is reasonable to have 1 neuron in the output layer.
     */
-    let mut nn = FeedForward::new(&[1, 8, 6, 1]);
+    let mut nn = FeedForward::new(&[1, 7, 8, 8, 7, 1]);
     
     /*
         Define DataSet.
@@ -39,15 +39,15 @@ fn main(){
     let mut i = -3.0;
     
     // Push the data to DataSet (method push accepts two slices: input data and expected output)
-    while i <= 3.0 {
-        data.push(&[i], &[i.sin()]);
-        i += 0.1;
+    while i <= 2.5 {
+        data.push(&[i], &[0.5*(i.exp().sin()) - (-i.exp()).cos()]);
+        i += 0.05;
     }
     
     // Here, we set necessary parameters and train neural network by our DataSet with 30 000 iterations
     nn.activation(Tanh)
-        .learning_rate(0.05)
-        .train(&data, 30_000);
+        .learning_rate(0.01)
+        .train(&data, 50_000);
 
     let mut res;
     
@@ -55,21 +55,19 @@ fn main(){
     i = 0.0;
     while i <= 0.3{
         res = nn.calc(&[i])[0];
-        println!("for [{:.3}], [{:.3}] -> [{:.3}]", i, i.sin(), res);
-        i += 0.05;
+        println!("for [{:.3}], [{:.3}] -> [{:.3}]", i, 0.5*(i.exp().sin()) - (-i.exp()).cos(), res);
+        i += 0.07;
     }
 }
 ```
 
 Expected output
 ```
-for [0.000], [0.000] -> [0.003]
-for [0.050], [0.050] -> [0.048]
-for [0.100], [0.100] -> [0.098]
-for [0.150], [0.149] -> [0.149]
-for [0.200], [0.199] -> [0.199]
-for [0.250], [0.247] -> [0.248]
-for [0.300], [0.296] -> [0.297]
+for [0.000], [-0.120] -> [-0.119]
+for [0.070], [-0.039] -> [-0.037]
+for [0.140], [0.048] -> [0.050]
+for [0.210], [0.141] -> [0.141]
+for [0.280], [0.240] -> [0.236]
 ```
 
 But we don't want to lose our trained network so easily. So, there is functionality to save and restore
