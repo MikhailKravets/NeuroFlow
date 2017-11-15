@@ -31,9 +31,9 @@ use serde;
 use bincode;
 use bincode::{serialize, deserialize_from, Infinite};
 
-/// Custom Error enum for handling multiple error types
+/// Custom ErrorKind enum for handling multiple error types
 #[derive(Debug)]
-pub enum IOError{
+pub enum ErrorKind {
     IO(std::io::Error),
     Encoding(bincode::Error)
 }
@@ -54,11 +54,11 @@ pub enum IOError{
 /// /* train here your neural network */
 /// io::save(&nn, "test.flow");
 /// ```
-pub fn save<T: serde::Serialize>(obj: &T, file_path: &str) -> Result<(), IOError>{
-    let mut file = File::create(file_path).map_err(IOError::IO)?;
-    let encoded: Vec<u8> = serialize(obj, Infinite).map_err(IOError::Encoding)?;
+pub fn save<T: serde::Serialize>(obj: &T, file_path: &str) -> Result<(), ErrorKind>{
+    let mut file = File::create(file_path).map_err(ErrorKind::IO)?;
+    let encoded: Vec<u8> = serialize(obj, Infinite).map_err(ErrorKind::Encoding)?;
 
-    file.write_all(&encoded).map_err(IOError::IO)?;
+    file.write_all(&encoded).map_err(ErrorKind::IO)?;
 
     Ok(())
 }
@@ -78,11 +78,11 @@ pub fn save<T: serde::Serialize>(obj: &T, file_path: &str) -> Result<(), IOError
 /// let mut new_nn: FeedForward = io::load("test.flow")
 ///     .unwrap_or(FeedForward::new(&[2, 2, 1]));
 /// ```
-pub fn load<'b, T>(file_path: &'b str) -> Result<T, IOError> where for<'de> T: serde::Deserialize<'de>{
-    let file = File::open(file_path).map_err(IOError::IO)?;
+pub fn load<'b, T>(file_path: &'b str) -> Result<T, ErrorKind> where for<'de> T: serde::Deserialize<'de>{
+    let file = File::open(file_path).map_err(ErrorKind::IO)?;
     let mut buf = BufReader::new(file);
 
-    let mut nn: T = deserialize_from(&mut buf, Infinite).map_err(IOError::Encoding)?;
+    let mut nn: T = deserialize_from(&mut buf, Infinite).map_err(ErrorKind::Encoding)?;
 
     Ok(nn)
 }

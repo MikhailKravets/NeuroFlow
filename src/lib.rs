@@ -6,6 +6,7 @@ pub mod io;
 extern crate rand;
 extern crate serde;
 extern crate bincode;
+extern crate csv;
 
 #[macro_use]
 extern crate serde_derive;
