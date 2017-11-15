@@ -3,6 +3,8 @@ extern crate neuroflow;
 use neuroflow::data::DataSet;
 use neuroflow::data::Extractable;
 
+use std::io::Write;
+
 
 #[test]
 fn test_data_set(){
@@ -14,9 +16,19 @@ fn test_data_set(){
 }
 
 #[test]
-#[ignore]
 fn test_load_from_csv(){
-    let ds = DataSet::from_csv("D:\\DELETE\\отчеты\\output.csv");
+    {
+        let mut file = std::fs::File::create("test.csv").unwrap();
+        file.write_all("x,x,y\n".as_bytes()).unwrap();
+        file.write_all("0,0,0\n".as_bytes()).unwrap();
+        file.write_all("1,0,1\n".as_bytes()).unwrap();
+        file.write_all("0,1,1\n".as_bytes()).unwrap();
+        file.write_all("1,1,0".as_bytes()).unwrap();
+        file.flush().unwrap();
+    }
+    let ds = DataSet::from_csv("test.csv");
+
+    std::fs::remove_file("test.csv").unwrap();
     match ds {
        Ok(v) => println!("{:?}", v),
         Err(e) => {
