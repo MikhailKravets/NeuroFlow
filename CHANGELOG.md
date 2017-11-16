@@ -3,8 +3,23 @@ The file contains important changes from version to version
 
 ## Unreleased
 
-- Work with data in files (``csv``, ``xlsx``, etc)
-- Add functionality for DataSet
+- Serialization and deserialization of neural networks to `JSON` format;
+- Allow users to use their own activation functions;
+- Update error system;
+- Increase speed of working;
+
+## 0.1.3 - 16.11.2017
+
+### Added
+
+- Method to load data from `csv` files `neuroflow::data::DataSet`;
+- Method that calculates mean values of `neuroflow::data::DataSet`;
+- Method that rounds all elements of `neuroflow::data::DataSet` with given precision.
+
+### Changed
+
+- Documentation was rewritten;
+- Improved reliability of crate;
 
 ## 0.1.2 - 13.11.2017
 
