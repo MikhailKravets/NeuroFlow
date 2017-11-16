@@ -152,7 +152,7 @@ for [1.000, 1.000], [0.000] -> [0.000]
 
 ## Installation
 Insert into your project's cargo.toml block next line
-```
+```toml
 [dependencies]
 neuroflow = "0.1.3"
 ```
