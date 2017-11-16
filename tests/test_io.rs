@@ -54,7 +54,7 @@ fn loading_of_neural_net(){
 
     save(&nn, "test.nn").unwrap();
 
-    let mut new_nn: FeedForward = load("test.nn").unwrap();
+    let mut new_nn = load::<FeedForward>("test.nn").unwrap();
 
     let sc = &[
         (&[0f64, 0f64], &[0f64]),
