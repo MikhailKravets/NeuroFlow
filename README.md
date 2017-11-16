@@ -10,7 +10,7 @@ Neural Networks Rust crate that is based on speed, safety, and clear sanity.
 
 ## How to use
 
-Let's try to approximate very simple `0.5*sin(e^x) - cos(e^(-x))` function.
+Let's try to approximate very simple function `0.5*sin(e^x) - cos(e^(-x))`.
 
 ```rust
 extern crate neuroflow;
@@ -94,7 +94,19 @@ neural networks from files.
 
 ----------------------
 
-Classic XOR problem
+Classic XOR problem (with no classic input of data)
+
+Let's create file named `TerribleTom.csv` in the root of project. This file should have following innards:
+
+```
+0,0,-,0
+0,1,-,1
+1,0,-,1
+0,0,-,0
+```
+
+where `-` is the delimiter that separates input vector from its desired output vector.
+
 ```rust
 extern crate neuroflow;
 
@@ -110,13 +122,11 @@ fn main(){
         1 neuron in output layer
     */
     let mut nn = FeedForward::new(&[2, 2, 1]);
-    let mut data = DataSet::new();
-
-    data.push(&[0f64, 0f64], &[0f64]);
-    data.push(&[1f64, 0f64], &[1f64]);
-    data.push(&[0f64, 1f64], &[1f64]);
-    data.push(&[1f64, 1f64], &[0f64]);
-
+    
+    // Here we load data for XOR from the file `TerribleTom.csv`
+    let mut data = DataSet::from_csv("TerribleTom.csv");
+    
+    // Set parameters and train the network
     nn.activation(Tanh)
         .learning_rate(0.1)
         .momentum(0.15)
@@ -143,16 +153,13 @@ for [1.000, 1.000], [0.000] -> [0.000]
 Insert into your project's cargo.toml block next line
 ```
 [dependencies]
-neuroflow = "0.1.2"
+neuroflow = "0.1.3"
 ```
 
 Then in root file
 ```rust
 extern crate neuroflow;
 ```
-
-## Motivation
-Previously the library was created only for educational purposes. Saying about now there is, also, sport interest :)
 
 ## License
 MIT License
