@@ -1,10 +1,8 @@
 //! Module contains functions, structs and traits for data storage, access, and processing.
 //!
-//! In order to train network by `neuroflow::FeedForward::train` method,
-//! you need the first argument to implement `Extractable` trait.
-//!
-//! Also, it has `DataSet` struct (which implement `Executable` trait) for easy managing of data.
-//! For example, when you load data from file, it'll be placed into `DataSet`.
+//! The most valuable unit of this module is `DataSet` struct
+//! (which implement `Executable` trait) for easy managing of data.
+//! When you load data from file, it'll be placed into `DataSet`.
 use std;
 
 use rand;
@@ -18,7 +16,7 @@ use ErrorKind;
 ///
 /// # Examples
 ///
-/// ```
+/// ```rust
 /// use neuroflow::data::Extractable;
 /// use neuroflow::data::DataSet;
 ///
@@ -44,17 +42,32 @@ pub trait Extractable {
     fn len(&self) -> usize;
 }
 
-/// Container for the set of data.
+/// Container for data storage. It is not important to use it but it can significantly
+/// simplify the work with `NeuroFlow` crate.
+///
+/// # Examples
+///
+/// ```rust
+/// use std::path::Path;
+/// use neuroflow::data::DataSet;
+///
+/// /* You can load data from csv files */
+/// let p = "container.csv";
+/// if Path::new(p).exists(){
+///     let mut data = DataSet::from_csv(p).unwrap();
+///     /* Fetch statistical information */
+///     let (x, y) = data.mean();
+///
+///     /* Round all elements at once with precision */
+///     data.round(2);
+/// }
+///
+/// /* etc */
+/// ```
 #[derive(Debug)]
 pub struct DataSet{
     x: Vec<Vec<f64>>,
     y: Vec<Vec<f64>>,
-
-    sum_x: Vec<f64>,
-    sum_y: Vec<f64>,
-
-    mean_x: Vec<f64>,
-    mean_y: Vec<f64>,
 }
 
 impl DataSet {
@@ -62,19 +75,16 @@ impl DataSet {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust
     /// use neuroflow::data::DataSet;
     ///
     /// let mut data = DataSet::new();
     /// ```
     pub fn new() -> DataSet{
-        return DataSet{
+        return DataSet {
             x: vec![],
             y: vec![],
-            sum_x: vec![],
-            sum_y: vec![],
-            mean_x: vec![],
-            mean_y: vec![]};
+        }
     }
 
     /// Read data from csv file and parse it to the `DataSet` instance.
@@ -92,11 +102,15 @@ impl DataSet {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust
+    /// use std::path::Path;
     /// use neuroflow::data::DataSet;
     ///
-    /// let mut data = DataSet::from_csv("container.csv");
-    /// println!("{:?}", data);
+    /// let p = "container.csv";
+    /// if Path::new(p).exists(){
+    ///     let mut data = DataSet::from_csv(p).unwrap();
+    ///     println!("{:?}", data);
+    /// }
     /// ```
     pub fn from_csv(file_path: &str) -> Result<DataSet, Box<std::error::Error>> {
         let mut file = csv::ReaderBuilder::new()
@@ -134,7 +148,7 @@ impl DataSet {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust
     /// use neuroflow::data::DataSet;
     ///
     /// let mut data = DataSet::new();
@@ -148,33 +162,30 @@ impl DataSet {
     /// Expected output
     ///
     /// `[2.4] [2.2, 2.1]`
-    pub fn sum(&mut self) -> (&[f64], &[f64]){
-        while self.sum_x.len() < self.x.len(){
-            self.sum_x.push(0.0);
-        }
+    pub fn sum(&self) -> (Vec<f64>, Vec<f64>){
+        let mut sum_x = vec![0.0; self.x[0].len()];
+        let mut sum_y = vec![0.0; self.y[0].len()];
+
         for i in 0..self.x.len(){
             for j in 0..self.x[i].len(){
-                self.sum_x[j] += self.x[i][j];
+                sum_x[j] += self.x[i][j];
             }
         }
 
-        while self.sum_y.len() < self.y.len(){
-            self.sum_y.push(0.0);
-        }
         for i in 0..self.y.len(){
             for j in 0..self.y[i].len(){
-                self.sum_y[j] += self.y[i][j];
+                sum_y[j] += self.y[i][j];
             }
         }
 
-        (&self.sum_x, &self.sum_y)
+        (sum_x, sum_y)
     }
 
     /// Find mean value of each column in `DataSet`
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust
     /// use neuroflow::data::DataSet;
     ///
     /// let mut data = DataSet::new();
@@ -188,20 +199,20 @@ impl DataSet {
     /// Expected output
     ///
     /// `[1.2] [1.1, 1.05]`
-    pub fn mean(&mut self) -> (&[f64], &[f64]){
-        self.sum();
+    pub fn mean(&self) -> (Vec<f64>, Vec<f64>){
+        let (sum_x, sum_y) = self.sum();
+        let mut mean_x = sum_x.clone().to_vec();
 
-        self.mean_x = self.sum_x.clone();
-        for i in 0..self.mean_x.len(){
-            self.mean_x[i] /= self.x.len() as f64;
+        for i in 0..self.x[0].len(){
+            mean_x[i] /= self.x.len() as f64;
         }
 
-        self.mean_y = self.sum_y.clone();
-        for i in 0..self.mean_y.len(){
-            self.mean_y[i] /= self.y.len() as f64;
+        let mut mean_y = sum_y.clone().to_vec();
+        for i in 0..self.y[0].len(){
+            mean_y[i] /= self.y.len() as f64;
         }
 
-        (&self.mean_x, &self.mean_y)
+        (mean_x, mean_y)
     }
 
     /// Round each value in `DataSet` with the given precision.
@@ -210,7 +221,7 @@ impl DataSet {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust
     /// use neuroflow::data::DataSet;
     ///
     /// let mut data = DataSet::new();
@@ -242,7 +253,7 @@ impl DataSet {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust
     /// use neuroflow::data::DataSet;
     ///
     /// let mut data = DataSet::new();
@@ -259,7 +270,7 @@ impl DataSet {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust
     /// use neuroflow::data::DataSet;
     ///
     /// let mut data = DataSet::new();

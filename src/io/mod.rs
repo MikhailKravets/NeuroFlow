@@ -5,7 +5,7 @@
 //! # Example
 //! Saving of neural network:
 //!
-//! ```
+//! ```rust
 //! use neuroflow::FeedForward;
 //! use neuroflow::io;
 //!
@@ -16,7 +16,7 @@
 //!
 //! Restoring of neural network:
 //!
-//! ```
+//! ```rust
 //! use neuroflow::FeedForward;
 //! use neuroflow::io;
 //!
@@ -41,7 +41,7 @@ use ErrorKind;
 ///
 /// # Examples
 ///
-/// ```
+/// ```rust
 /// use neuroflow::FeedForward;
 /// use neuroflow::io;
 ///
@@ -66,7 +66,7 @@ pub fn save<T: serde::Serialize>(obj: &T, file_path: &str) -> Result<(), ErrorKi
 ///
 /// # Examples
 ///
-/// ```
+/// ```rust
 /// use neuroflow::FeedForward;
 /// use neuroflow::io;
 ///
