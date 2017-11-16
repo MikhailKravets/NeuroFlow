@@ -67,12 +67,12 @@ impl DataSet {
 
     /// Read data from csv file and parse it to the `DataSet` instance.
     ///
-    /// The file must have following header format:
+    /// The file must not have header. Input vector must be separated from desired output
+    /// by `-` symbol like in the following:
     ///
-    /// `x,x,y,y`
+    /// `1,0,1,-,1,2`
     ///
-    /// where each value (must be parsable to float) under `x` responds to input vector
-    /// and each value under `y` response to desired output vector.
+    /// `2,3,0,-,2,3,1`
     ///
     /// * `file_path: &str` - path to `csv` file;
     /// * `return -> Result<DataSet, Box<std::error::Error>>` - return new `DataSet`
@@ -87,26 +87,28 @@ impl DataSet {
     /// println!("{:?}", data);
     /// ```
     pub fn from_csv(file_path: &str) -> Result<DataSet, Box<std::error::Error>> {
-        let mut file = csv::ReaderBuilder::new().from_path(file_path)?;
+        let mut file = csv::ReaderBuilder::new()
+            .has_headers(false)
+            .from_path(file_path)?;
         let mut data_set = DataSet::new();
-
-        let header = file.headers()?.clone();
+        let mut is_x = true;
 
         for row in file.records(){
             let records = row?;
             let mut x: Vec<f64> = Vec::new();
             let mut y: Vec<f64> = Vec::new();
 
-            for i in 0..header.len(){
-                if let Some(h) = header.get(i){
-                    if h == "x"{
-                        if let Some(v) = records.get(i){
-                            x.push(v.parse()?);
-                        }
-                    } else if h == "y" {
-                        if let Some(v) = records.get(i){
-                            y.push(v.parse()?);
-                        }
+            is_x = true;
+
+            for i in 0..records.len(){
+                if records.get(i).unwrap() == "-"{
+                    is_x = false;
+                    continue;
+                } else if let Some(v) = records.get(i){
+                    if is_x {
+                        x.push(v.parse()?);
+                    } else {
+                        y.push(v.parse()?);
                     }
                 }
             }

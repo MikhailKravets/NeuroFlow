@@ -19,11 +19,10 @@ fn test_data_set(){
 fn test_load_from_csv(){
     {
         let mut file = std::fs::File::create("test.csv").unwrap();
-        file.write_all("x,x,y\n".as_bytes()).unwrap();
-        file.write_all("0,0,0\n".as_bytes()).unwrap();
-        file.write_all("1,0,1\n".as_bytes()).unwrap();
-        file.write_all("0,1,1\n".as_bytes()).unwrap();
-        file.write_all("1,1,0".as_bytes()).unwrap();
+        file.write_all("0,0,-,0\n".as_bytes()).unwrap();
+        file.write_all("1,0,-,1\n".as_bytes()).unwrap();
+        file.write_all("0,1,-,1\n".as_bytes()).unwrap();
+        file.write_all("1,1,-,0".as_bytes()).unwrap();
         file.flush().unwrap();
     }
     let ds = DataSet::from_csv("test.csv");
