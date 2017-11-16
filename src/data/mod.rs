@@ -10,8 +10,6 @@ use rand::distributions::range::Range;
 use rand::distributions::IndependentSample;
 use csv;
 
-use ErrorKind;
-
 /// Trait for getting specific element from set.
 ///
 /// # Examples
@@ -117,7 +115,7 @@ impl DataSet {
             .has_headers(false)
             .from_path(file_path)?;
         let mut data_set = DataSet::new();
-        let mut is_x = true;
+        let mut is_x: bool;
 
         for row in file.records(){
             let records = row?;

@@ -24,11 +24,9 @@
 //!     .unwrap_or(FeedForward::new(&[2, 2, 1]));
 //! ```
 
-use std;
 use std::fs::File;
 use std::io::{Write, BufReader};
 use serde;
-use bincode;
 use bincode::{serialize, deserialize_from, Infinite};
 
 use ErrorKind;
@@ -77,7 +75,7 @@ pub fn load<'b, T>(file_path: &'b str) -> Result<T, ErrorKind> where for<'de> T:
     let file = File::open(file_path).map_err(ErrorKind::IO)?;
     let mut buf = BufReader::new(file);
 
-    let mut nn: T = deserialize_from(&mut buf, Infinite).map_err(ErrorKind::Encoding)?;
+    let nn: T = deserialize_from(&mut buf, Infinite).map_err(ErrorKind::Encoding)?;
 
     Ok(nn)
 }
