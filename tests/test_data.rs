@@ -46,7 +46,7 @@ fn test_sum(){
     data.push(&[0f64, 1f64], &[1f64]);
     data.push(&[1f64, 1f64], &[0f64]);
 
-    let (x, y) = data.sum().unwrap();
+    let (x, y) = data.sum();
 
     assert_eq!(x[0], 2.0);
     assert_eq!(x[1], 2.0);
@@ -62,9 +62,27 @@ fn test_mean(){
     data.push(&[0f64, 1f64], &[1f64]);
     data.push(&[1f64, 1f64], &[0f64]);
 
-    let (x, y) = data.mean().unwrap();
+    let (x, y) = data.mean();
 
     assert_eq!(x[0], 0.5);
     assert_eq!(x[1], 0.5);
     assert_eq!(y[0], 0.5);
+}
+
+#[test]
+fn test_round(){
+    use neuroflow::data::Extractable;
+
+    let mut data = DataSet::new();
+    data.push(&[0.54878, 0.124578], &[0.12357]);
+    data.push(&[1.9879849, 0.45646546], &[1.98798745]);
+    data.push(&[0.78798789, 1.9798798], &[1.3248778]);
+    data.push(&[1.98798798, 1.98789456], &[0.97878945]);
+
+    data.round(2);
+
+    assert_eq!(data.get(0).0[0], 0.55);
+    assert_eq!(data.get(0).1[0], 0.12);
+
+    println!("{:?}", data);
 }

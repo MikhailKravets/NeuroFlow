@@ -130,11 +130,25 @@ impl DataSet {
         Ok(data_set)
     }
 
-    pub fn sum(&mut self) -> Result<(&[f64], &[f64]), ()>{
-        if self.x.len() == 0{
-            return Err(());
-        }
-
+    /// Find sum of elements by columns in `DataSet`
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use neuroflow::data::DataSet;
+    ///
+    /// let mut data = DataSet::new();
+    /// data.push(&[1.3], &[1.2, 2.1]);
+    /// data.push(&[1.1], &[1.0, 2.0]);
+    ///
+    /// let (x, y) = data.sum();
+    /// println!("{:?} {:?}", x, y);
+    /// ```
+    ///
+    /// Expected output
+    ///
+    /// `[2.4] [2.2, 2.1]`
+    pub fn sum(&mut self) -> (&[f64], &[f64]){
         while self.sum_x.len() < self.x.len(){
             self.sum_x.push(0.0);
         }
@@ -153,14 +167,28 @@ impl DataSet {
             }
         }
 
-        Ok((&self.sum_x, &self.sum_y))
+        (&self.sum_x, &self.sum_y)
     }
 
-    pub fn mean(&mut self) -> Result<(&[f64], &[f64]), ()>{
-        if self.x.len() == 0{
-            return Err(());
-        }
-
+    /// Find mean value of each column in `DataSet`
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use neuroflow::data::DataSet;
+    ///
+    /// let mut data = DataSet::new();
+    /// data.push(&[1.3], &[1.2, 2.1]);
+    /// data.push(&[1.1], &[1.0, 2.0]);
+    ///
+    /// let (x, y) = data.mean();
+    /// println!("{:?} {:?}", x, y);
+    /// ```
+    ///
+    /// Expected output
+    ///
+    /// `[1.2] [1.1, 1.05]`
+    pub fn mean(&mut self) -> (&[f64], &[f64]){
         self.sum();
 
         self.mean_x = self.sum_x.clone();
@@ -173,7 +201,38 @@ impl DataSet {
             self.mean_y[i] /= self.y.len() as f64;
         }
 
-        Ok((&self.mean_x, &self.mean_y))
+        (&self.mean_x, &self.mean_y)
+    }
+
+    /// Round each value in `DataSet` with the given precision.
+    ///
+    /// * `precision: u32` - amount of digits after point that must be remained after rounding
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use neuroflow::data::DataSet;
+    ///
+    /// let mut data = DataSet::new();
+    /// data.push(&[1.3456465], &[1.259898, 2.1113213]);
+    /// data.push(&[1.11132132132], &[1.04848, 2.0548487]);
+    ///
+    /// data.round(2);
+    /// ```
+    pub fn round(&mut self, precision: u32){
+        let pow = 10f64.powi(precision as i32);
+
+        for i in 0..self.x.len(){
+            for j in 0..self.x[i].len(){
+                self.x[i][j] = (self.x[i][j] * pow).round() / pow;
+            }
+        }
+
+        for i in 0..self.y.len(){
+            for j in 0..self.y[i].len(){
+                self.y[i][j] = (self.y[i][j] * pow).round() / pow;
+            }
+        }
     }
 
     /// Append data to the end of the set.
