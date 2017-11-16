@@ -6,7 +6,8 @@
 [![codecov](https://codecov.io/gh/MikhailKravets/NeuroFlow/branch/master/graph/badge.svg)](https://codecov.io/gh/MikhailKravets/NeuroFlow)
 [![crates](https://img.shields.io/crates/v/neuroflow.svg)](https://crates.io/crates/neuroflow)
 
-Neural Networks Rust crate that is based on speed, safety, and clear sanity.
+NeuroFlow is fast neural networks (deep learning) Rust crate.
+It relies on three pillars: speed, reliability, and speed again.
 
 ## How to use
 
