@@ -36,3 +36,35 @@ fn test_load_from_csv(){
         }
     }
 }
+
+#[test]
+fn test_sum(){
+    let mut data = DataSet::new();
+
+    data.push(&[0f64, 0f64], &[0f64]);
+    data.push(&[1f64, 0f64], &[1f64]);
+    data.push(&[0f64, 1f64], &[1f64]);
+    data.push(&[1f64, 1f64], &[0f64]);
+
+    let (x, y) = data.sum().unwrap();
+
+    assert_eq!(x[0], 2.0);
+    assert_eq!(x[1], 2.0);
+    assert_eq!(y[0], 2.0);
+}
+
+#[test]
+fn test_mean(){
+    let mut data = DataSet::new();
+
+    data.push(&[0f64, 0f64], &[0f64]);
+    data.push(&[1f64, 0f64], &[1f64]);
+    data.push(&[0f64, 1f64], &[1f64]);
+    data.push(&[1f64, 1f64], &[0f64]);
+
+    let (x, y) = data.mean().unwrap();
+
+    assert_eq!(x[0], 0.5);
+    assert_eq!(x[1], 0.5);
+    assert_eq!(y[0], 0.5);
+}

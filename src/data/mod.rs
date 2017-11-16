@@ -48,7 +48,13 @@ pub trait Extractable {
 #[derive(Debug)]
 pub struct DataSet{
     x: Vec<Vec<f64>>,
-    y: Vec<Vec<f64>>
+    y: Vec<Vec<f64>>,
+
+    sum_x: Vec<f64>,
+    sum_y: Vec<f64>,
+
+    mean_x: Vec<f64>,
+    mean_y: Vec<f64>,
 }
 
 impl DataSet {
@@ -62,7 +68,13 @@ impl DataSet {
     /// let mut data = DataSet::new();
     /// ```
     pub fn new() -> DataSet{
-        return DataSet{x: vec![], y: vec![]};
+        return DataSet{
+            x: vec![],
+            y: vec![],
+            sum_x: vec![],
+            sum_y: vec![],
+            mean_x: vec![],
+            mean_y: vec![]};
     }
 
     /// Read data from csv file and parse it to the `DataSet` instance.
@@ -116,6 +128,52 @@ impl DataSet {
         }
 
         Ok(data_set)
+    }
+
+    pub fn sum(&mut self) -> Result<(&[f64], &[f64]), ()>{
+        if self.x.len() == 0{
+            return Err(());
+        }
+
+        while self.sum_x.len() < self.x.len(){
+            self.sum_x.push(0.0);
+        }
+        for i in 0..self.x.len(){
+            for j in 0..self.x[i].len(){
+                self.sum_x[j] += self.x[i][j];
+            }
+        }
+
+        while self.sum_y.len() < self.y.len(){
+            self.sum_y.push(0.0);
+        }
+        for i in 0..self.y.len(){
+            for j in 0..self.y[i].len(){
+                self.sum_y[j] += self.y[i][j];
+            }
+        }
+
+        Ok((&self.sum_x, &self.sum_y))
+    }
+
+    pub fn mean(&mut self) -> Result<(&[f64], &[f64]), ()>{
+        if self.x.len() == 0{
+            return Err(());
+        }
+
+        self.sum();
+
+        self.mean_x = self.sum_x.clone();
+        for i in 0..self.mean_x.len(){
+            self.mean_x[i] /= self.x.len() as f64;
+        }
+
+        self.mean_y = self.sum_y.clone();
+        for i in 0..self.mean_y.len(){
+            self.mean_y[i] /= self.y.len() as f64;
+        }
+
+        Ok((&self.mean_x, &self.mean_y))
     }
 
     /// Append data to the end of the set.
