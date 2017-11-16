@@ -103,7 +103,7 @@ Let's create file named `TerribleTom.csv` in the root of project. This file shou
 0,0,-,0
 0,1,-,1
 1,0,-,1
-0,0,-,0
+1,1,-,0
 ```
 
 where `-` is the delimiter that separates input vector from its desired output vector.
