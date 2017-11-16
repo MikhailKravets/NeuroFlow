@@ -157,7 +157,7 @@ Insert into your project's cargo.toml block next line
 neuroflow = "0.1.3"
 ```
 
-Then in root file
+Then in project root file
 ```rust
 extern crate neuroflow;
 ```
