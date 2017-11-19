@@ -31,7 +31,7 @@ fn saving_to_json(){
     match to_json(&nn) {
         Ok(s) => println!("{}", s),
         Err(e) => {
-            println!("{}", e);
+            println!("{:?}", e);
             assert!(false);
         }
     };
