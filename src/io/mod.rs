@@ -27,6 +27,7 @@
 use std::fs::File;
 use std::io::{Write, BufReader};
 use serde;
+use serde_json;
 use bincode::{serialize, deserialize_from, Infinite};
 
 use ErrorKind;
@@ -82,8 +83,8 @@ pub fn load<'b, T>(file_path: &'b str) -> Result<T, ErrorKind> where for<'de> T:
 
 /// Future function for saving in JSON string.
 /// return: JSON string
-pub fn to_json<T: serde::Serialize>(obj: T) {
-
+pub fn to_json<T: serde::Serialize>(obj: &T) -> Result<String, ErrorKind> {
+    serde_json::to_string(obj).map_err(ErrorKind::Json)
 }
 
 /// Function for deserializing of JSON to NN struct

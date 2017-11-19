@@ -121,6 +121,7 @@ pub mod io;
 
 extern crate rand;
 extern crate serde;
+extern crate serde_json;
 extern crate bincode;
 extern crate csv;
 
@@ -137,6 +138,7 @@ use data::Extractable;
 pub enum ErrorKind {
     IO(std::io::Error),
     Encoding(bincode::Error),
+    Json(serde_json::Error),
     StdError(Box<std::error::Error>)
 }
 
