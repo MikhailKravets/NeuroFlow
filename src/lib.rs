@@ -233,6 +233,7 @@ pub struct FeedForward {
     layers: Vec<Layer>,
     learn_rate: f64,
     momentum: f64,
+    error: f64,
 
     act_type: activators::Type,
 
@@ -300,7 +301,7 @@ impl FeedForward {
     /// ```
     ///
     pub fn new(architecture: &[i32]) -> FeedForward {
-        let mut nn = FeedForward {learn_rate: 0.1, momentum: 0.1,
+        let mut nn = FeedForward {learn_rate: 0.1, momentum: 0.1, error: 0.0,
             layers: Vec::new(),
             act: ActivationContainer{func: activators::tanh, der: activators::der_tanh},
             act_type: activators::Type::Tanh};
@@ -354,8 +355,10 @@ impl FeedForward {
 
         for j in (0..self.layers.len()).rev(){
             if j == self.layers.len() - 1{
+                self.error = 0.0;
                 for i in 0..self.layers[j].y.len(){
                     self.layers[j].delta[i] = (d[i] - self.layers[j].y[i])* (self.act.der)(self.layers[j].v[i]);
+                    self.error += 0.5 * (d[i] - self.layers[j].y[i]).powi(2);
                 }
             } else {
                 for i in 0..self.layers[j].delta.len(){
@@ -539,6 +542,13 @@ impl FeedForward {
     pub fn momentum(&mut self, momentum: f64) -> &mut FeedForward {
         self.momentum = momentum;
         self
+    }
+
+    /// Get current training error
+    ///
+    /// * `return -> f64` - training error
+    pub fn get_error(&self) -> f64{
+        self.error
     }
 }
 
