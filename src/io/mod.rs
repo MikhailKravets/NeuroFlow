@@ -11,7 +11,7 @@
 //!
 //! let mut nn = FeedForward::new(&[2, 2, 1]);
 //! /* train here your neural network */
-//! io::save(&nn, "test.flow");
+//! io::save(&mut nn, "test.flow");
 //! ```
 //!
 //! Restoring of neural network:
@@ -29,6 +29,7 @@ use std::io::{Write, BufReader};
 use serde;
 use serde_json;
 use bincode::{serialize, deserialize_from, Infinite};
+use Transform;
 
 use ErrorKind;
 
@@ -46,10 +47,12 @@ use ErrorKind;
 ///
 /// let mut nn = FeedForward::new(&[2, 2, 1]);
 /// /* train here your neural network */
-/// io::save(&nn, "test.flow");
+/// io::save(&mut nn, "test.flow");
 /// ```
-pub fn save<T: serde::Serialize>(obj: &T, file_path: &str) -> Result<(), ErrorKind>{
+pub fn save<T: Transform>(obj: &mut T, file_path: &str) -> Result<(), ErrorKind>{
     let mut file = File::create(file_path).map_err(ErrorKind::IO)?;
+
+    obj.before();
     let encoded: Vec<u8> = serialize(obj, Infinite).map_err(ErrorKind::Encoding)?;
 
     file.write_all(&encoded).map_err(ErrorKind::IO)?;
@@ -72,12 +75,12 @@ pub fn save<T: serde::Serialize>(obj: &T, file_path: &str) -> Result<(), ErrorKi
 /// let mut new_nn: FeedForward = io::load("test.flow")
 ///     .unwrap_or(FeedForward::new(&[2, 2, 1]));
 /// ```
-pub fn load<'b, T>(file_path: &'b str) -> Result<T, ErrorKind> where for<'de> T: serde::Deserialize<'de>{
+pub fn load<'b, T>(file_path: &'b str) -> Result<T, ErrorKind> where T: Transform{
     let file = File::open(file_path).map_err(ErrorKind::IO)?;
     let mut buf = BufReader::new(file);
 
-    let nn: T = deserialize_from(&mut buf, Infinite).map_err(ErrorKind::Encoding)?;
-
+    let mut nn: T = deserialize_from(&mut buf, Infinite).map_err(ErrorKind::Encoding)?;
+    nn.after();
     Ok(nn)
 }
 

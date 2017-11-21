@@ -52,7 +52,7 @@ fn saving_of_neural_net(){
         .momentum(0.15)
         .train(&data, 5_000);
 
-    save(&nn, "test.nn").unwrap();
+    save(&mut nn, "test.nn").unwrap();
 
     let p = Path::new("test.nn");
     assert!(p.exists());
@@ -76,7 +76,7 @@ fn loading_of_neural_net(){
         .momentum(0.15)
         .train(&data, 5_000);
 
-    save(&nn, "test.nn").unwrap();
+    save(&mut nn, "test.nn").unwrap();
 
     let mut new_nn = load::<FeedForward>("test.nn").unwrap();
 

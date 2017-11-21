@@ -67,7 +67,7 @@
 //!     First argument is link on the saving neural network;
 //!     Second argument is path to the file.
 //! */
-//! io::save(&nn, "test.flow").unwrap();
+//! io::save(&mut nn, "test.flow").unwrap();
 //!
 //! /*
 //!     After we have saved the neural network to the file we can restore it by calling
@@ -150,6 +150,22 @@ enum Field {
     Y,
     Deltas,
     Weights
+}
+
+/// This trait should be implemented by neural network structure when you want it
+/// to be transformable to other formats. `Note` that you, also, need to implement
+/// `serde::Serialize` and `serde::Deserialize` traits before. Hopefully you can
+/// do it easily with `derive` attribute.
+///
+/// Necessity of this trait can be easily described when you restore `FeedForward` instance
+/// by `neuroflow::io::load` function. It calls `after` method in order to adjust
+/// activation function of neural network.
+pub trait Transform: serde::Serialize + for <'de> serde::Deserialize<'de>{
+    /// The method that should be called before neural network transformation
+    fn before(&mut self){}
+
+    /// The method that should be called after neural network transformation
+    fn after(&mut self){}
 }
 
 /// Struct `Layer` represents single layer of network.
@@ -595,6 +611,28 @@ impl FeedForward {
     /// * `return -> f64` - training error
     pub fn get_error(&self) -> f64{
         self.error
+    }
+}
+
+impl Transform for FeedForward{
+    fn after(&mut self){
+        match self.act_type {
+            activators::Type::Sigmoid => {
+                self.act_type = activators::Type::Sigmoid;
+                self.act.func = activators::sigm;
+                self.act.der = activators::der_sigm;
+            }
+            activators::Type::Tanh | activators::Type::Custom => {
+                self.act_type = activators::Type::Tanh;
+                self.act.func = activators::tanh;
+                self.act.der = activators::der_tanh;
+            }
+            activators::Type::Relu => {
+                self.act_type = activators::Type::Relu;
+                self.act.func = activators::relu;
+                self.act.der = activators::der_relu;
+            }
+        }
     }
 }
 
