@@ -66,6 +66,9 @@ pub trait Extractable {
 pub struct DataSet{
     x: Vec<Vec<f64>>,
     y: Vec<Vec<f64>>,
+
+    tx: Vec<Vec<f64>>,
+    ty: Vec<Vec<f64>>,
 }
 
 impl DataSet {
@@ -82,6 +85,9 @@ impl DataSet {
         return DataSet {
             x: vec![],
             y: vec![],
+
+            tx: vec![],
+            ty: vec![],
         }
     }
 
@@ -262,6 +268,31 @@ impl DataSet {
         self.y.push(y.to_vec());
     }
 
+    /// Separate some data from training set to test set.
+    ///
+    /// * `proportion: f64` - how much elements from training set should be in the training set
+    ///
+    /// If test set is not null it is appended to training set and then divided into
+    /// training set and test set
+    pub fn divide(&mut self, proportion: f64){
+        for i in 0..self.tx.len(){
+            self.x.push(self.tx[i].clone());
+            self.y.push(self.ty[i].clone());
+        }
+        self.tx = vec![];
+        self.ty = vec![];
+
+        let amount = (self.x.len() as f64 * proportion) as i32;
+        for _ in 0..amount{
+            let i = self.rand_index();
+
+            self.tx.push(self.x[i].clone());
+            self.ty.push(self.y[i].clone());
+
+            self.remove(i);
+        }
+    }
+
     /// Remove element by index from set
     ///
     /// * `i: usize` - index of element to be deleted.
@@ -278,6 +309,11 @@ impl DataSet {
     pub fn remove(&mut self, i: usize){
         self.x.remove(i);
         self.y.remove(i);
+    }
+
+    fn rand_index(&self) -> usize {
+        let rnd_range = Range::new(0, self.y.len());
+        rnd_range.ind_sample(&mut rand::thread_rng())
     }
 }
 

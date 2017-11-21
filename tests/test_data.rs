@@ -86,3 +86,28 @@ fn test_round(){
 
     println!("{:?}", data);
 }
+
+#[test]
+fn test_division(){
+    use neuroflow::data::Extractable;
+
+    let mut data = DataSet::new();
+    data.push(&[0.54878, 0.124578], &[0.12357]);
+    data.push(&[1.9879849, 0.45646546], &[1.98798745]);
+    data.push(&[0.78798789, 1.9798798], &[1.3248778]);
+    data.push(&[1.98798798, 1.98789456], &[0.97878945]);
+    data.push(&[1.98798798, 1.98789456], &[0.97878945]);
+    data.push(&[1.98798798, 1.98789456], &[0.97878945]);
+    data.push(&[1.98798798, 1.98789456], &[0.97878945]);
+    data.push(&[1.98798798, 1.98789456], &[0.97878945]);
+    data.push(&[1.98798798, 1.98789456], &[0.97878945]);
+    data.push(&[1.98798798, 1.98789456], &[0.97878945]);
+
+    data.round(2);
+
+    data.divide(0.1);
+    assert_eq!(data.len(), 9);
+
+    data.divide(0.1);
+    assert_eq!(data.len(), 9);
+}
