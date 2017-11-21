@@ -506,6 +506,10 @@ impl FeedForward {
                 self.act.func = activators::tanh;
                 self.act.der = activators::der_tanh;
             }
+            activators::Type::Relu => {
+                self.act.func = activators::relu;
+                self.act.der = activators::der_relu;
+            }
         }
         self
     }
