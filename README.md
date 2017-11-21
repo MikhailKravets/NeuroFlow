@@ -80,7 +80,7 @@ neural networks from files.
         First argument is link on the saving neural network;
         Second argument is path to the file. 
     */
-    neuroflow::io::save(&nn, "test.flow").unwrap();
+    neuroflow::io::save(&mut nn, "test.flow").unwrap();
     
     /*
         After we have saved the neural network to the file we can restore it by calling
