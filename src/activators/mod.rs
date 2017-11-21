@@ -9,7 +9,8 @@ use std::f64;
 pub enum Type {
     Sigmoid,
     Tanh,
-    Relu
+    Relu,
+    Custom
 }
 
 

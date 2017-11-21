@@ -91,6 +91,27 @@ fn binding(){
 }
 
 #[test]
+fn custom_activation(){
+    fn func(x: f64) -> f64{
+        0.0
+    }
+
+    fn der_func(x: f64) -> f64{
+        0.0
+    }
+
+    let mut nn = FeedForward::new(&[1, 2, 1]);
+    nn.custom_activation(func, der_func);
+
+    let before_fit: f64 = nn.calc(&[3.2])[0];
+
+    nn.fit(&[1.0], &[2.1]);
+
+    let after_fit: f64 = nn.calc(&[2.1])[0];
+    assert_eq!(before_fit, after_fit);
+}
+
+#[test]
 fn widrows(){
     let w = estimators::widrows(&[2, 1], 0.1);
     assert_eq!(w, 90f64);

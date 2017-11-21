@@ -491,7 +491,9 @@ impl FeedForward {
         &self.layers[self.layers.len() - 1].y
     }
 
-    /// Choose activation function.
+    /// Choose activation function. `Note` that if you pass `activators::Type::Custom`
+    /// as argument of this method, the default value (`activators::Type::Tanh`) will
+    /// be used.
     ///
     /// * `func: neuroflow::activators::Type` - enum element that indicates which
     /// function to use;
@@ -502,7 +504,7 @@ impl FeedForward {
                 self.act.func = activators::sigm;
                 self.act.der = activators::der_sigm;
             }
-            activators::Type::Tanh => {
+            activators::Type::Tanh | activators::Type::Custom => {
                 self.act.func = activators::tanh;
                 self.act.der = activators::der_tanh;
             }
@@ -511,6 +513,43 @@ impl FeedForward {
                 self.act.der = activators::der_relu;
             }
         }
+        self
+    }
+
+    /// Set custom activation function and its derivative.
+    /// Activation type is set to `activators::Type::Custom`.
+    ///
+    /// * `func: fn(f64) -> f64` - activation function to be set;
+    /// * `der: fn(f64) -> f64` - derivative of activation function;
+    /// * `return -> &mut FeedForward` - link on the current struct.
+    ///
+    /// # Warning
+    ///
+    /// Be careful using custom activation function. For good results this function
+    /// should be smooth, non-decreasing, and differentiable.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// # use neuroflow::FeedForward;
+    ///
+    /// fn sigmoid(x: f64) -> f64{
+    ///     1.0/(1.0 + x.exp())
+    /// }
+    ///
+    /// fn der_sigmoid(x: f64) -> f64{
+    ///     sigmoid(x)*(1.0 - sigmoid(x))
+    /// }
+    ///
+    /// let mut nn = FeedForward::new(&[1, 3, 2]);
+    /// nn.custom_activation(sigmoid, der_sigmoid);
+    /// ```
+    pub fn custom_activation(&mut self, func: fn(f64) -> f64, der: fn(f64) -> f64) -> &mut FeedForward{
+        self.act_type = activators::Type::Custom;
+
+        self.act.func = func;
+        self.act.der = der;
+
         self
     }
 
