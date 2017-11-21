@@ -501,14 +501,17 @@ impl FeedForward {
     pub fn activation(&mut self, func: activators::Type) -> &mut FeedForward{
         match func{
             activators::Type::Sigmoid => {
+                self.act_type = activators::Type::Sigmoid;
                 self.act.func = activators::sigm;
                 self.act.der = activators::der_sigm;
             }
             activators::Type::Tanh | activators::Type::Custom => {
+                self.act_type = activators::Type::Tanh;
                 self.act.func = activators::tanh;
                 self.act.der = activators::der_tanh;
             }
             activators::Type::Relu => {
+                self.act_type = activators::Type::Relu;
                 self.act.func = activators::relu;
                 self.act.der = activators::der_relu;
             }
