@@ -15,7 +15,7 @@ use neuroflow::estimators;
 
 #[test]
 fn xor(){
-    let ALLOWED_ERROR = 0.1; // Max allowed error is 10%
+    const ALLOWED_ERROR: f64 = 0.1; // Max allowed error is 10%
     let mut nn = FeedForward::new(&[2, 2, 1]);
     let sc = &[
         (&[0f64, 0f64], &[0f64]),
@@ -27,7 +27,7 @@ fn xor(){
     let rnd_range = Range::new(0, sc.len());
     let prev = time::now_utc();
 
-    nn.momentum(0.05);
+    nn.learning_rate(0.1).momentum(0.05);
     for _ in 0..30_000{
         k = rnd_range.ind_sample(&mut rand::thread_rng());
         nn.fit(sc[k].0, sc[k].1);

@@ -175,6 +175,7 @@ struct Layer {
     v: Vec<f64>,
     y: Vec<f64>,
     delta: Vec<f64>,
+    prev_delta: Vec<f64>,
     w: Vec<Vec<f64>>,
 }
 
@@ -259,7 +260,7 @@ pub struct FeedForward {
 
 impl Layer {
     fn new(amount: i32, input: i32) -> Layer {
-        let mut nl = Layer {v: vec![], y: vec![], delta: vec![], w: Vec::new()};
+        let mut nl = Layer {v: vec![], y: vec![], delta: vec![], prev_delta: vec![], w: Vec::new()};
         let mut v: Vec<f64>;
         for _ in 0..amount {
             nl.y.push(0.0);
@@ -370,6 +371,7 @@ impl FeedForward {
         let mut sum: f64;
 
         for j in (0..self.layers.len()).rev(){
+            self.layers[j].prev_delta = self.layers[j].delta.clone();
             if j == self.layers.len() - 1{
                 self.error = 0.0;
                 for i in 0..self.layers[j].y.len(){
@@ -394,14 +396,14 @@ impl FeedForward {
                 for k in 0..self.layers[j].w[i].len(){
                     if j == 0 {
                         self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*x[k];
-                    }
-                        else {
-                            if k == 0{
-                                self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i];
-                            } else {
-                                self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*self.layers[j - 1].y[k - 1];
-                            }
+                    } else {
+                        if k == 0{
+                            self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i];
+                        } else {
+                            self.layers[j].w[i][k] += self.learn_rate * self.layers[j].delta[i]*self.layers[j - 1].y[k - 1];
                         }
+                    }
+                    self.layers[j].w[i][k] += self.momentum * self.layers[j].prev_delta[i];
                 }
             }
         }
