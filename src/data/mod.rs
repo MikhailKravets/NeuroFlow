@@ -9,6 +9,7 @@ use rand;
 use rand::distributions::range::Range;
 use rand::distributions::IndependentSample;
 use csv;
+use FeedForward;
 
 /// Trait for getting specific element from set.
 ///
@@ -314,6 +315,24 @@ impl DataSet {
     fn rand_index(&self) -> usize {
         let rnd_range = Range::new(0, self.y.len());
         rnd_range.ind_sample(&mut rand::thread_rng())
+    }
+
+    /// Don't use this method. It is only for me and will be deleted
+    /// as soon as possible
+    pub fn cv(&self, nn: &mut FeedForward) -> Vec<f64> {
+        let mut error: Vec<f64> = vec![0.0; self.y[0].len()];
+
+        for i in 0..self.ty.len(){
+            let res = nn.calc(&self.tx[i]);
+
+            for j in 0..self.ty[i].len(){
+                error[j] += (self.ty[i][j] - res[j]).abs();
+            }
+        }
+
+        let len = self.ty.len() as f64;
+
+        error.iter().map(|x| x / len).collect()
     }
 }
 

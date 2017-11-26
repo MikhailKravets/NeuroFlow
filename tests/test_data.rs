@@ -1,7 +1,10 @@
 extern crate neuroflow;
 
+use neuroflow::FeedForward;
 use neuroflow::data::DataSet;
 use neuroflow::data::Extractable;
+
+use neuroflow::activators;
 
 use std::io::Write;
 
@@ -110,4 +113,28 @@ fn test_division(){
 
     data.divide(0.1);
     assert_eq!(data.len(), 9);
+}
+
+#[test]
+fn test_cv(){
+    const ALLOWED_ERROR: f64 = 0.1; // Max allowed error is 10%
+    let mut nn = FeedForward::new(&[2, 2, 2]);
+    let mut data = DataSet::new();
+
+    data.push(&[0f64, 0f64], &[0f64, 0f64]);
+    data.push(&[1f64, 0f64], &[1f64, 0f64]);
+    data.push(&[0f64, 1f64], &[1f64, 0f64]);
+    data.push(&[1f64, 1f64], &[0f64, 0f64]);
+    data.push(&[0f64, 2f64], &[1f64, 0f64]);
+    data.push(&[1f64, 2f64], &[2f64, 0f64]);
+    data.push(&[2f64, 1f64], &[1f64, 0f64]);
+
+    data.divide(0.5);
+
+    nn.activation(activators::Type::Tanh)
+        .learning_rate(0.05)
+        .momentum(0.15)
+        .train(&data, 30_000);
+
+    println!("{:?}", data.cv(&mut nn));
 }
