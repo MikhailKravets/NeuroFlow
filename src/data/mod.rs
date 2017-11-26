@@ -319,7 +319,7 @@ impl DataSet {
 
     /// Don't use this method. It is only for me and will be deleted
     /// as soon as possible
-    pub fn cv(&self, nn: &mut FeedForward) -> Vec<f64> {
+    pub fn cv(&self, nn: &mut FeedForward) -> f64 {
         let mut error: Vec<f64> = vec![0.0; self.y[0].len()];
 
         for i in 0..self.ty.len(){
@@ -332,7 +332,8 @@ impl DataSet {
 
         let len = self.ty.len() as f64;
 
-        error.iter().map(|x| x / len).collect()
+        error.iter().map(|x| x / len).collect::<Vec<f64>>();
+        error.iter().sum::<f64>() / len
     }
 }
 
