@@ -3,8 +3,11 @@ The file contains important changes from version to version
 
 ## Unreleased
 
+- Total rewriting of architecture;
+- Add an ability to compute on GPU/CPU;
+
+
 - Serialization and deserialization of neural networks to `JSON` format;
-- Allow users to use their own activation functions;
 - Update error system;
 - Increase speed of working;
 
