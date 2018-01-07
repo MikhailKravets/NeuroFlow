@@ -9,6 +9,8 @@
 NeuroFlow is fast neural networks (deep learning) Rust crate.
 It relies on three pillars: speed, reliability, and speed again.
 
+> Hello, everyone! Work on the crate is currently suspended because I am a little busy to do it :( Thanks you all
+
 ## How to use
 
 Let's try to approximate very simple function `0.5*sin(e^x) - cos(e^(-x))`.
