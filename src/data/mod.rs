@@ -3,13 +3,14 @@
 //! The most valuable unit of this module is `DataSet` struct
 //! (which implement `Executable` trait) for easy managing of data.
 //! When you load data from file, it'll be placed into `DataSet`.
-use std;
+use std::error;
 
-use rand;
-use rand::distributions::range::Range;
-use rand::distributions::IndependentSample;
+use rand::Rng;
+//use rand::distributions::range::Range;
+//use rand::distributions::IndependentSample;
 use csv;
 use FeedForward;
+
 
 /// Trait for getting specific element from set.
 ///
@@ -117,7 +118,7 @@ impl DataSet {
     ///     println!("{:?}", data);
     /// }
     /// ```
-    pub fn from_csv(file_path: &str) -> Result<DataSet, Box<std::error::Error>> {
+    pub fn from_csv(file_path: &str) -> Result<DataSet, Box<dyn error::Error>> {
         let mut file = csv::ReaderBuilder::new()
             .has_headers(false)
             .from_path(file_path)?;
@@ -313,8 +314,10 @@ impl DataSet {
     }
 
     fn rand_index(&self) -> usize {
-        let rnd_range = Range::new(0, self.y.len());
-        rnd_range.ind_sample(&mut rand::thread_rng())
+        let mut rng = rand::thread_rng();
+        rng.gen_range(0..self.y.len())
+        //let rnd_range = Range::new(0, self.y.len());
+        //rnd_range.ind_sample(&mut rand::thread_rng())
     }
 
     /// Don't use this method. It is only for me and will be deleted
@@ -332,15 +335,19 @@ impl DataSet {
 
         let len = self.ty.len() as f64;
 
-        error.iter().map(|x| x / len).collect::<Vec<f64>>();
+        // The result of this function is not used
+        // error.iter().map(|x| x / len).collect::<Vec<f64>>();
         error.iter().sum::<f64>() / len
     }
 }
 
 impl Extractable for DataSet{
     fn rand(&self) -> (&Vec<f64>, &Vec<f64>){
-        let rnd_range = Range::new(0, self.y.len());
-        let k = rnd_range.ind_sample(&mut rand::thread_rng());
+        let mut rng = rand::thread_rng();
+        let k = rng.gen_range(0..self.y.len());
+
+        //let rnd_range = Range::new(0, self.y.len());
+        //let k = rnd_range.ind_sample(&mut rand::thread_rng());
 
         (&self.x[k], &self.y[k])
     }

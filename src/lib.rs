@@ -132,6 +132,7 @@ use std::fmt;
 use std::default::Default;
 
 use data::Extractable;
+use std::error;
 
 /// Custom ErrorKind enum for handling multiple error types
 #[derive(Debug)]
@@ -139,7 +140,7 @@ pub enum ErrorKind {
     IO(std::io::Error),
     Encoding(bincode::Error),
     Json(serde_json::Error),
-    StdError(Box<std::error::Error>)
+    StdError(Box<dyn error::Error>)
 }
 
 /// The struct that points different fields of network.

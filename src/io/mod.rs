@@ -28,7 +28,7 @@ use std::fs::File;
 use std::io::{Write, BufReader};
 use serde;
 use serde_json;
-use bincode::{serialize, deserialize_from, Infinite};
+use bincode::{serialize, deserialize_from};
 use Transform;
 
 use ErrorKind;
@@ -53,7 +53,7 @@ pub fn save<T: Transform>(obj: &mut T, file_path: &str) -> Result<(), ErrorKind>
     let mut file = File::create(file_path).map_err(ErrorKind::IO)?;
 
     obj.before();
-    let encoded: Vec<u8> = serialize(obj, Infinite).map_err(ErrorKind::Encoding)?;
+    let encoded: Vec<u8> = serialize(obj).map_err(ErrorKind::Encoding)?;
 
     file.write_all(&encoded).map_err(ErrorKind::IO)?;
 
@@ -79,7 +79,7 @@ pub fn load<'b, T>(file_path: &'b str) -> Result<T, ErrorKind> where T: Transfor
     let file = File::open(file_path).map_err(ErrorKind::IO)?;
     let mut buf = BufReader::new(file);
 
-    let mut nn: T = deserialize_from(&mut buf, Infinite).map_err(ErrorKind::Encoding)?;
+    let mut nn: T = deserialize_from(&mut buf).map_err(ErrorKind::Encoding)?;
     nn.after();
     Ok(nn)
 }
@@ -91,6 +91,6 @@ pub fn to_json<T: serde::Serialize>(obj: &T) -> Result<String, ErrorKind> {
 }
 
 /// Function for deserializing of JSON to NN struct
-pub fn from_json(s: &str){
-
+pub fn from_json(_: &str){
+// TODO
 }
