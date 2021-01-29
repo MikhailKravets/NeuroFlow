@@ -26,4 +26,4 @@ csv = "^1.0"
 rand_distr = "^0.4"
 
 [dev-dependencies]
-time = "*"
+time = "^0.2"
