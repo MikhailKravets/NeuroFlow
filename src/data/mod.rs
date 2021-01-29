@@ -314,8 +314,6 @@ impl DataSet {
     fn rand_index(&self) -> usize {
         let mut rng = rand::thread_rng();
         rng.gen_range(0..self.y.len())
-        //let rnd_range = Range::new(0, self.y.len());
-        //rnd_range.ind_sample(&mut rand::thread_rng())
     }
 
     /// Don't use this method. It is only for me and will be deleted
@@ -333,8 +331,6 @@ impl DataSet {
 
         let len = self.ty.len() as f64;
 
-        // The result of this function is not used
-        // error.iter().map(|x| x / len).collect::<Vec<f64>>();
         error.iter().sum::<f64>() / len
     }
 }
@@ -343,9 +339,6 @@ impl Extractable for DataSet{
     fn rand(&self) -> (&Vec<f64>, &Vec<f64>){
         let mut rng = rand::thread_rng();
         let k = rng.gen_range(0..self.y.len());
-
-        //let rnd_range = Range::new(0, self.y.len());
-        //let k = rnd_range.ind_sample(&mut rand::thread_rng());
 
         (&self.x[k], &self.y[k])
     }

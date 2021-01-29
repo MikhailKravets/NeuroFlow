@@ -117,7 +117,6 @@ fn test_division(){
 
 #[test]
 fn test_cv(){
-    //const ALLOWED_ERROR: f64 = 0.1; // Max allowed error is 10%
     let mut nn = FeedForward::new(&[2, 2, 2]);
     let mut data = DataSet::new();
 
