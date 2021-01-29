@@ -6,8 +6,6 @@
 use std::error;
 
 use rand::Rng;
-//use rand::distributions::range::Range;
-//use rand::distributions::IndependentSample;
 use csv;
 use FeedForward;
 

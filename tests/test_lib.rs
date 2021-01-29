@@ -1,13 +1,14 @@
 extern crate neuroflow;
-extern crate time;
 extern crate rand;
+extern crate rand_distr;
+extern crate time;
+
+use time::OffsetDateTime;
 
 use neuroflow::FeedForward;
 use neuroflow::data::{DataSet, Extractable};
 
-use rand::distributions::IndependentSample;
-use rand::distributions::range::Range;
-use rand::distributions::normal::Normal;
+use rand::Rng;
 
 use neuroflow::activators;
 use neuroflow::estimators;
@@ -24,12 +25,13 @@ fn xor(){
         (&[1f64, 1f64], &[0f64]),
     ];
     let mut k;
-    let rnd_range = Range::new(0, sc.len());
-    let prev = time::now_utc();
+    let mut rng = rand::thread_rng();    
+    let prev = OffsetDateTime::now_utc();
 
     nn.learning_rate(0.1).momentum(0.05);
     for _ in 0..30_000{
-        k = rnd_range.ind_sample(&mut rand::thread_rng());
+        k = rng.gen_range(0.. sc.len());
+        //k = rnd_range.ind_sample(&mut rand::thread_rng());
         nn.fit(sc[k].0, sc[k].1);
     }
 
@@ -44,7 +46,7 @@ fn xor(){
         }
     }
 
-    println!("\nSpend time: {:.5}", (time::now_utc() - prev));
+    println!("\nSpend time: {:.5}", (OffsetDateTime::now_utc() - prev).subsec_milliseconds());
     assert!(true);
 }
 
@@ -78,7 +80,7 @@ fn xor_through_data_set_and_train(){
 
 #[test]
 fn binding(){
-    let allowed_error = 0.08; // Max allowed error is 8%
+    //let allowed_error = 0.08; // Max allowed error is 8%
     let mut nn = FeedForward::new(&[6, 4, 4, 2, 1]);
 
     println!("{}", nn);
@@ -92,11 +94,11 @@ fn binding(){
 
 #[test]
 fn custom_activation(){
-    fn func(x: f64) -> f64{
+    fn func(_: f64) -> f64{
         0.0
     }
 
-    fn der_func(x: f64) -> f64{
+    fn der_func(_: f64) -> f64{
         0.0
     }
 

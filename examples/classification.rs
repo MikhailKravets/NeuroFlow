@@ -1,46 +1,44 @@
 extern crate neuroflow;
 extern crate time;
 extern crate rand;
+extern crate rand_distr;
 
 use neuroflow::FeedForward;
-use neuroflow::data::{DataSet, Extractable};
 
-use rand::distributions::IndependentSample;
-use rand::distributions::range::Range;
-use rand::distributions::normal::Normal;
+use rand::Rng;
+use rand_distr::{Normal, Distribution};
 
-use neuroflow::activators;
-use neuroflow::activators::tanh;
-use neuroflow::activators::Type::Tanh;
-use neuroflow::activators::Type::Sigmoid;
+use time::OffsetDateTime;
+
 use neuroflow::estimators;
 
 
 fn main(){
-    let allowed_error = 0.08; // Max allowed error is 8%
+    //let allowed_error = 0.08; // Max allowed error is 8%
     let mut nn = FeedForward::new(&[2, 3, 4, 3]);
     let mut sample;
     let mut training_set: Vec<(Vec<f64>, Vec<f64>)> = Vec::new();
     let training_amount = (20f64 * estimators::widrows(&[3, 4, 3], 0.8)) as i32;
 
-    let c1 = Normal::new(1f64, 0.5);
-    let c2 = Normal::new(2f64, 1.0);
-    let c3 = Normal::new(3f64, 0.35);
+    let c1 = Normal::new(1f64, 0.5).unwrap();
+    let c2 = Normal::new(2f64, 1.0).unwrap();
+    let c3 = Normal::new(3f64, 0.35).unwrap();
+    
 
     let mut k = 0;
     for _ in 0..training_amount{
         if k == 0{
-            training_set.push((vec![c1.ind_sample(&mut rand::thread_rng()), c1.ind_sample(&mut rand::thread_rng())],
+            training_set.push((vec![c1.sample(&mut rand::thread_rng()), c1.sample(&mut rand::thread_rng())],
                                vec![1f64, 0f64, 0f64]));
             k += 1;
         }
             else if k == 1 {
-                training_set.push((vec![c2.ind_sample(&mut rand::thread_rng()), c2.ind_sample(&mut rand::thread_rng())],
+                training_set.push((vec![c2.sample(&mut rand::thread_rng()), c2.sample(&mut rand::thread_rng())],
                                    vec![0f64, 1f64, 0f64]));
                 k += 1;
             }
                 else if k == 2 {
-                    training_set.push((vec![c3.ind_sample(&mut rand::thread_rng()), c3.ind_sample(&mut rand::thread_rng())],
+                    training_set.push((vec![c3.sample(&mut rand::thread_rng()), c3.sample(&mut rand::thread_rng())],
                                        vec![0f64, 0f64, 1f64]));
                     k += 1;
                 }
@@ -49,13 +47,13 @@ fn main(){
                     }
     }
 
-    let rnd_range = Range::new(0, training_set.len());
+    let mut rng = rand::thread_rng();    
 
-    let prev = time::now_utc();
+    let prev = OffsetDateTime::now_utc();
     nn.activation(neuroflow::activators::Type::Tanh);
 
     for _ in 0..50_000{
-        k = rnd_range.ind_sample(&mut rand::thread_rng());
+        k = rng.gen_range(0..training_set.len());
         nn.fit(&training_set[k].0, &training_set[k].1);
     }
 
@@ -72,26 +70,26 @@ fn main(){
     }
 
     {
-        sample = [c1.ind_sample(&mut rand::thread_rng()), c1.ind_sample(&mut rand::thread_rng())];
+        sample = [c1.sample(&mut rand::thread_rng()), c1.sample(&mut rand::thread_rng())];
         let res = nn.calc(&sample);
         println!("for: [{:?}], [1, 0, 0] -> {:?}", sample, res);
         assert!(check(&res, 0));
     }
 
     {
-        sample = [c2.ind_sample(&mut rand::thread_rng()), c2.ind_sample(&mut rand::thread_rng())];
+        sample = [c2.sample(&mut rand::thread_rng()), c2.sample(&mut rand::thread_rng())];
         let res = nn.calc(&sample);
         println!("for: [{:?}], [0, 1, 0] -> {:?}", sample, res);
         assert!(check(res, 1));
     }
 
     {
-        sample = [c3.ind_sample(&mut rand::thread_rng()), c3.ind_sample(&mut rand::thread_rng())];
+        sample = [c3.sample(&mut rand::thread_rng()), c3.sample(&mut rand::thread_rng())];
         let res = nn.calc(&sample);
         println!("for: [{:?}], [0, 0, 1] -> {:?}", sample, res);
         assert!(check(res, 2));
     }
 
-    println!("\nSpend time: {}", (time::now_utc() - prev));
+    println!("\nSpend time: {}", (OffsetDateTime::now_utc() - prev).subsec_milliseconds());
     assert!(true);
 }
