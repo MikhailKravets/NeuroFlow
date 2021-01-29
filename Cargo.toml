@@ -17,7 +17,7 @@ travis-ci = { repository = "MikhailKravets/NeuroFlow", branch = "master" }
 codecov = { repository = "MikhailKravets/NeuroFlow", branch = "master", service = "github" }
 
 [dependencies]
-rand = "*"
+rand = "^0.8"
 serde = "^1.0"
 serde_derive = "^1.0"
 serde_json = "^1.0"
