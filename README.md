@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/MikhailKravets/DataFlow/0.2.0/logo.png"><br><br>
+  <img src="https://raw.githubusercontent.com/MikhailKravets/NeuroFlow/0.2.0/logo.png"><br><br>
 </div>
 
 [![codecov](https://codecov.io/gh/MikhailKravets/NeuroFlow/branch/master/graph/badge.svg)](https://codecov.io/gh/MikhailKravets/NeuroFlow)
