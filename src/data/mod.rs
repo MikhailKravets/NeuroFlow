@@ -5,9 +5,8 @@
 //! When you load data from file, it'll be placed into `DataSet`.
 use std;
 
-use rand;
-use rand::distributions::range::Range;
-use rand::distributions::IndependentSample;
+use rand::{thread_rng, Rng};
+use rand::distributions::Uniform;
 use csv;
 use FeedForward;
 
@@ -117,7 +116,7 @@ impl DataSet {
     ///     println!("{:?}", data);
     /// }
     /// ```
-    pub fn from_csv(file_path: &str) -> Result<DataSet, Box<std::error::Error>> {
+    pub fn from_csv(file_path: &str) -> Result<DataSet, Box<dyn std::error::Error>> {
         let mut file = csv::ReaderBuilder::new()
             .has_headers(false)
             .from_path(file_path)?;
@@ -313,8 +312,8 @@ impl DataSet {
     }
 
     fn rand_index(&self) -> usize {
-        let rnd_range = Range::new(0, self.y.len());
-        rnd_range.ind_sample(&mut rand::thread_rng())
+        let mut rng = thread_rng();
+        rng.sample(Uniform::new(0, self.y.len()))
     }
 
     /// Don't use this method. It is only for me and will be deleted
@@ -332,15 +331,15 @@ impl DataSet {
 
         let len = self.ty.len() as f64;
 
-        error.iter().map(|x| x / len).collect::<Vec<f64>>();
+        let _ = error.iter().map(|x| x / len).collect::<Vec<f64>>();
         error.iter().sum::<f64>() / len
     }
 }
 
 impl Extractable for DataSet{
     fn rand(&self) -> (&Vec<f64>, &Vec<f64>){
-        let rnd_range = Range::new(0, self.y.len());
-        let k = rnd_range.ind_sample(&mut rand::thread_rng());
+        let mut rnd_range = thread_rng();
+        let k = rnd_range.sample(Uniform::new(0, self.y.len()));
 
         (&self.x[k], &self.y[k])
     }

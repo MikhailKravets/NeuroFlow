@@ -139,7 +139,7 @@ pub enum ErrorKind {
     IO(std::io::Error),
     Encoding(bincode::Error),
     Json(serde_json::Error),
-    StdError(Box<std::error::Error>)
+    StdError(Box<dyn std::error::Error>)
 }
 
 /// The struct that points different fields of network.
@@ -269,7 +269,7 @@ impl Layer {
 
             v = Vec::new();
             for _ in 0..input + 1{
-                v.push(2f64*rand::random::<f64>() - 1f64);
+                v.push(2f64 * rand::random::<f64>() - 1f64);
             }
 
             nl.w.push(v);
@@ -286,7 +286,7 @@ impl Layer {
         let len = self.w[index].len();
 
         for _ in 0..len{
-            v.push(2f64*rand::random::<f64>() - 1f64);
+            v.push(2f64 * rand::random::<f64>() - 1f64);
         }
         self.w.insert(index, v);
     }
