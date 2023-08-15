@@ -1,15 +1,16 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/MikhailKravets/DataFlow/master/logo.png"><br><br>
+  <img src="https://raw.githubusercontent.com/MikhailKravets/DataFlow/0.2.0/logo.png"><br><br>
 </div>
 
-[![Build status](https://travis-ci.org/MikhailKravets/NeuroFlow.svg?branch=master)](https://travis-ci.org/MikhailKravets/NeuroFlow)
 [![codecov](https://codecov.io/gh/MikhailKravets/NeuroFlow/branch/master/graph/badge.svg)](https://codecov.io/gh/MikhailKravets/NeuroFlow)
 [![crates](https://img.shields.io/crates/v/neuroflow.svg)](https://crates.io/crates/neuroflow)
 
-NeuroFlow is fast neural networks (deep learning) Rust crate.
-It relies on three pillars: speed, reliability, and speed again.
+> NeuroFlow is fast neural networks (deep learning) Rust crate.
+> It relies on three pillars: speed, reliability, and speed again.
 
-> Hello, everyone! Work on the crate is currently suspended because I am a little busy to do it :( Thanks you all
+...I would write if this library was going to be a second PyTorch from the Rust world.
+However, this repository found its place in the educational area and can be
+used by young Rustaceans to enter the world of Neural Networks.
 
 ## How to use
 
