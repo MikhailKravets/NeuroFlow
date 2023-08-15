@@ -5,16 +5,16 @@
 [![codecov](https://codecov.io/gh/MikhailKravets/NeuroFlow/branch/master/graph/badge.svg)](https://codecov.io/gh/MikhailKravets/NeuroFlow)
 [![crates](https://img.shields.io/crates/v/neuroflow.svg)](https://crates.io/crates/neuroflow)
 
-> NeuroFlow is fast neural networks (deep learning) Rust crate.
+> NeuroFlow is fast Neural Networks (deep learning) Rust crate.
 > It relies on three pillars: speed, reliability, and speed again.
 
-...I would write if this library was going to be a second PyTorch from the Rust world.
+...I would write if this library was going to be the second PyTorch from the Rust world.
 However, this repository found its place in the educational area and can be
 used by young Rustaceans to enter the world of Neural Networks.
 
 ## How to use
 
-Let's try to approximate very simple function `0.5*sin(e^x) - cos(e^(-x))`.
+Let's try to approximate a very simple function `0.5*sin(e^x) - cos(e^(-x))`.
 
 ```rust
 extern crate neuroflow;
@@ -26,16 +26,16 @@ use neuroflow::activators::Type::Tanh;
 
 fn main(){
     /*
-        Define neural network with 1 neuron in input layers. Network contains 4 hidden layers.
-        And, such as our function returns single value, it is reasonable to have 1 neuron in the output layer.
+        Define a neural network with 1 neuron in input layers. The network contains 4 hidden layers.
+        And, such as our function returns a single value, it is reasonable to have 1 neuron in the output layer.
     */
     let mut nn = FeedForward::new(&[1, 7, 8, 8, 7, 1]);
     
     /*
         Define DataSet.
         
-        DataSet is the Type that significantly simplifies work with neural network.
-        Majority of its functionality is still under development :(
+        DataSet is the Type that significantly simplifies work with neural networks.
+        The majority of its functionality is still under development :(
     */
     let mut data: DataSet = DataSet::new();
     let mut i = -3.0;
@@ -46,7 +46,7 @@ fn main(){
         i += 0.05;
     }
     
-    // Here, we set necessary parameters and train neural network by our DataSet with 50 000 iterations
+    // Here, we set the necessary parameters and train the neural network by our DataSet with 50 000 iterations
     nn.activation(Tanh)
         .learning_rate(0.01)
         .train(&data, 50_000);
@@ -80,8 +80,8 @@ neural networks from files.
     /*
         In order to save neural network into file call function save from neuroflow::io module.
         
-        First argument is link on the saving neural network;
-        Second argument is path to the file. 
+        The first argument is the link to the saving neural network;
+        The second argument is the path to the file. 
     */
     neuroflow::io::save(&mut nn, "test.flow").unwrap();
     
@@ -90,7 +90,7 @@ neural networks from files.
         of load function from neuroflow::io module.
         
         We must specify the type of new_nn variable.
-        The only argument of load function is the path to file containing
+        The only argument of the load function is the path to a file containing
         the neural network
     */
     let mut new_nn: FeedForward = neuroflow::io::load("test.flow").unwrap();
@@ -100,7 +100,7 @@ neural networks from files.
 
 Classic XOR problem (with no classic input of data)
 
-Let's create file named `TerribleTom.csv` in the root of project. This file should have following innards:
+Let's create a file named `TerribleTom.csv` at the root of the project. This file should have the following innards:
 
 ```
 0,0,-,0
@@ -109,7 +109,7 @@ Let's create file named `TerribleTom.csv` in the root of project. This file shou
 1,1,-,0
 ```
 
-where `-` is the delimiter that separates input vector from its desired output vector.
+where `-` is the delimiter that separates the input vector from its desired output vector.
 
 ```rust
 extern crate neuroflow;
@@ -121,9 +121,9 @@ use neuroflow::activators::Type::Tanh;
 
 fn main(){
     /*
-        Define neural network with 2 neurons in input layers,
+        Define a neural network with 2 neurons in input layers,
         1 hidden layer (with 2 neurons),
-        1 neuron in output layer
+        1 neuron in the output layer
     */
     let mut nn = FeedForward::new(&[2, 2, 1]);
     
@@ -169,5 +169,5 @@ extern crate neuroflow;
 MIT License
 
 ### Attribution
-The origami bird from logo is made by [Freepik](https://www.freepik.com/)
+The origami bird from the logo is made by [Freepik](https://www.freepik.com/)
 
