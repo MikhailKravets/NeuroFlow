@@ -3,22 +3,14 @@ extern crate time;
 extern crate rand;
 
 use neuroflow::FeedForward;
-use neuroflow::data::{DataSet, Extractable};
+use neuroflow::data::DataSet;
 
-use rand::distributions::IndependentSample;
-use rand::distributions::range::Range;
-use rand::distributions::normal::Normal;
-
-use neuroflow::activators;
-use neuroflow::activators::tanh;
 use neuroflow::activators::Type::Tanh;
-use neuroflow::activators::Type::Sigmoid;
-use neuroflow::estimators;
 
 
 
 fn main(){
-    let mut nn = FeedForward::new(&[1, 7, 8, 8, 7, 1]);
+    let mut nn = FeedForward::new(&[1, 5, 3, 1]);
     let mut data: DataSet = DataSet::new();
     let mut i = -3.0;
 
@@ -30,8 +22,8 @@ fn main(){
     let prev = time::now_utc();
 
     nn.activation(Tanh)
-        .learning_rate(0.01)
-        .train(&data, 50_000);
+        .learning_rate(0.007)
+        .train(&data, 60_000);
 
     let mut res;
 

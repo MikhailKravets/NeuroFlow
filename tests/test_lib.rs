@@ -5,9 +5,8 @@ extern crate rand;
 use neuroflow::FeedForward;
 use neuroflow::data::{DataSet, Extractable};
 
-use rand::distributions::IndependentSample;
-use rand::distributions::range::Range;
-use rand::distributions::normal::Normal;
+use rand::{thread_rng, Rng};
+use rand::distributions::Uniform;
 
 use neuroflow::activators;
 use neuroflow::estimators;
@@ -16,20 +15,21 @@ use neuroflow::estimators;
 #[test]
 fn xor(){
     const ALLOWED_ERROR: f64 = 0.1; // Max allowed error is 10%
-    let mut nn = FeedForward::new(&[2, 2, 1]);
+    let mut nn = FeedForward::new(&[2, 4, 1]);
     let sc = &[
         (&[0f64, 0f64], &[0f64]),
         (&[1f64, 0f64], &[1f64]),
         (&[0f64, 1f64], &[1f64]),
         (&[1f64, 1f64], &[0f64]),
     ];
-    let mut k;
-    let rnd_range = Range::new(0, sc.len());
     let prev = time::now_utc();
 
-    nn.learning_rate(0.1).momentum(0.05);
+    let mut k;
+    let mut rnd_range = thread_rng();
+
+    nn.learning_rate(0.1).momentum(0.01);
     for _ in 0..30_000{
-        k = rnd_range.ind_sample(&mut rand::thread_rng());
+        k = rnd_range.sample(Uniform::new(0, sc.len()));
         nn.fit(sc[k].0, sc[k].1);
     }
 
@@ -39,7 +39,7 @@ fn xor(){
         println!("for [{:.3}, {:.3}], [{:.3}] -> [{:.3}]",
                  v.0[0], v.0[1], v.1[0], res);
 
-        if (res - v.1[0]).abs() > ALLOWED_ERROR{
+        if (res - v.1[0]).abs() > ALLOWED_ERROR {
             assert!(false);
         }
     }
@@ -51,7 +51,7 @@ fn xor(){
 #[test]
 fn xor_through_data_set_and_train(){
     const ALLOWED_ERROR: f64 = 0.1; // Max allowed error is 10%
-    let mut nn = FeedForward::new(&[2, 2, 1]);
+    let mut nn = FeedForward::new(&[2, 4, 1]);
     let mut data = DataSet::new();
 
     data.push(&[0f64, 0f64], &[0f64]);
@@ -60,8 +60,8 @@ fn xor_through_data_set_and_train(){
     data.push(&[1f64, 1f64], &[0f64]);
 
     nn.activation(activators::Type::Tanh)
-        .learning_rate(0.05)
-        .momentum(0.15)
+        .learning_rate(0.01)
+        .momentum(0.1)
         .train(&data, 30_000);
 
     let mut res;
@@ -78,7 +78,6 @@ fn xor_through_data_set_and_train(){
 
 #[test]
 fn binding(){
-    let allowed_error = 0.08; // Max allowed error is 8%
     let mut nn = FeedForward::new(&[6, 4, 4, 2, 1]);
 
     println!("{}", nn);
@@ -92,11 +91,11 @@ fn binding(){
 
 #[test]
 fn custom_activation(){
-    fn func(x: f64) -> f64{
+    fn func(_x: f64) -> f64{
         0.0
     }
 
-    fn der_func(x: f64) -> f64{
+    fn der_func(_x: f64) -> f64{
         0.0
     }
 

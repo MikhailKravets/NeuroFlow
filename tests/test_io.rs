@@ -41,6 +41,7 @@ fn saving_to_json(){
 fn saving_of_neural_net(){
     let mut nn = FeedForward::new(&[2, 2, 1]);
     let mut data = DataSet::new();
+    let file_path = "testsave.nn";
 
     data.push(&[0f64, 0f64], &[0f64]);
     data.push(&[1f64, 0f64], &[1f64]);
@@ -52,9 +53,9 @@ fn saving_of_neural_net(){
         .momentum(0.15)
         .train(&data, 5_000);
 
-    save(&mut nn, "test.nn").unwrap();
+    save(&mut nn, file_path).unwrap();
 
-    let p = Path::new("test.nn");
+    let p = Path::new(file_path);
     assert!(p.exists());
     if p.exists(){
         remove_file(p).unwrap();
@@ -65,6 +66,7 @@ fn saving_of_neural_net(){
 fn loading_of_neural_net(){
     let mut nn = FeedForward::new(&[2, 2, 1]);
     let mut data = DataSet::new();
+    let file_path = "testload.nn";
 
     data.push(&[0f64, 0f64], &[0f64]);
     data.push(&[1f64, 0f64], &[1f64]);
@@ -76,9 +78,9 @@ fn loading_of_neural_net(){
         .momentum(0.15)
         .train(&data, 5_000);
 
-    save(&mut nn, "test.nn").unwrap();
+    save(&mut nn, file_path).unwrap();
 
-    let mut new_nn = load::<FeedForward>("test.nn").unwrap();
+    let mut new_nn = load::<FeedForward>(file_path).unwrap();
 
     let sc = &[
         (&[0f64, 0f64], &[0f64]),
@@ -100,13 +102,13 @@ fn loading_of_neural_net(){
         }
     }
 
-    let p = Path::new("test.nn");
+    let p = Path::new(file_path);
     remove_file(p).unwrap();
 }
 
 #[test]
 fn load_not_existent_file(){
-    match load::<FeedForward>("test.nn") {
+    match load::<FeedForward>("testnonexistent.nn") {
         Ok(_) => assert!(false),
         Err(_) => assert!(true)
     }
