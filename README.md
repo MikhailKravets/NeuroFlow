@@ -157,7 +157,7 @@ for [1.000, 1.000], [0.000] -> [0.000]
 Insert into your project's cargo.toml block next line
 ```toml
 [dependencies]
-neuroflow = "~0.1"
+neuroflow = "~0.2"
 ```
 
 Then in project root file
